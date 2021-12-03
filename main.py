@@ -72,7 +72,7 @@ N = setN(10000)
 percentS = setPercentS(0.7)
 percentIr = setPercentIr(0.1)
 percentIl = setPercentIl(0.1)
-percentIp = setPercentS(0.1)
+percentIp = setPercentIp(0.1)
 S0, Ir0, Il0, Ip0 = setSI(N, percentS, percentIr, percentIl, percentIp)
 I0 = Ir0 + Il0 + Ip0
 
