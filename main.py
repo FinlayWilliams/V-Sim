@@ -1,8 +1,9 @@
 ### All Imported Python Packages to be Used ###
-import tkinter as tk
+import model
 from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
+import tkinter as tk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
@@ -121,7 +122,7 @@ S0, Ir0, Il0, Ip0 = setSI(N, percentS, percentIr, percentIl, percentIp)
 I0 = Ir0 + Il0 + Ip0
 
 ## S local Value
-WSNno = setWSN(10)
+WSNno = setWSN(5)
 Sloc = setSloc(WSNno, S0)
 
 ## S Neighbours Value
@@ -135,9 +136,11 @@ contactRate = setContactRate(4)
 bRcontactRate = setContactRate(3)
 bLcontactRate = setContactRate(2)
 bPcontactRate = setContactRate(1)
+
 brPtransmission = setPtransmission(5)
 blPtransmission = setPtransmission(4)
 bpPtransmission = setPtransmission(3)
+
 bR = setInfectionRate(bRcontactRate, brPtransmission)
 bL = setInfectionRate(bLcontactRate, blPtransmission)
 bP = setInfectionRate(bPcontactRate, bpPtransmission)
@@ -212,5 +215,9 @@ plt.xlabel('Timesteps')
 plt.ylabel('Population Size')
 plt.grid()
 plt.show()
+
+myModel = model.Model(10000, 0.7, 0.1, 0.1, 0.1, 5, 10, 10, 5, 5, 5, 5, 4, 4, 4, 50, 0.5, 864000, 0.5, 10)
+myModel.newVariable(10)
+print(myModel.Jeff)
 
 #<-------------------------------------------------------- GUI -------------------------------------------------------->
