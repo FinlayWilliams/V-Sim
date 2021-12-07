@@ -69,12 +69,45 @@ def setInfectionRate(contRate, pTransmission):
     return infRate
 
 
+def setDistance(depArea, n):
+    dist = depArea * n
+    return dist
+
+
+def setMeanMessageSize(mMsgSize): return mMsgSize
+
+
+def setMeanPower(meanpower): return meanpower
+
+
+def setPowerMsg(meanpower, mMsgSize, dist):
+    pwrMsg = meanpower * mMsgSize * dist
+    return pwrMsg
+
+
+def setPowerTime(pwrMsg, contRate):
+    pwrTime = pwrMsg * contRate
+    return pwrTime
+
+
+def setTotalBatteryCapacity(ttlBatCap): return ttlBatCap
+
+
+def setNodeLifespan(ttlBatCap, pwrTime):
+    nLifespan = ttlBatCap * pwrTime
+    return nLifespan
+
+
+def setDeathrate(nLifespan):
+    return 1 / nLifespan
+
+
 def setARecoveryRate(recoveryRate): return recoveryRate
 
 
 def setTimesteps(t):
-    t = np.linspace(0, t)
-    return t
+    timesteps = np.linspace(0, t, 101)
+    return timesteps
 
 
 ### Instantiating Variables and Their Default Values ###
@@ -98,6 +131,7 @@ transRange = setTransRange(10)
 Snhb = setSnhb(N, S0, density, transRange)
 
 ## Infection Rates
+contactRate = setContactRate(4)
 bRcontactRate = setContactRate(3)
 bLcontactRate = setContactRate(2)
 bPcontactRate = setContactRate(1)
@@ -109,10 +143,27 @@ bL = setInfectionRate(bLcontactRate, blPtransmission)
 bP = setInfectionRate(bPcontactRate, bpPtransmission)
 
 ## Death Rates
-dthB = 0.05
-dthR = 0.01
-dthL = 0.01
-dthP = 0.01
+distance = setDistance(depArea, N)
+meanMessageSize = setMeanMessageSize(50)
+meanPower = setMeanPower(0.5)
+powerMsg = setPowerMsg(meanPower, meanMessageSize, distance)
+
+regPowerTime = setPowerTime(powerMsg, contactRate)
+rndPowerTime = setPowerTime(powerMsg, bRcontactRate)
+lclPowerTime = setPowerTime(powerMsg, bLcontactRate)
+p2pPowerTime = setPowerTime(powerMsg, bPcontactRate)
+
+totalBatteryCapacity = setTotalBatteryCapacity(864000)
+
+regNodeLifespan = setNodeLifespan(totalBatteryCapacity, regPowerTime)
+rndNodeLifespan = setNodeLifespan(totalBatteryCapacity, rndPowerTime)
+lclNodeLifespan = setNodeLifespan(totalBatteryCapacity, lclPowerTime)
+p2pNodeLifespan = setNodeLifespan(totalBatteryCapacity, p2pPowerTime)
+
+dthB = setDeathrate(regNodeLifespan)
+dthR = setDeathrate(rndNodeLifespan)
+dthL = setDeathrate(lclNodeLifespan)
+dthP = setDeathrate(p2pNodeLifespan)
 
 ## Recovery rate
 A = setARecoveryRate(0.5)
@@ -156,7 +207,9 @@ plt.plot(T, Ir, 'y', label='Random-Scanning Infected')
 plt.plot(T, Il, 'b', label='Local Infected')
 plt.plot(T, Ip, 'c', label='P2P Infected')
 plt.legend(loc='best')
+plt.title("IoT-SIS Model")
 plt.xlabel('Timesteps')
+plt.ylabel('Population Size')
 plt.grid()
 plt.show()
 
