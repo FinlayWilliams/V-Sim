@@ -132,14 +132,14 @@ transRange = setTransRange(10)
 Snhb = setSnhb(N, S0, density, transRange)
 
 ## Infection Rates
-contactRate = setContactRate(4)
-bRcontactRate = setContactRate(3)
-bLcontactRate = setContactRate(2)
-bPcontactRate = setContactRate(1)
+contactRate = setContactRate(0.4)
+bRcontactRate = setContactRate(0.3)
+bLcontactRate = setContactRate(0.2)
+bPcontactRate = setContactRate(0.1)
 
-brPtransmission = setPtransmission(5)
-blPtransmission = setPtransmission(4)
-bpPtransmission = setPtransmission(3)
+brPtransmission = setPtransmission(0.5)
+blPtransmission = setPtransmission(0.4)
+bpPtransmission = setPtransmission(0.3)
 
 bR = setInfectionRate(bRcontactRate, brPtransmission)
 bL = setInfectionRate(bLcontactRate, blPtransmission)

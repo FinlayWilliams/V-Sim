@@ -23,6 +23,48 @@ class Model:
         self.recoveryRate = rcvryRate
         self.Timesteps = timesteps
 
+        self.calculateVariables()
+
+    # Method to create all remaining variables and calculate their values based off of the input values
+    def calculateVariables(self):
+        # SI Population
+        self.S = self.N * self.percentS
+        self.Ir = self.N * self.percentIr
+        self.Il = self.N * self.percentIl
+        self.Ip = self.N * self.percentIp
+        self.I = self.Ir + self.Il + self.Ip
+
+        # S Local Set Range
+        self.SLoc = self.S / self.WSNnumber
+
+        # S Neighbour Set Range
+        self.density = self.N * self.deploymentArea
+        self.SNhb = self.S / (self.N / (self.density * self.transmissionRange))
+
+        # Infection Rates
+        self.bR = self.IrContactRate * self.IrPTransmission
+        self.bL = self.IlContactRate * self.IlPTransmission
+        self.bP = self.IpContactRate * self.IpPTransmission
+
+        # Death Rates
+        self.distance = self.deploymentArea * self.N
+        self.powerMessage = self.meanPower * self.meanMessageSize * self.distance
+
+        self.regularPowerTime = self.powerMessage * self.contactRate
+        self.randomPowerTime = self.powerMessage * self.IrContactRate
+        self.localPowerTime = self.powerMessage * self.IlContactRate
+        self.peerToPeerPowerTime = self.powerMessage * self.IpContactRate
+
+        self.regularLifespan = self.totalBattery * self.regularPowerTime
+        self.randomLifespan = self.totalBattery * self.randomPowerTime
+        self.localLifespan = self.totalBattery * self.localPowerTime
+        self.peerToPeerLifespan = self.totalBattery * self.peerToPeerPowerTime
+
+        self.dthB = 1 / self.regularLifespan
+        self.dthR = 1 / self.randomLifespan
+        self.dthL = 1 / self.localLifespan
+        self.dthP = 1 / self.peerToPeerLifespan
+
     # All Setters that can be called when changing input values
     def setN(self, n): self.N = n
 
@@ -63,7 +105,3 @@ class Model:
     def setRecoveryRate(self, rcvryRate): self.recoveryRate = rcvryRate
 
     def setTimesteps(self, timesteps): self.Timesteps = timesteps
-
-    # Method to create all remaining variables and calculate their values based off of the input values
-    def calculateVariables(self):
-        ligmaballs
