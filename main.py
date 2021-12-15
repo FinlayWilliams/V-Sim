@@ -55,7 +55,8 @@ def setTransRange(transRange): return transRange
 
 def setSnhb(n, s, density, transRange):
     nhb = density * transRange
-    snhb = s / (n / nhb)
+    newperc = n / nhb
+    snhb = s * newperc
     return snhb
 
 
@@ -71,7 +72,7 @@ def setInfectionRate(contRate, pTransmission):
 
 
 def setDistance(depArea, n):
-    dist = depArea * n
+    dist = depArea / n
     return dist
 
 
@@ -114,10 +115,10 @@ def setTimesteps(t):
 ### Instantiating Variables and Their Default Values ###
 ##  Population
 N = setN(10000)
-percentS = setPercentS(0.7)
-percentIr = setPercentIr(0.1)
-percentIl = setPercentIl(0.1)
-percentIp = setPercentIp(0.1)
+percentS = setPercentS(0.99)
+percentIr = setPercentIr(0.005)
+percentIl = setPercentIl(0.0025)
+percentIp = setPercentIp(0.0025)
 S0, Ir0, Il0, Ip0 = setSI(N, percentS, percentIr, percentIl, percentIp)
 I0 = Ir0 + Il0 + Ip0
 
@@ -126,7 +127,7 @@ WSNno = setWSN(5)
 Sloc = setSloc(WSNno, S0)
 
 ## S Neighbours Value
-depArea = setDepArea(10)
+depArea = setDepArea(50)
 density = setDensity(N, depArea)
 transRange = setTransRange(10)
 Snhb = setSnhb(N, S0, density, transRange)
@@ -137,8 +138,8 @@ bRcontactRate = setContactRate(0.3)
 bLcontactRate = setContactRate(0.2)
 bPcontactRate = setContactRate(0.1)
 
-brPtransmission = setPtransmission(0.5)
-blPtransmission = setPtransmission(0.4)
+brPtransmission = setPtransmission(0.3)
+blPtransmission = setPtransmission(0.3)
 bpPtransmission = setPtransmission(0.3)
 
 bR = setInfectionRate(bRcontactRate, brPtransmission)
@@ -172,10 +173,10 @@ dthP = setDeathrate(p2pNodeLifespan)
 A = setARecoveryRate(0.5)
 
 ## Timesteps
-T = setTimesteps(10)
+T = setTimesteps(100)
 
 ### Initial Conditions
-y0 = S0, Ir0, Il0, Ip0
+#y0 = S0, Ir0, Il0, Ip0
 
 
 ### Function that solves the differentials
@@ -183,32 +184,60 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
     S, Ir, Il, Ip = y
     I = Ir + Il + Ip
 
-    # Not sure if any of these should be in brackets - or if the alpha * I should be in brackets of any description ...
+    dSdt = -bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
 
-    dSdt = -(bR * S * I) - (bL * Sloc * I) - (bP * Snhb * I) - (dthB * S) + (a * I)
+    dIrdt = bR * S * I - a * Ir - dthB * Ir - dthR * Ir
 
-    dIrdt = (bR * S * I) - (a * Ir) - (dthB * Ir) - (dthR * Ir)
+    dIldt = bL * Sloc * I - a * Il - dthB * Il - dthL * Il
 
-    dIldt = (bL * Sloc * I) - (a * Il) - (dthB * Il) - (dthL * Il)
-
-    dIpdt = (bP * Snhb * I) - (a * Ip) - (dthB * Ip) - (dthP * Ip)
+    dIpdt = bP * Snhb * I - a * Ip - dthB * Ip - dthP * Ip
 
     return dSdt, dIrdt, dIldt, dIpdt
 
+######################################################
 
-### Getting the final solution through running the model
-solution = odeint(SIModel, y0, T, args=(Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, A))
+#solution = odeint(SIModel, y0, T, args=(Sloc, Snhb,  bR,  bL,  bP,  dthB, dthR, dthL, dthP, A))
+# S0 = 99998
+# Ir0 = 0
+# Il0 = 0
+# Ip0 = 1
+#
+# y0 = S0, Ir0, Il0, Ip0
+#
+# solution2 = odeint(SIModel, y0, T, args=(0.14, 0.014, 0.02, 0.02, 0.02, 0.03, 0.03, 0.03, 0.03, 0.7))
+#
+# ### Assigning final SI Values
+# S, Ir, Il, Ip = solution2.T
+# I = Ir + Il + Ip
+#
+# ### Testing Plot
+# plt.plot(T, S, 'g', label='Susceptible')
+# plt.plot(T, I, 'r', label='All Infected')
+# plt.plot(T, Ir, 'y', label='Random-Scanning Infected')
+# plt.plot(T, Il, 'b', label='Local Infected')
+# plt.plot(T, Ip, 'c', label='P2P Infected')
+# plt.legend(loc='best')
+# plt.title("IoT-SIS Model")
+# plt.xlabel('Timesteps')
+# plt.ylabel('Population Size')
+# plt.grid()
+# plt.show()
 
-### Assigning final SI Values
-S, Ir, Il, Ip = solution.T
-I = Ir + Il + Ip
+##########################################
 
-### Testing Plot
-plt.plot(T, S, 'g', label='Susceptible')
-plt.plot(T, I, 'r', label='All Infected')
-plt.plot(T, Ir, 'y', label='Random-Scanning Infected')
-plt.plot(T, Il, 'b', label='Local Infected')
-plt.plot(T, Ip, 'c', label='P2P Infected')
+#VAR:                                                        deply  tran  cntc  ircnt ilcnt ipcnt  irP   ilP   ipP   mean  mean
+#VAR:                  N      S     Ir      Il     Ip    W   area   rng    rte   rte   rte   rte  trans trans trans  msg    pwr      ttlbat    rcvo    time
+myModel = model.Model(10000, 0.9, 0.034, 0.0330, 0.0330, 10,   50,   10,    5,    5,    5,    5,  0.4,  0.4,  0.4,   50,    0.5,    864000,    0.5,    10)
+
+S1, Ir1, Il1, Ip1 = myModel.runModel()
+I1 = Ir1 + Il1 + Ip1
+T1 = myModel.Timesteps
+
+plt.plot(T1, S1, 'g', label='Susceptible')
+#plt.plot(T1, I1, 'r', label='All Infected')
+plt.plot(T1, Ir1, 'y', label='Random-Scanning Infected')
+plt.plot(T1, Il1, 'b', label='Local Infected')
+plt.plot(T1, Ip1, 'c', label='P2P Infected')
 plt.legend(loc='best')
 plt.title("IoT-SIS Model")
 plt.xlabel('Timesteps')
@@ -216,8 +245,5 @@ plt.ylabel('Population Size')
 plt.grid()
 plt.show()
 
-myModel = model.Model(10000, 0.7, 0.1, 0.1, 0.1, 5, 10, 10, 5, 5, 5, 5, 4, 4, 4, 50, 0.5, 864000, 0.5, 10)
-myModel.newVariable(10)
-print(myModel.Jeff)
-
+print(Ir1)
 #<-------------------------------------------------------- GUI -------------------------------------------------------->

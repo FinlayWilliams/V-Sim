@@ -1,4 +1,8 @@
+import numpy as np
+from scipy.integrate import odeint
+
 class Model:
+    # Preliminary Constructor to Initialise Variables and Allow for easy class creation
     def __init__(self, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, irCntctRate,
                  ilCntctRate, ipCntctRate, irPTrans, ilPTrans, ipPTrans, meanMsgSize, meanPwr, ttlBattery, rcvryRate,
                  timesteps):
@@ -21,7 +25,7 @@ class Model:
         self.meanPower = meanPwr
         self.totalBattery = ttlBattery
         self.recoveryRate = rcvryRate
-        self.Timesteps = timesteps
+        self.Timesteps = np.linspace(0, timesteps, 101)
 
         self.calculateVariables()
 
@@ -35,11 +39,13 @@ class Model:
         self.I = self.Ir + self.Il + self.Ip
 
         # S Local Set Range
-        self.SLoc = self.S / self.WSNnumber
+        #self.SLoc = self.S / self.WSNnumber
+        self.SLoc = 1 / self.WSNnumber
 
         # S Neighbour Set Range
         self.density = self.N * self.deploymentArea
-        self.SNhb = self.S / (self.N / (self.density * self.transmissionRange))
+        #self.SNhb = self.S * (self.N / (self.density * self.transmissionRange))
+        self.SNhb = 1 / (self.density * self.transmissionRange)
 
         # Infection Rates
         self.bR = self.IrContactRate * self.IrPTransmission
@@ -47,7 +53,7 @@ class Model:
         self.bP = self.IpContactRate * self.IpPTransmission
 
         # Death Rates
-        self.distance = self.deploymentArea * self.N
+        self.distance = self.deploymentArea / self.N
         self.powerMessage = self.meanPower * self.meanMessageSize * self.distance
 
         self.regularPowerTime = self.powerMessage * self.contactRate
@@ -64,6 +70,29 @@ class Model:
         self.dthR = 1 / self.randomLifespan
         self.dthL = 1 / self.localLifespan
         self.dthP = 1 / self.peerToPeerLifespan
+
+    def SISModel(self, y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
+        S, Ir, Il, Ip = y
+        I = Ir + Il + Ip
+
+        dSdt = - bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
+
+        dIrdt = bR * S * I - a * Ir - dthB * Ir - dthR * Ir
+
+        dIldt = bL * Sloc * I - a * Il - dthB * Il - dthL * Il
+
+        dIpdt = bP * Snhb * I - a * Ip - dthB * Ip - dthP * Ip
+
+        return dSdt, dIrdt, dIldt, dIpdt
+
+    def runModel(self):
+        y0 = self.S, self.Ir, self.Il, self.Ip
+
+        solution = odeint(self.SISModel, y0, self.Timesteps, args=(self.SLoc, self.SNhb, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+
+        S, Ir, Il, Ip = solution.T
+
+        return S, Ir, Il, Ip
 
     # All Setters that can be called when changing input values
     def setN(self, n): self.N = n
@@ -104,4 +133,4 @@ class Model:
 
     def setRecoveryRate(self, rcvryRate): self.recoveryRate = rcvryRate
 
-    def setTimesteps(self, timesteps): self.Timesteps = timesteps
+    def setTimesteps(self, timesteps): self.Timesteps = np.linspace(0, timesteps, 101)
