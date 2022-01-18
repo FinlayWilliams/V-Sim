@@ -227,7 +227,7 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
 #
 #VAR:                                                        deply       tran  cntc  ircnt ilcnt ipcnt  irP     ilP     ipP   mean  mean
 #VAR:                  N      S     Ir      Il     Ip    W   area        rng    rte   rte   rte   rte  trans   trans    trans  msg    pwr      ttlbat    rcvo    time
-myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10,   50 * 50,   10,     5,   10,   50,   100,  0.00003,  0.03,  0.03,   50,    0.75,    864000,    0.5,    100)
+myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10,   50 * 50,   10,     1,   5,   20,   26,  0.00002,  0.09,  0.08,   50,    0.75,    864000,    0.5,    100)
 
 S1, Ir1, Il1, Ip1 = myModel.runModel()
 I1 = Ir1 + Il1 + Ip1

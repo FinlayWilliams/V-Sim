@@ -75,7 +75,10 @@ class Model:
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
 
-        dSdt = - bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
+        #Sloc = S * Sloc
+        #Snhb = S * Snhb
+
+        dSdt = -bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
 
         dIrdt = bR * S * I - a * Ir - dthB * Ir - dthR * Ir
 
@@ -83,7 +86,7 @@ class Model:
 
         dIpdt = bP * Snhb * I - a * Ip - dthB * Ip - dthP * Ip
 
-        print(dthR)
+        #print(dthR)
 
         return dSdt, dIrdt, dIldt, dIpdt
 
