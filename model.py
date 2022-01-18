@@ -43,7 +43,7 @@ class Model:
         self.SLoc = 1 / self.WSNnumber
 
         # S Neighbour Set Range
-        self.density = self.N * self.deploymentArea
+        self.density = self.N / self.deploymentArea
         #self.SNhb = self.S * (self.N / (self.density * self.transmissionRange))
         self.SNhb = 1 / (self.density * self.transmissionRange)
 
@@ -82,6 +82,8 @@ class Model:
         dIldt = bL * Sloc * I - a * Il - dthB * Il - dthL * Il
 
         dIpdt = bP * Snhb * I - a * Ip - dthB * Ip - dthP * Ip
+
+        print(dthR)
 
         return dSdt, dIrdt, dIldt, dIpdt
 

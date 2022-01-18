@@ -173,7 +173,7 @@ dthP = setDeathrate(p2pNodeLifespan)
 A = setARecoveryRate(0.5)
 
 ## Timesteps
-T = setTimesteps(100)
+T = setTimesteps(20)
 
 ### Initial Conditions
 #y0 = S0, Ir0, Il0, Ip0
@@ -196,7 +196,7 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
 
 ######################################################
 
-#solution = odeint(SIModel, y0, T, args=(Sloc, Snhb,  bR,  bL,  bP,  dthB, dthR, dthL, dthP, A))
+# #solution = odeint(SIModel, y0, T, args=(Sloc, Snhb,  bR,  bL,  bP,  dthB, dthR, dthL, dthP, A))
 # S0 = 99998
 # Ir0 = 0
 # Il0 = 0
@@ -204,7 +204,7 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
 #
 # y0 = S0, Ir0, Il0, Ip0
 #
-# solution2 = odeint(SIModel, y0, T, args=(0.14, 0.014, 0.02, 0.02, 0.02, 0.03, 0.03, 0.03, 0.03, 0.7))
+# solution2 = odeint(SIModel, y0, T, args=(0.1, 0.014, 0.00002, 0.00002, 0.00002, 0.000015, 0.00005, 0.00025, 0.00025, 0.5))
 #
 # ### Assigning final SI Values
 # S, Ir, Il, Ip = solution2.T
@@ -212,7 +212,7 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
 #
 # ### Testing Plot
 # plt.plot(T, S, 'g', label='Susceptible')
-# plt.plot(T, I, 'r', label='All Infected')
+# #plt.plot(T, I, 'r', label='All Infected')
 # plt.plot(T, Ir, 'y', label='Random-Scanning Infected')
 # plt.plot(T, Il, 'b', label='Local Infected')
 # plt.plot(T, Ip, 'c', label='P2P Infected')
@@ -223,11 +223,11 @@ def SIModel(y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
 # plt.grid()
 # plt.show()
 
-##########################################
-
-#VAR:                                                        deply  tran  cntc  ircnt ilcnt ipcnt  irP   ilP   ipP   mean  mean
-#VAR:                  N      S     Ir      Il     Ip    W   area   rng    rte   rte   rte   rte  trans trans trans  msg    pwr      ttlbat    rcvo    time
-myModel = model.Model(10000, 0.9, 0.034, 0.0330, 0.0330, 10,   50,   10,    5,    5,    5,    5,  0.4,  0.4,  0.4,   50,    0.5,    864000,    0.5,    10)
+# # ##########################################
+#
+#VAR:                                                        deply       tran  cntc  ircnt ilcnt ipcnt  irP     ilP     ipP   mean  mean
+#VAR:                  N      S     Ir      Il     Ip    W   area        rng    rte   rte   rte   rte  trans   trans    trans  msg    pwr      ttlbat    rcvo    time
+myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10,   50 * 50,   10,     5,   10,   50,   100,  0.00003,  0.03,  0.03,   50,    0.75,    864000,    0.5,    100)
 
 S1, Ir1, Il1, Ip1 = myModel.runModel()
 I1 = Ir1 + Il1 + Ip1
@@ -245,5 +245,5 @@ plt.ylabel('Population Size')
 plt.grid()
 plt.show()
 
-print(Ir1)
+#print(S1)
 #<-------------------------------------------------------- GUI -------------------------------------------------------->
