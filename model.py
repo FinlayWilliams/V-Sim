@@ -3,9 +3,8 @@ from scipy.integrate import odeint
 
 class Model:
     # Preliminary Constructor to Initialise Variables and Allow for easy class creation
-    def __init__(self, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, irCntctRate,
-                 ilCntctRate, ipCntctRate, irPTrans, ilPTrans, ipPTrans, meanMsgSize, meanPwr, ttlBattery, rcvryRate,
-                 timesteps):
+    def __init__(self, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
+                 irPsuc, ilPsuc, ipPsuc, meanMsgSize, meanPwr, ttlBattery, rcvryRate, timesteps):
         self.N = n
         self.percentS = prcntS
         self.percentIr = prcntIr
@@ -15,12 +14,11 @@ class Model:
         self.deploymentArea = depArea
         self.transmissionRange = transRange
         self.contactRate = cntctRate
-        self.IrContactRate = irCntctRate
-        self.IlContactRate = ilCntctRate
-        self.IpContactRate = ipCntctRate
-        self.IrPTransmission = irPTrans
-        self.IlPTransmission = ilPTrans
-        self.IpPTransmission = ipPTrans
+        self.botScanningRate = scanRate
+        self.botPtransmission = Ptrans
+        self.IrPsuccess = irPsuc
+        self.IlPsuccess = ilPsuc
+        self.IpPsuccess = ipPsuc
         self.meanMessageSize = meanMsgSize
         self.meanPower = meanPwr
         self.totalBattery = ttlBattery
@@ -39,18 +37,21 @@ class Model:
         self.I = self.Ir + self.Il + self.Ip
 
         # S Local Set Range
-        #self.SLoc = self.S / self.WSNnumber
         self.SLoc = 1 / self.WSNnumber
 
         # S Neighbour Set Range
         self.density = self.N / self.deploymentArea
-        #self.SNhb = self.S * (self.N / (self.density * self.transmissionRange))
         self.SNhb = 1 / (self.density * self.transmissionRange)
 
+        # Contact rates
+        self.IrContactRate = self.botScanningRate * self.IrPsuccess
+        self.IlContactRate = self.botScanningRate * self.IlPsuccess
+        self.IpContactRate = self.botScanningRate * self.IpPsuccess
+
         # Infection Rates
-        self.bR = self.IrContactRate * self.IrPTransmission
-        self.bL = self.IlContactRate * self.IlPTransmission
-        self.bP = self.IpContactRate * self.IpPTransmission
+        self.bR = self.IrContactRate * self.botPtransmission
+        self.bL = self.IlContactRate * self.botPtransmission
+        self.bP = self.IpContactRate * self.botPtransmission
 
         # Death Rates
         self.distance = self.deploymentArea / self.N
