@@ -83,6 +83,10 @@ lbl_PWR = tk.Label(frame_1_bot, text="Mean Power to Send Message (mA):"); entry_
 lbl_BTRY = tk.Label(frame_1_bot, text="Total Node Battery Capacity (mAs):"); entry_BTRY = tk.Entry(frame_1_bot)
 lbl_RR = tk.Label(frame_1_bot, text="Recovery rate:"); entry_RR = tk.Entry(frame_1_bot)
 lbl_T = tk.Label(frame_1_bot, text="Days to Observe:"); entry_T = tk.Entry(frame_1_bot)
+btn_RUN = tk.Button(frame_1_bot, text="Run Model HERE 4 NOW")
+btn_INSP = tk.Button(frame_1_bot, text="Inspect Model")
+btn_SAVE = tk.Button(frame_1_bot, text="Save Configuration")
+btn_NEW = tk.Button(frame_1_bot, text="New Simulation")
 
 # Placing them
 # 1st Block
@@ -92,22 +96,27 @@ lbl_IR.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="e"); entry_IR.grid(ro
 lbl_IL.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="e"); entry_IL.grid(row=3, column=1, padx=5, pady=5)
 lbl_IP.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="e"); entry_IP.grid(row=4, column=1, padx=5, pady=5)
 # 2nd Block
-lbl_WSN.grid(row=0, column=2, padx=5, pady=(10,5), sticky="e"); entry_WSN.grid(row=0, column=3, padx=5, pady=(10,5))
+lbl_WSN.grid(row=0, column=2, padx=5, pady=(10, 5), sticky="e"); entry_WSN.grid(row=0, column=3, padx=5, pady=(10, 5))
 lbl_DEP.grid(row=1, column=2, padx=5, pady=5, sticky="e"); entry_DEP.grid(row=1, column=3, padx=5, pady=5)
 lbl_TRNS.grid(row=2, column=2, padx=5, pady=5, sticky="e"); entry_TRNS.grid(row=2, column=3, padx=5, pady=5)
 lbl_CNTCT.grid(row=3, column=2, padx=5, pady=5, sticky="e"); entry_CNTCT.grid(row=3, column=3, padx=5, pady=5)
 lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e"); entry_SCAN.grid(row=4, column=3, padx=5, pady=5)
 # 3rd Block
-lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(10,5), sticky="e"); entry_Ptrns.grid(row=0, column=5, padx=5, pady=(10,5))
+lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(10, 5), sticky="e"); entry_Ptrns.grid(row=0, column=5, padx=5, pady=(10, 5))
 lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e"); entry_IrPsu.grid(row=1, column=5, padx=5, pady=5)
 lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e"); entry_IlPsu.grid(row=2, column=5, padx=5, pady=5)
 lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e"); entry_IpPsu.grid(row=3, column=5, padx=5, pady=5)
 # 4th Block
-lbl_MSG.grid(row=0, column=6, padx=5, pady=(10,5), sticky="e"); entry_MSG.grid(row=0, column=7, padx=5, pady=(10,5))
+lbl_MSG.grid(row=0, column=6, padx=5, pady=(10, 5), sticky="e"); entry_MSG.grid(row=0, column=7, padx=5, pady=(10, 5))
 lbl_PWR.grid(row=1, column=6, padx=5, pady=5, sticky="e"); entry_PWR.grid(row=1, column=7, padx=5, pady=5)
 lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e"); entry_BTRY.grid(row=2, column=7, padx=5, pady=5)
 lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e"); entry_RR.grid(row=3, column=7, padx=5, pady=5)
 lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e"); entry_T.grid(row=4, column=7, padx=5, pady=5)
+# 5th Block
+btn_RUN.grid(row=0, column=8, padx=5, pady=(10, 4))
+btn_INSP.grid(row=1, column=8, padx=5, pady=4)
+btn_SAVE.grid(row=2, column=8, padx=5, pady=4)
+btn_NEW.grid(row=3, column=8, padx=5, pady=4)
 
 # Runnit
 base.mainloop()
