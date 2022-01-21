@@ -81,7 +81,7 @@ class ModelInterface:
         self.scl_Ptrns = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
 
         self.lbl_IrPsu = tk.Label(self.frame_1_bot, text="IR PSuccess Rate:");
-        self.scl_IrPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.0001, orient="horizontal", command=self.updateModel)
+        self.scl_IrPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.00001, orient="horizontal", command=self.updateModel)
 
         self.lbl_IlPsu = tk.Label(self.frame_1_bot, text="IL PSuccess Rate:");
         self.scl_IlPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
@@ -108,7 +108,7 @@ class ModelInterface:
         self.scl_T = tk.Scale(self.frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal", command=self.updateModel)
 
         self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW", command=self.displayGraphs)
-        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model", command=self.updateModel(1))
+        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model")
         self.btn_SAVE = tk.Button(self.frame_1_bot, text="Save Configuration")
         self.btn_NEW = tk.Button(self.frame_1_bot, text="New Simulation")
         self.btn_CMPR = tk.Button(self.frame_1_bot, text="Compare Configurations")
@@ -137,7 +137,7 @@ class ModelInterface:
         self.lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e"); self.scl_SCAN.grid(row=4, column=3, padx=5, sticky="ew"); self.scl_SCAN.set("27")
         # 3rd Block
         self.lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e"); self.scl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0)); self.scl_Ptrns.set("0.3")
-        self.lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e"); self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew"); self.scl_IrPsu.set("0.0002")
+        self.lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e"); self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew"); self.scl_IrPsu.set("0.00002")
         self.lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e"); self.scl_IlPsu.grid(row=2, column=5, padx=5, sticky="ew"); self.scl_IlPsu.set("0.06")
         self.lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e"); self.scl_IpPsu.grid(row=3, column=5, padx=5, sticky="ew"); self.scl_IpPsu.set("0.09")
         # 4th Block
@@ -158,7 +158,7 @@ class ModelInterface:
 
         # Getting the graphs out
         self.updateModel(1)
-        self.displayGraphs()
+        #self.displayGraphs()
 
         # Runnit
         self.base.mainloop()
@@ -176,8 +176,12 @@ class ModelInterface:
         axes[0, 0].plot(T1, Il1, 'b', label="Local Scanning Infected")
         axes[0, 0].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
         axes[0, 0].set_title("Title")
+        axes[0, 0].ticklabel_format(style="plain")
+
         axes[0, 1].plot(T1, Ip1)
+
         axes[1, 0].plot(T1, Ip1)
+
         axes[1, 1].plot(T1, S1, 'g', label="Susceptible")
         axes[1, 1].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
         axes[1, 1].plot(T1, Il1, 'b', label="Local Scanning Infected")
@@ -199,10 +203,10 @@ class ModelInterface:
     # This method is called whenever a value option is changed, to automatically update the model
     def updateModel(self, Stub):
         N = int(self.cmb_N.get())
-        S = int(N * self.scl_S.get())
-        IR = int(N * self.scl_IR.get())
-        IL = int(N * self.scl_IL.get())
-        IP = int(N * self.scl_IP.get())
+        S = float(self.scl_S.get())
+        IR = float(self.scl_IR.get())
+        IL = float(self.scl_IL.get())
+        IP = float(self.scl_IP.get())
         WSN = int(self.cmb_WSN.get())
         DEP = int(self.cmb_DEP.get()) * int(self.cmb_DEP.get())
         TRNS = int(self.cmb_TRNS.get())
