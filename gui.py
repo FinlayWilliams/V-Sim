@@ -178,7 +178,10 @@ class ModelInterface:
         axes[0, 0].set_title("Title")
         axes[0, 0].ticklabel_format(style="plain")
 
-        axes[0, 1].plot(T1, Ip1)
+        pop = [S1[len(S1)-1], Ir1[len(Ir1)-1], Il1[len(Il1)-1], Ip1[len(Ip1)-1]]
+        explode = (0.1, 0, 0, 0)
+        labels = ["Susceptible", "Random-Scanning Infected", "Local Scanning Infected", "Peer-to-Peer Infected"]
+        axes[0, 1].pie(pop, explode=explode, labels=labels)
 
         axes[1, 0].plot(T1, Ip1)
 
