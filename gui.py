@@ -77,7 +77,7 @@ class ModelInterface:
         self.cmb_CNTCT = ttk.Combobox(self.frame_1_bot, values=self.CNTCT_Options, state="readonly")
 
         self.lbl_SCAN = tk.Label(self.frame_1_bot, text="Botnet Scanning Rate (/sec):");
-        self.scl_SCAN = tk.Scale(self.frame_1_bot, from_=0, to=250, resolution=1, orient="horizontal",command=self.updateModel)
+        self.scl_SCAN = tk.Scale(self.frame_1_bot, from_=0, to=250, resolution=1, orient="horizontal", command=self.updateModel)
 
         self.lbl_Ptrns = tk.Label(self.frame_1_bot, text="PTransmission Rate:");
         self.scl_Ptrns = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
@@ -210,6 +210,7 @@ class ModelInterface:
         self.ax[3].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
         self.ax[3].plot(T1, Il1, 'b', label="Local Scanning Infected")
         self.ax[3].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
+        self.ax[3].legend(loc="best")
         self.ax[3].set_title("Legend")
 
         self.canvas.draw()
