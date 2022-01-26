@@ -109,7 +109,7 @@ class ModelInterface:
         self.lbl_T = tk.Label(self.frame_1_bot, text="Days to Observe:");
         self.scl_T = tk.Scale(self.frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal", command=self.updateModel)
 
-        self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW", command=self.displayGraphs)
+        self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW", command= lambda: self.updateGraphs(self.activeModel))
         self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model")
         self.btn_SAVE = tk.Button(self.frame_1_bot, text="Save Configuration")
         self.btn_NEW = tk.Button(self.frame_1_bot, text="New Simulation")
@@ -160,50 +160,59 @@ class ModelInterface:
 
         # Getting the graphs out
         self.updateModel(1)
-        #self.displayGraphs()
+
+        figure = plt.figure(facecolor="#453354")
+        self.canvas = FigureCanvasTkAgg(figure,  self.frame_1_top)
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.ax = [figure.add_subplot(2, 2, x+1, facecolor="#453354") for x in range(4)]
+
+        for x in range(4):
+            self.ax[x].ticklabel_format(style="plain")
+
+        self.updateGraphs(self.activeModel)
 
         # Runnit
         self.base.mainloop()
 
-    # This method places all graph elements displaying the model
-    def displayGraphs(self):
-        S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
+    def updateGraphs(self, model):
+        S1, Ir1, Il1, Ip1 = model.runModel()
         I1 = Ir1 + Il1 + Ip1
-        T1 = self.activeModel.Timesteps
+        T1 = model.Timesteps
 
-        figure, axes = plt.subplots(nrows=2, ncols=2, facecolor="#453354")
+        [self.ax[x].clear() for x in range(4)]
 
-        axes[0, 0].plot(T1, S1, 'g', label="Susceptible")
-        axes[0, 0].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
-        axes[0, 0].plot(T1, Il1, 'b', label="Local Scanning Infected")
-        axes[0, 0].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
-        axes[0, 0].set_title("Title")
-        axes[0, 0].ticklabel_format(style="plain")
-        axes[0, 0].set_facecolor("#453354")
+        # Plotting the first graph
+        self.ax[0].plot(T1, S1, 'g', label="Susceptible")
+        self.ax[0].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
+        self.ax[0].plot(T1, Il1, 'b', label="Local Scanning Infected")
+        self.ax[0].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
+        self.ax[0].set_title("Population Sizes Over Time - Individual Virus Infection Types")
 
-        pop = [S1[len(S1)-1], Ir1[len(Ir1)-1], Il1[len(Il1)-1], Ip1[len(Ip1)-1]]
+        # Plotting the second graph
+        pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
+        # Saving myself for every time a population goes negative
+        for x in range(len(pop)):
+            if pop[x] < 0:
+                pop[x] = 0
+
         explode = (0.1, 0, 0, 0)
         labels = ["Susceptible", "Random-Scanning Infected", "Local Scanning Infected", "Peer-to-Peer Infected"]
-        axes[0, 1].pie(pop, explode=explode, labels=labels)
-        axes[0, 1].set_facecolor("#453354")
+        self.ax[1].pie(pop, explode=explode, labels=labels)
+        self.ax[1].set_title("Population Sizes on the Final Recorded Day")
 
-        axes[1, 0].plot(T1, Ip1)
-        axes[1, 0].set_facecolor("#453354")
+        # Plotting the third graph
+        self.ax[2].plot(T1, S1, 'g', label="Susceptible")
+        self.ax[2].plot(T1, I1, 'r', label="All Infected")
+        self.ax[2].set_title("Population Sizes Over Time - Individual Virus Infection Types")
 
-        axes[1, 1].plot(T1, S1, 'g', label="Susceptible")
-        axes[1, 1].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
-        axes[1, 1].plot(T1, Il1, 'b', label="Local Scanning Infected")
-        axes[1, 1].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
-        axes[1, 1].legend(loc="best")
-        axes[1, 1].set_facecolor("#453354")
+        # Plotting fourth graph
+        self.ax[3].plot(T1, S1, 'g', label="Susceptible")
+        self.ax[3].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
+        self.ax[3].plot(T1, Il1, 'b', label="Local Scanning Infected")
+        self.ax[3].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
+        self.ax[3].set_title("Legend")
 
-        figure.tight_layout()
-
-        canvas = FigureCanvasTkAgg(figure, master=self.frame_1_top)  # A tk.DrawingArea.
-        #canvas.get_tk_widget().delete(self.figure)
-
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.canvas.draw()
 
     # This method is called whenever a value option is changed, to automatically update the model
     def updateModel(self, Stub):
