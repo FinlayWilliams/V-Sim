@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 
+import matplotlib.style
+import matplotlib as mpl
 from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -148,7 +150,7 @@ class ModelInterface:
         self.lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e"); self.cmb_BTRY.grid(row=2, column=7, padx=5, pady=5); self.cmb_BTRY.set("864000");
         self.cmb_BTRY.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e"); self.scl_RR.grid(row=3, column=7, padx=5, sticky="ew"); self.scl_RR.set("0.5")
-        self.lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e"); self.scl_T.grid(row=4, column=7, padx=5, sticky="ew"); self.scl_T.set("100")
+        self.lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e"); self.scl_T.grid(row=4, column=7, padx=5, sticky="ew"); self.scl_T.set("10")
         # 5th Block
         self.btn_RUN.grid(row=0, column=8, padx=(60, 5), pady=(7, 4), sticky="ew")
         self.btn_INSP.grid(row=1, column=8, padx=(60, 5), pady=4, sticky="ew")
@@ -169,7 +171,7 @@ class ModelInterface:
         I1 = Ir1 + Il1 + Ip1
         T1 = self.activeModel.Timesteps
 
-        figure, axes = plt.subplots(nrows=2, ncols=2)
+        figure, axes = plt.subplots(nrows=2, ncols=2, facecolor="#453354")
 
         axes[0, 0].plot(T1, S1, 'g', label="Susceptible")
         axes[0, 0].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
@@ -177,19 +179,23 @@ class ModelInterface:
         axes[0, 0].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
         axes[0, 0].set_title("Title")
         axes[0, 0].ticklabel_format(style="plain")
+        axes[0, 0].set_facecolor("#453354")
 
         pop = [S1[len(S1)-1], Ir1[len(Ir1)-1], Il1[len(Il1)-1], Ip1[len(Ip1)-1]]
         explode = (0.1, 0, 0, 0)
         labels = ["Susceptible", "Random-Scanning Infected", "Local Scanning Infected", "Peer-to-Peer Infected"]
         axes[0, 1].pie(pop, explode=explode, labels=labels)
+        axes[0, 1].set_facecolor("#453354")
 
         axes[1, 0].plot(T1, Ip1)
+        axes[1, 0].set_facecolor("#453354")
 
         axes[1, 1].plot(T1, S1, 'g', label="Susceptible")
         axes[1, 1].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
         axes[1, 1].plot(T1, Il1, 'b', label="Local Scanning Infected")
         axes[1, 1].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
         axes[1, 1].legend(loc="best")
+        axes[1, 1].set_facecolor("#453354")
 
         figure.tight_layout()
 
@@ -199,12 +205,10 @@ class ModelInterface:
         canvas.draw()
         canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-        # toolbar = NavigationToolbar2Tk(canvas, self.frame_1_top)
-        # toolbar.update()
-        i = 0
-
     # This method is called whenever a value option is changed, to automatically update the model
     def updateModel(self, Stub):
+        OtherStub = Stub
+
         N = int(self.cmb_N.get())
         S = float(self.scl_S.get())
         IR = float(self.scl_IR.get())
@@ -226,6 +230,3 @@ class ModelInterface:
         T = int(self.scl_T.get())
 
         self.activeModel = model.Model(N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T)
-        OtherStub = Stub
-
-        print("Hey")
