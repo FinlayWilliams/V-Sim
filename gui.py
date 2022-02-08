@@ -203,7 +203,7 @@ class ModelInterface:
         # Plotting the third graph
         self.ax[2].plot(T1, S1, 'g', label="Susceptible")
         self.ax[2].plot(T1, I1, 'r', label="All Infected")
-        self.ax[2].set_title("Population Sizes Over Time - Individual Virus Infection Types")
+        self.ax[2].set_title("Population Sizes Over Time - Grouped Virus Infection Types")
 
         # Plotting fourth graph
         self.ax[3].plot(T1, S1, 'g', label="Susceptible")
