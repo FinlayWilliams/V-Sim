@@ -1,42 +1,16 @@
-import numpy as np
 import tkinter as tk
-from tkinter import *
 from tkinter import ttk
-
-import matplotlib.style
-import matplotlib as mpl
 from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-import model
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from Model import model
 
-class ModelInterface:
-    # Constructor
-    def __init__(self, model):
-        self.activeModel = model
-        self.modelList = []
-        self.initialiseInterfaceObjects()
-
-    # This method initialises the base window itself
-    def initialiseInterfaceObjects(self):
-        # Base Interface Settings
-        self.base = tk.Tk()
-        self.base.title("IoT-SIS Model Simulation")
-        screen_width = self.base.winfo_screenwidth()
-        screen_height = self.base.winfo_screenheight()
-        center_x = int(screen_width / 2 - 1536 / 2)
-        center_y = int(screen_height / 2 - 864 / 2)
-        self.base.geometry(f"1536x864+{center_x}+{center_y}")
-        self.base.resizable(0, 0)
-        self.base.configure(background="#453354")
-        self.base.attributes("-transparentcolor", "grey")
-        self.base.iconbitmap('./assets/virus_icon.ico')
+class ControlInterface:
 
     # This method places and displays the model-control page elements
-    def displayModelControls(self):
+    def displayModelControls(self, base):
         ### Frame 1 ( first screen )
-        self.frame_1 = tk.Frame(self.base, bg="#453354")
-        self.frame_1.place(relheight=1, relwidth=1)
+        self.frame_1 = tk.Frame(base, bg="#453354")
+        #self.frame_1.place(relheight=1, relwidth=1)
 
         # Frame 1 Top Widgets
         self.frame_1_top = tk.Frame(self.frame_1, bg="red")
@@ -49,16 +23,20 @@ class ModelInterface:
         self.cmb_N = ttk.Combobox(self.frame_1_bot, values=self.N_Options, state="readonly")
 
         self.lbl_S = tk.Label(self.frame_1_bot, text="Initial S Size (% of N):");
-        self.scl_S = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
+        self.scl_S = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+                              command=self.updateModel)
 
         self.lbl_IR = tk.Label(self.frame_1_bot, text="Initial IR Size (% of N):");
-        self.scl_IR = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal", command=self.updateModel)
+        self.scl_IR = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+                               command=self.updateModel)
 
         self.lbl_IL = tk.Label(self.frame_1_bot, text="Initial IL Size (% of N):");
-        self.scl_IL = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal", command=self.updateModel)
+        self.scl_IL = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+                               command=self.updateModel)
 
         self.lbl_IP = tk.Label(self.frame_1_bot, text="Initial IP Size (% of N):");
-        self.scl_IP = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal", command=self.updateModel)
+        self.scl_IP = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+                               command=self.updateModel)
 
         self.lbl_WSN = tk.Label(self.frame_1_bot, text="Wireless Sensor Network Count:");
         self.WSN_Options = ["1", "5", "10", "20", "50"];
@@ -77,19 +55,24 @@ class ModelInterface:
         self.cmb_CNTCT = ttk.Combobox(self.frame_1_bot, values=self.CNTCT_Options, state="readonly")
 
         self.lbl_SCAN = tk.Label(self.frame_1_bot, text="Botnet Scanning Rate (/sec):");
-        self.scl_SCAN = tk.Scale(self.frame_1_bot, from_=0, to=250, resolution=1, orient="horizontal", command=self.updateModel)
+        self.scl_SCAN = tk.Scale(self.frame_1_bot, from_=0, to=250, resolution=1, orient="horizontal",
+                                 command=self.updateModel)
 
         self.lbl_Ptrns = tk.Label(self.frame_1_bot, text="PTransmission Rate:");
-        self.scl_Ptrns = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
+        self.scl_Ptrns = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+                                  command=self.updateModel)
 
         self.lbl_IrPsu = tk.Label(self.frame_1_bot, text="IR PSuccess Rate:");
-        self.scl_IrPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.00001, orient="horizontal", command=self.updateModel)
+        self.scl_IrPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.00001, orient="horizontal",
+                                  command=self.updateModel)
 
         self.lbl_IlPsu = tk.Label(self.frame_1_bot, text="IL PSuccess Rate:");
-        self.scl_IlPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
+        self.scl_IlPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+                                  command=self.updateModel)
 
         self.lbl_IpPsu = tk.Label(self.frame_1_bot, text="IP PSuccess Rate:");
-        self.scl_IpPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal", command=self.updateModel)
+        self.scl_IpPsu = tk.Scale(self.frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+                                  command=self.updateModel)
 
         self.lbl_MSG = tk.Label(self.frame_1_bot, text="Mean Message Size (Bytes):");
         self.MSG_Options = ["10", "20", "50", "100"];
@@ -104,12 +87,15 @@ class ModelInterface:
         self.cmb_BTRY = ttk.Combobox(self.frame_1_bot, values=self.BTRY_Options, state="readonly")
 
         self.lbl_RR = tk.Label(self.frame_1_bot, text="Recovery rate:");
-        self.scl_RR = tk.Scale(self.frame_1_bot, from_=0, to=1, digits=3, resolution=0.250, orient="horizontal", command=self.updateModel)
+        self.scl_RR = tk.Scale(self.frame_1_bot, from_=0, to=1, digits=3, resolution=0.250, orient="horizontal",
+                               command=self.updateModel)
 
         self.lbl_T = tk.Label(self.frame_1_bot, text="Days to Observe:");
-        self.scl_T = tk.Scale(self.frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal", command=self.updateModel)
+        self.scl_T = tk.Scale(self.frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal",
+                              command=self.updateModel)
 
-        self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW", command= lambda: self.updateGraphs(self.activeModel))
+        self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW",
+                                 command=lambda: self.updateGraphs(self.activeModel))
         self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model")
         self.btn_SAVE = tk.Button(self.frame_1_bot, text="Save Configuration")
         self.btn_NEW = tk.Button(self.frame_1_bot, text="New Simulation")
@@ -121,36 +107,74 @@ class ModelInterface:
         ## Frame 1 Bottom Half
         self.frame_1_bot.place(y=648, relheight=0.27, relwidth=1)
         # 1st Block
-        self.lbl_N.grid(row=0, column=0, padx=(10, 5), pady=(7, 0), sticky="e"); self.cmb_N.grid(row=0, column=1, padx=5, pady=(7, 0)); self.cmb_N.set("10000");
+        self.lbl_N.grid(row=0, column=0, padx=(10, 5), pady=(7, 0), sticky="e");
+        self.cmb_N.grid(row=0, column=1, padx=5, pady=(7, 0));
+        self.cmb_N.set("10000");
         self.cmb_N.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_S.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="e"); self.scl_S.grid(row=1, column=1, padx=5, sticky="ew"); self.scl_S.set("0.99")
-        self.lbl_IR.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="e"); self.scl_IR.grid(row=2, column=1, padx=5, sticky="ew"); self.scl_IR.set("0.003")
-        self.lbl_IL.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="e"); self.scl_IL.grid(row=3, column=1, padx=5, sticky="ew"); self.scl_IL.set("0.003")
-        self.lbl_IP.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="e"); self.scl_IP.grid(row=4, column=1, padx=5, sticky="ew"); self.scl_IP.set("0.004")
+        self.lbl_S.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="e");
+        self.scl_S.grid(row=1, column=1, padx=5, sticky="ew");
+        self.scl_S.set("0.99")
+        self.lbl_IR.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="e");
+        self.scl_IR.grid(row=2, column=1, padx=5, sticky="ew");
+        self.scl_IR.set("0.003")
+        self.lbl_IL.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="e");
+        self.scl_IL.grid(row=3, column=1, padx=5, sticky="ew");
+        self.scl_IL.set("0.003")
+        self.lbl_IP.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="e");
+        self.scl_IP.grid(row=4, column=1, padx=5, sticky="ew");
+        self.scl_IP.set("0.004")
         # 2nd Block
-        self.lbl_WSN.grid(row=0, column=2, padx=5, pady=(7, 0), sticky="e"); self.cmb_WSN.grid(row=0, column=3, padx=5, pady=(7, 0)); self.cmb_WSN.set("10");
+        self.lbl_WSN.grid(row=0, column=2, padx=5, pady=(7, 0), sticky="e");
+        self.cmb_WSN.grid(row=0, column=3, padx=5, pady=(7, 0));
+        self.cmb_WSN.set("10");
         self.cmb_WSN.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_DEP.grid(row=1, column=2, padx=5, pady=5, sticky="e"); self.cmb_DEP.grid(row=1, column=3, padx=5, pady=5); self.cmb_DEP.set("50");
+        self.lbl_DEP.grid(row=1, column=2, padx=5, pady=5, sticky="e");
+        self.cmb_DEP.grid(row=1, column=3, padx=5, pady=5);
+        self.cmb_DEP.set("50");
         self.cmb_DEP.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_TRNS.grid(row=2, column=2, padx=5, pady=5, sticky="e"); self.cmb_TRNS.grid(row=2, column=3, padx=5, pady=5); self.cmb_TRNS.set("10");
+        self.lbl_TRNS.grid(row=2, column=2, padx=5, pady=5, sticky="e");
+        self.cmb_TRNS.grid(row=2, column=3, padx=5, pady=5);
+        self.cmb_TRNS.set("10");
         self.cmb_TRNS.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_CNTCT.grid(row=3, column=2, padx=5, pady=5, sticky="e"); self.cmb_CNTCT.grid(row=3, column=3, padx=5, pady=5, sticky="ew"); self.cmb_CNTCT.set("1");
+        self.lbl_CNTCT.grid(row=3, column=2, padx=5, pady=5, sticky="e");
+        self.cmb_CNTCT.grid(row=3, column=3, padx=5, pady=5, sticky="ew");
+        self.cmb_CNTCT.set("1");
         self.cmb_CNTCT.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e"); self.scl_SCAN.grid(row=4, column=3, padx=5, sticky="ew"); self.scl_SCAN.set("27")
+        self.lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e");
+        self.scl_SCAN.grid(row=4, column=3, padx=5, sticky="ew");
+        self.scl_SCAN.set("27")
         # 3rd Block
-        self.lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e"); self.scl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0)); self.scl_Ptrns.set("0.3")
-        self.lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e"); self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew"); self.scl_IrPsu.set("0.00002")
-        self.lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e"); self.scl_IlPsu.grid(row=2, column=5, padx=5, sticky="ew"); self.scl_IlPsu.set("0.06")
-        self.lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e"); self.scl_IpPsu.grid(row=3, column=5, padx=5, sticky="ew"); self.scl_IpPsu.set("0.09")
+        self.lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e");
+        self.scl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0));
+        self.scl_Ptrns.set("0.3")
+        self.lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e");
+        self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew");
+        self.scl_IrPsu.set("0.00002")
+        self.lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e");
+        self.scl_IlPsu.grid(row=2, column=5, padx=5, sticky="ew");
+        self.scl_IlPsu.set("0.06")
+        self.lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e");
+        self.scl_IpPsu.grid(row=3, column=5, padx=5, sticky="ew");
+        self.scl_IpPsu.set("0.09")
         # 4th Block
-        self.lbl_MSG.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e"); self.cmb_MSG.grid(row=0, column=7, padx=5, pady=(7, 0)); self.cmb_MSG.set("50");
+        self.lbl_MSG.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e");
+        self.cmb_MSG.grid(row=0, column=7, padx=5, pady=(7, 0));
+        self.cmb_MSG.set("50");
         self.cmb_MSG.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_PWR.grid(row=1, column=6, padx=5, pady=5, sticky="e"); self.cmb_PWR.grid(row=1, column=7, padx=5, pady=5);  self.cmb_PWR.set("0.75");
+        self.lbl_PWR.grid(row=1, column=6, padx=5, pady=5, sticky="e");
+        self.cmb_PWR.grid(row=1, column=7, padx=5, pady=5);
+        self.cmb_PWR.set("0.75");
         self.cmb_PWR.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e"); self.cmb_BTRY.grid(row=2, column=7, padx=5, pady=5); self.cmb_BTRY.set("864000");
+        self.lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e");
+        self.cmb_BTRY.grid(row=2, column=7, padx=5, pady=5);
+        self.cmb_BTRY.set("864000");
         self.cmb_BTRY.bind("<<ComboboxSelected>>", self.updateModel)
-        self.lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e"); self.scl_RR.grid(row=3, column=7, padx=5, sticky="ew"); self.scl_RR.set("0.5")
-        self.lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e"); self.scl_T.grid(row=4, column=7, padx=5, sticky="ew"); self.scl_T.set("10")
+        self.lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e");
+        self.scl_RR.grid(row=3, column=7, padx=5, sticky="ew");
+        self.scl_RR.set("0.5")
+        self.lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e");
+        self.scl_T.grid(row=4, column=7, padx=5, sticky="ew");
+        self.scl_T.set("10")
         # 5th Block
         self.btn_RUN.grid(row=0, column=8, padx=(60, 5), pady=(7, 4), sticky="ew")
         self.btn_INSP.grid(row=1, column=8, padx=(60, 5), pady=4, sticky="ew")
@@ -162,18 +186,16 @@ class ModelInterface:
         self.updateModel(1)
 
         figure = plt.figure(facecolor="#453354")
-        self.canvas = FigureCanvasTkAgg(figure,  self.frame_1_top)
+        self.canvas = FigureCanvasTkAgg(figure, self.frame_1_top)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-        self.ax = [figure.add_subplot(2, 2, x+1, facecolor="#453354") for x in range(4)]
+        self.ax = [figure.add_subplot(2, 2, x + 1, facecolor="#453354") for x in range(4)]
 
         for x in range(4):
             self.ax[x].ticklabel_format(style="plain")
 
         self.updateGraphs(self.activeModel)
 
-        # Runnit
-        self.base.mainloop()
-
+    # Method to update the onscreen graphs to whatever the current model configuration is
     def updateGraphs(self, model):
         S1, Ir1, Il1, Ip1 = model.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -239,4 +261,5 @@ class ModelInterface:
         RR = float(self.scl_RR.get())
         T = int(self.scl_T.get())
 
-        self.activeModel = model.Model(N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T)
+        self.activeModel = model.Model(N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG,
+                                       PWR, BTRY, RR, T)

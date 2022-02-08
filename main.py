@@ -1,21 +1,12 @@
 #<-------------------------------------------------- All Imports ------------------------------------------------------>
-import model
-import gui
-from scipy.integrate import odeint
-import numpy as np
-
-import matplotlib.pyplot as plt
-import tkinter as tk
-from tkinter import ttk
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-
+from Model import model
+from Interface import base
 
 #<------------------------------------------------------- Model ------------------------------------------------------->
 
 # # #VAR:                                                    deply    tran  cntc     scan     P         irP      ilP      ipP    mean   mean
 # # #VAR:               N      S     Ir      Il     Ip    W   area     rng    rte      rte    trans      suc      suc      suc    msg    pwr      ttlbat    rcvo    time
-myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10, 50 * 50,   10,     1,      27,     0.3,    0.00002,   0.06,    0.09,     50,   0.75,    864000,    0.75,    100)
+#myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10, 50 * 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75, 100)
 #
 # S1, Ir1, Il1, Ip1 = myModel.runModel()
 # I1 = Ir1 + Il1 + Ip1
@@ -34,5 +25,4 @@ myModel = model.Model(10000, 0.99, 0.003, 0.003, 0.004, 10, 50 * 50,   10,     1
 # plt.show()
 
 #<-------------------------------------------------------- GUI -------------------------------------------------------->
-interface = gui.ModelInterface(myModel)
-interface.displayModelControls()
+interface = base.BaseInterface()
