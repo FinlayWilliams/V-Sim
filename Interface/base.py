@@ -14,7 +14,7 @@ class BaseInterface(master.MasterInterface):
         self.interfaces = []
         self.display(1, self.interfaces)
 
-    # This method initialises the base window itself
+    # This method initialises the base window itself as well as the other interfaces
     def display(self, baseWin, interfaces):
         # Base Interface Settings
         self.base = tk.Tk()
