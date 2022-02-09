@@ -10,7 +10,8 @@ class HomeInterface(master.MasterInterface):
         lblex = tk.Label(self.frame_1, text="Welcome to the IoT-SIS Simulation tool", bg="#453354")
         lblex.pack()
 
-        lblex2 = tk.Label(self.frame_1, text="Here, some basic information about the models variables will be explained:", bg="#453354")
+        lblex2 = tk.Label(self.frame_1, text="Here, some basic information about the "
+                                             "models variables will be ""explained:", bg="#453354")
         lblex2.pack()
 
         lbl1 = tk.Label(self.frame_1, text="Press this button to get started configuring a the model", bg="#453354")
