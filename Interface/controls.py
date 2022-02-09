@@ -1,15 +1,18 @@
+from Interface import master
+from Model import model
 import tkinter as tk
 from tkinter import ttk
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
-from Model import model
 
 
-class ControlInterface:
+class ControlInterface(master.MasterInterface):
+
     # This method instantiates and places all widgets for the controls page
-    def displayModelControls(self, base):
+    def display(self, baseWin, interfaces):
+
         ### Frame 1 the overarching frame (filling the base element)
-        self.frame_1 = tk.Frame(base, bg="#453354")
+        self.frame_1 = tk.Frame(baseWin, bg="#453354")
 
         # Frame 1 Top (Area for the graphs)
         self.frame_1_top = tk.Frame(self.frame_1, bg="red")
@@ -96,7 +99,7 @@ class ControlInterface:
 
         self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW",
                                  command=lambda: self.updateGraphs(self.activeModel))
-        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model")
+        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model", command=lambda: self.changeFrame(interfaces[0]))
         self.btn_SAVE = tk.Button(self.frame_1_bot, text="Save Configuration")
         self.btn_NEW = tk.Button(self.frame_1_bot, text="New Simulation")
         self.btn_CMPR = tk.Button(self.frame_1_bot, text="Compare Configurations")

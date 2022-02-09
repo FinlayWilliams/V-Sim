@@ -1,6 +1,6 @@
 #<-------------------------------------------------- All Imports ------------------------------------------------------>
-from Model import model
-from Interface import base
+# from Model import model
+
 
 #<------------------------------------------------------- Model ------------------------------------------------------->
 
@@ -25,4 +25,9 @@ from Interface import base
 # plt.show()
 
 #<-------------------------------------------------------- GUI -------------------------------------------------------->
+# import sys
+# sys.path.append(r'Interface')
+
+from Interface import base
+
 interface = base.BaseInterface()
