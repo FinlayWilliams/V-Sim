@@ -1,4 +1,5 @@
 import tkinter as tk
+from Model import model
 
 
 class MasterInterface:
@@ -6,7 +7,7 @@ class MasterInterface:
     def __init__(self):
         self.frame_1 = tk.Frame()
 
-    def display(self, baseWin, interfaces):
+    def display(self, baseWin):
         pass
 
     def changeFrame(self, newFrame):

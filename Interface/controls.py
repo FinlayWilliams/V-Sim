@@ -4,12 +4,18 @@ import tkinter as tk
 from tkinter import ttk
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+import numpy as np
 
 
 class ControlInterface(master.MasterInterface):
 
+    def __init__(self, modelList, interfaces, activeModel):
+        self.modelList = modelList
+        self.interfaces = interfaces
+        self.activeModel = activeModel
+
     # This method instantiates and places all widgets for the controls page
-    def display(self, baseWin, interfaces):
+    def display(self, baseWin):
 
         ### Frame 1 the overarching frame (filling the base element)
         self.frame_1 = tk.Frame(baseWin, bg="#453354")
@@ -42,11 +48,11 @@ class ControlInterface(master.MasterInterface):
                                command=self.updateModel)
 
         self.lbl_WSN = tk.Label(self.frame_1_bot, text="Wireless Sensor Network Count:")
-        self.WSN_Options = ["1", "5", "10", "20", "50"];
+        self.WSN_Options = ["1", "5", "10", "20", "50"]
         self.cmb_WSN = ttk.Combobox(self.frame_1_bot, values=self.WSN_Options, state="readonly")
 
         self.lbl_DEP = tk.Label(self.frame_1_bot, text="Node Deployment Area: (m x m)")
-        self.DEP_Options = ["25", "50", "100", "150"];
+        self.DEP_Options = ["25", "50", "100", "150"]
         self.cmb_DEP = ttk.Combobox(self.frame_1_bot, values=self.DEP_Options, state="readonly")
 
         self.lbl_TRNS = tk.Label(self.frame_1_bot, text="Node Transmission Range (m):")
@@ -99,10 +105,11 @@ class ControlInterface(master.MasterInterface):
 
         self.btn_RUN = tk.Button(self.frame_1_bot, text="Run Model HERE 4 NOW",
                                  command=lambda: self.updateGraphs(self.activeModel))
-        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model", command=lambda: self.changeFrame(interfaces[0]))
+        self.btn_INSP = tk.Button(self.frame_1_bot, text="Inspect Model")
         self.btn_SAVE = tk.Button(self.frame_1_bot, text="Save Configuration")
-        self.btn_NEW = tk.Button(self.frame_1_bot, text="New Simulation")
         self.btn_CMPR = tk.Button(self.frame_1_bot, text="Compare Configurations")
+        self.btn_RTRN = tk.Button(self.frame_1_bot, text="Return", command=lambda: self.changeFrame(self.interfaces[0]))
+
 
         # Placing all elements
         ## Frame 1 Top Half
@@ -112,78 +119,78 @@ class ControlInterface(master.MasterInterface):
         # 1st Block
         self.lbl_N.grid(row=0, column=0, padx=(10, 5), pady=(7, 0), sticky="e")
         self.cmb_N.grid(row=0, column=1, padx=5, pady=(7, 0))
-        self.cmb_N.set("10000");
+        self.cmb_N.set(self.activeModel.N)
         self.cmb_N.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_S.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_S.grid(row=1, column=1, padx=5, sticky="ew")
-        self.scl_S.set("0.99")
+        self.scl_S.set(self.activeModel.percentS)
         self.lbl_IR.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IR.grid(row=2, column=1, padx=5, sticky="ew")
-        self.scl_IR.set("0.003")
+        self.scl_IR.set(self.activeModel.percentIr)
         self.lbl_IL.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IL.grid(row=3, column=1, padx=5, sticky="ew")
-        self.scl_IL.set("0.003")
+        self.scl_IL.set(self.activeModel.percentIl)
         self.lbl_IP.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IP.grid(row=4, column=1, padx=5, sticky="ew")
-        self.scl_IP.set("0.004")
+        self.scl_IP.set(self.activeModel.percentIp)
         # 2nd Block
         self.lbl_WSN.grid(row=0, column=2, padx=5, pady=(7, 0), sticky="e")
         self.cmb_WSN.grid(row=0, column=3, padx=5, pady=(7, 0))
-        self.cmb_WSN.set("10")
+        self.cmb_WSN.set(self.activeModel.WSNnumber)
         self.cmb_WSN.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_DEP.grid(row=1, column=2, padx=5, pady=5, sticky="e")
         self.cmb_DEP.grid(row=1, column=3, padx=5, pady=5)
-        self.cmb_DEP.set("50")
+        self.cmb_DEP.set(self.activeModel.deploymentArea)
         self.cmb_DEP.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_TRNS.grid(row=2, column=2, padx=5, pady=5, sticky="e")
         self.cmb_TRNS.grid(row=2, column=3, padx=5, pady=5)
-        self.cmb_TRNS.set("10")
+        self.cmb_TRNS.set(self.activeModel.transmissionRange)
         self.cmb_TRNS.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_CNTCT.grid(row=3, column=2, padx=5, pady=5, sticky="e")
         self.cmb_CNTCT.grid(row=3, column=3, padx=5, pady=5, sticky="ew")
-        self.cmb_CNTCT.set("1")
+        self.cmb_CNTCT.set(self.activeModel.contactRate)
         self.cmb_CNTCT.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e")
         self.scl_SCAN.grid(row=4, column=3, padx=5, sticky="ew")
-        self.scl_SCAN.set("27")
+        self.scl_SCAN.set(self.activeModel.botScanningRate)
         # 3rd Block
         self.lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e")
         self.scl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0))
-        self.scl_Ptrns.set("0.3")
+        self.scl_Ptrns.set(self.activeModel.botPtransmission)
         self.lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e")
         self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew")
-        self.scl_IrPsu.set("0.00002")
+        self.scl_IrPsu.set(self.activeModel.IrPsuccess)
         self.lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e")
         self.scl_IlPsu.grid(row=2, column=5, padx=5, sticky="ew")
-        self.scl_IlPsu.set("0.06")
+        self.scl_IlPsu.set(self.activeModel.IlPsuccess)
         self.lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e")
         self.scl_IpPsu.grid(row=3, column=5, padx=5, sticky="ew")
-        self.scl_IpPsu.set("0.09")
+        self.scl_IpPsu.set(self.activeModel.IpPsuccess)
         # 4th Block
         self.lbl_MSG.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e")
         self.cmb_MSG.grid(row=0, column=7, padx=5, pady=(7, 0))
-        self.cmb_MSG.set("50")
+        self.cmb_MSG.set(self.activeModel.meanMessageSize)
         self.cmb_MSG.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_PWR.grid(row=1, column=6, padx=5, pady=5, sticky="e")
         self.cmb_PWR.grid(row=1, column=7, padx=5, pady=5)
-        self.cmb_PWR.set("0.75")
+        self.cmb_PWR.set(self.activeModel.meanPower)
         self.cmb_PWR.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e")
         self.cmb_BTRY.grid(row=2, column=7, padx=5, pady=5)
-        self.cmb_BTRY.set("864000")
+        self.cmb_BTRY.set(self.activeModel.totalBattery)
         self.cmb_BTRY.bind("<<ComboboxSelected>>", self.updateModel)
         self.lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e")
         self.scl_RR.grid(row=3, column=7, padx=5, sticky="ew")
-        self.scl_RR.set("0.5")
+        self.scl_RR.set(self.activeModel.recoveryRate)
         self.lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e")
         self.scl_T.grid(row=4, column=7, padx=5, sticky="ew")
-        self.scl_T.set("10")
+        self.scl_T.set(self.activeModel.Timesteps)
         # 5th Block
         self.btn_RUN.grid(row=0, column=8, padx=(60, 5), pady=(7, 4), sticky="ew")
         self.btn_INSP.grid(row=1, column=8, padx=(60, 5), pady=4, sticky="ew")
         self.btn_SAVE.grid(row=2, column=8, padx=(60, 5), pady=4, sticky="ew")
-        self.btn_NEW.grid(row=3, column=8, padx=(60, 5), pady=4, sticky="ew")
-        self.btn_CMPR.grid(row=4, column=8, padx=(60, 5), pady=4, sticky="ew")
+        self.btn_CMPR.grid(row=3, column=8, padx=(60, 5), pady=4, sticky="ew")
+        self.btn_RTRN.grid(row=4, column=8, padx=(60, 5), pady=4, sticky="ew")
 
         # Matching the model to the default figures
         self.updateModel(1)
@@ -204,7 +211,7 @@ class ControlInterface(master.MasterInterface):
     def updateGraphs(self, model):
         S1, Ir1, Il1, Ip1 = model.runModel()
         I1 = Ir1 + Il1 + Ip1
-        T1 = model.Timesteps
+        T1 = np.linspace(0, model.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(4)]

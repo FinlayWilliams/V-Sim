@@ -23,7 +23,7 @@ class Model:
         self.meanPower = meanPwr
         self.totalBattery = ttlBattery
         self.recoveryRate = rcvryRate
-        self.Timesteps = np.linspace(0, timesteps, 101)
+        self.Timesteps = timesteps
 
         self.calculateVariables()
 
@@ -94,7 +94,7 @@ class Model:
     def runModel(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
-        solution = odeint(self.SISModel, y0, self.Timesteps, args=(self.SLoc, self.SNhb, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 101), args=(self.SLoc, self.SNhb, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
         S, Ir, Il, Ip = solution.T
 
