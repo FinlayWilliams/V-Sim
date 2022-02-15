@@ -1,10 +1,11 @@
 import numpy as np
 from scipy.integrate import odeint
 
-class Model:
+class SIS:
     # Preliminary Constructor to Initialise Variables and Allow for easy class creation
-    def __init__(self, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
+    def __init__(self, name, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
                  irPsuc, ilPsuc, ipPsuc, meanMsgSize, meanPwr, ttlBattery, rcvryRate, timesteps):
+        self.Name = name
         self.N = n
         self.percentS = prcntS
         self.percentIr = prcntIr
@@ -26,6 +27,9 @@ class Model:
         self.Timesteps = timesteps
 
         self.calculateVariables()
+
+    def __str__(self):
+        return self.Name
 
     # Method to create all remaining variables and calculate their values based off of the input values
     def calculateVariables(self):
