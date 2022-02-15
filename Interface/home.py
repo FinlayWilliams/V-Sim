@@ -10,8 +10,9 @@ class HomeInterface(master.MasterInterface):
         self.modelList = modelList
         self.interfaces = interfaces
 
-    def troubleshoot(self):
-        print(self.listy.curselection())
+    def troubleshoot(self, stub):
+        print(str((self.listy.get(self.listy.curselection()))))
+        self.interfaces[1].activeModel = str((self.listy.get(self.listy.curselection())))
 
     def display(self, baseWin):
         self.frame_1 = tk.Frame(baseWin, bg="#453354")
