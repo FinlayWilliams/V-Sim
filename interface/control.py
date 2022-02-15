@@ -4,13 +4,12 @@ from tkinter import *
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
-from Model import sis
+from model import sis
 
 
 class ControlInterface(tk.Frame):
-
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for the interface
+    # it also creates and places all widgets for this interface
     def __init__(self, master, controller):
         super().__init__(master)
 
@@ -82,7 +81,7 @@ class ControlInterface(tk.Frame):
         self.scl_IpPsu = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                                   command=self.updateModel)
 
-        lbl_Name = tk.Label(frame_1_bot, text="Model Name:")
+        lbl_Name = tk.Label(frame_1_bot, text="model Name:")
         self.entry_Name = tk.Entry(frame_1_bot)
 
         lbl_MSG = tk.Label(frame_1_bot, text="Mean Message Size (Bytes):")
@@ -105,10 +104,10 @@ class ControlInterface(tk.Frame):
         self.scl_T = tk.Scale(frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal",
                               command=self.updateModel)
 
-        btn_RUN = tk.Button(frame_1_bot, text="Run Model HERE 4 NOW", command=lambda: self.updateGraphs(self.activeModel))
-        btn_INSP = tk.Button(frame_1_bot, text="Inspect Model")
-        btn_SAVE = tk.Button(frame_1_bot, text="Save Model", command=lambda: [self.updateModel(1), controller.overwriteModel(self.activeModelIndex, self.activeModel)])
-        btn_SAVE_NEW = tk.Button(frame_1_bot, text="Save New Model", command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
+        btn_RUN = tk.Button(frame_1_bot, text="Run model HERE 4 NOW", command=lambda: self.updateGraphs(self.activeModel))
+        btn_INSP = tk.Button(frame_1_bot, text="Inspect model")
+        btn_SAVE = tk.Button(frame_1_bot, text="Save model", command=lambda: [self.updateModel(1), controller.overwriteModel(self.activeModelIndex, self.activeModel)])
+        btn_SAVE_NEW = tk.Button(frame_1_bot, text="Save New model", command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
         btn_RTRN = tk.Button(frame_1_bot, text="Return to Home", command=lambda: controller.display("ControlInterface", "HomeInterface"))
 
         # Placing all elements

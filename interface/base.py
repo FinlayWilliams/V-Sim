@@ -2,28 +2,28 @@ import tkinter as tk
 from tkinter import ttk
 from .home import HomeInterface
 from .control import ControlInterface
-from Model.sis import SIS
+from model.sis import SIS
 
 
 class BaseApp(tk.Tk):
+    # Initialising the base tk.Tk class and overarching container
+    # (setting default sizes, default models, all interfaces)
     def __init__(self):
-
-        # Initialising the base tk.Tk class and overarching container
-        # (setting default sizes, default models, all interfaces)
         super().__init__()
-        self.title("IoT-SIS Model Simulation")
+        self.title("IoT-SIS model Simulation")
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
         center_x = int(self.screen_width / 2 - 1536 / 2)
         center_y = int(self.screen_height / 2 - 864 / 2)
         self.geometry(f"1536x864+{center_x}+{center_y}")
+        self.iconbitmap("assets/virus_icon.ico")
 
         # Creating a base frame interface for all other interfaces to use as the master class
         base = tk.Frame(self, background="#453354")
         base.pack(side="top", fill="both", expand=True)
 
-        # Initialising a Model list and a default model
+        # Initialising a model list and a default model
         self.models = []
         defaultModel = SIS("SIS: DefaultModel", 10000, 0.99, 0.003, 0.003, 0.004, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
                            0.09, 50, 0.75, 864000, 0.75, 10)
@@ -31,7 +31,7 @@ class BaseApp(tk.Tk):
         self.activeModelIndex = 0
         self.activeModel = defaultModel
 
-        # Initialising all interfaces and displaying the Home Interface
+        # Initialising all interfaces and displaying the Home interface
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
@@ -70,7 +70,7 @@ class BaseApp(tk.Tk):
 
     def getActiveModel(self): return self.activeModel
 
-    def switchActiveModel(self, index): self.activeModel = self.models[index]
+    def setActiveModel(self, index): self.activeModel = self.models[index]
 
     def addModel(self, newModel): self.models.append(newModel)
 

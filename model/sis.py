@@ -28,6 +28,7 @@ class SIS:
 
         self.calculateVariables()
 
+    # Method to obtain the name from each model allowing the list to access an attribute for identification
     def __str__(self):
         return self.Name
 

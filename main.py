@@ -1,4 +1,4 @@
-from Interface.base import BaseApp
+from interface.base import BaseApp
 
 
 theApplication = BaseApp()
