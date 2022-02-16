@@ -15,100 +15,123 @@ class ControlInterface(tk.Frame):
 
         self.controller = controller
 
-        # Frame 1 Top (Upper area for displaying graphs)
-        frame_1_top = tk.Frame(self, bg="red")
+        # Frame Top (Upper area for displaying graphs)
+        frame_top = tk.Frame(self, bg="blue")
+        # This button serves as a refresh button for the graphs (as doing it live is slow)
+        btn_Refresh_Graph = tk.Button(frame_top, wraplength=40, width=5, text="Refresh Graphs", font=("Arial", 7), command=self.updateGraphs)
+        # This button will reset the current configuration to that of the activemodel at the time of opening the window
+        # and then resets the graphs too
+        btn_Reset = tk.Button(frame_top, wraplength=40, width=5,text="Reset Model", font=("Arial", 7), command= lambda: [self.updateVariables(controller), self.updateGraphs()])
 
-        # Frame 1 Bottom (Lower area for the controls)
-        frame_1_bot = tk.Frame(self, bg="green")
+        # Canvas frame (to hold the graphs)
+        canvas_frame = tk.Frame(frame_top, bg="blue")
+
+        # Frame Mid (For a single label)
+        frame_mid = tk.Frame(self, bg="red")
+        lbl_Options = tk.Label(frame_mid, text="Model Variables", bg="red", font=("Arial", 10), fg="white")
+
+        # Frame Bottom (Lower area for the controls)
+        frame_bot = tk.Frame(self, bg="green")
 
         # Creating labels and entry boxes for all initial variables
-        lbl_N = tk.Label(frame_1_bot, text="Initial Node Population Size (N):")
+        lbl_N = tk.Label(frame_bot, text="Initial Node Population Size (N):")
         N_Options = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
-        self.cmb_N = ttk.Combobox(frame_1_bot, values=N_Options, state="readonly")
+        self.cmb_N = ttk.Combobox(frame_bot, values=N_Options, state="readonly")
 
-        lbl_S = tk.Label(frame_1_bot, text="Initial S Size (% of N):")
-        self.scl_S = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+        lbl_S = tk.Label(frame_bot, text="Initial S Size (% of N):")
+        self.scl_S = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                               command=self.updateModel)
 
-        lbl_IR = tk.Label(frame_1_bot, text="Initial IR Size (% of N):")
-        self.scl_IR = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+        lbl_IR = tk.Label(frame_bot, text="Initial IR Size (% of N):")
+        self.scl_IR = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
 
-        lbl_IL = tk.Label(frame_1_bot, text="Initial IL Size (% of N):")
-        self.scl_IL = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+        lbl_IL = tk.Label(frame_bot, text="Initial IL Size (% of N):")
+        self.scl_IL = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
 
-        lbl_IP = tk.Label(frame_1_bot, text="Initial IP Size (% of N):")
-        self.scl_IP = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
+        lbl_IP = tk.Label(frame_bot, text="Initial IP Size (% of N):")
+        self.scl_IP = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
 
-        lbl_WSN = tk.Label(frame_1_bot, text="Wireless Sensor Network Count:")
+        lbl_WSN = tk.Label(frame_bot, text="Wireless Sensor Network Count:")
         WSN_Options = ["1", "5", "10", "20", "50"]
-        self.cmb_WSN = ttk.Combobox(frame_1_bot, values=WSN_Options, state="readonly")
+        self.cmb_WSN = ttk.Combobox(frame_bot, values=WSN_Options, state="readonly")
 
-        lbl_DEP = tk.Label(frame_1_bot, text="Node Deployment Area: (m x m)")
+        lbl_DEP = tk.Label(frame_bot, text="Node Deployment Area: (m x m)")
         DEP_Options = ["25", "50", "100", "150"]
-        self.cmb_DEP = ttk.Combobox(frame_1_bot, values=DEP_Options, state="readonly")
+        self.cmb_DEP = ttk.Combobox(frame_bot, values=DEP_Options, state="readonly")
 
-        lbl_TRNS = tk.Label(frame_1_bot, text="Node Transmission Range (m):")
+        lbl_TRNS = tk.Label(frame_bot, text="Node Transmission Range (m):")
         TRNS_Options = ["1", "5", "10", "15"]
-        self.cmb_TRNS = ttk.Combobox(frame_1_bot, values=TRNS_Options, state="readonly")
+        self.cmb_TRNS = ttk.Combobox(frame_bot, values=TRNS_Options, state="readonly")
 
-        lbl_CNTCT = tk.Label(frame_1_bot, text="S Node Contact Rate:")
+        lbl_CNTCT = tk.Label(frame_bot, text="S Node Contact Rate:")
         CNTCT_Options = ["1", "5", "10", "20", "50", "75", "100", "250"]
-        self.cmb_CNTCT = ttk.Combobox(frame_1_bot, values=CNTCT_Options, state="readonly")
+        self.cmb_CNTCT = ttk.Combobox(frame_bot, values=CNTCT_Options, state="readonly")
 
-        lbl_SCAN = tk.Label(frame_1_bot, text="Botnet Scanning Rate (/sec):")
-        self.scl_SCAN = tk.Scale(frame_1_bot, from_=0, to=250, resolution=1, orient="horizontal",
+        lbl_SCAN = tk.Label(frame_bot, text="Botnet Scanning Rate (/sec):")
+        self.scl_SCAN = tk.Scale(frame_bot, from_=0, to=250, resolution=1, orient="horizontal",
                                  command=self.updateModel)
 
-        lbl_Ptrns = tk.Label(frame_1_bot, text="PTransmission Rate:")
-        self.scl_Ptrns = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+        lbl_Ptrns = tk.Label(frame_bot, text="PTransmission Rate:")
+        self.scl_Ptrns = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                                   command=self.updateModel)
 
-        lbl_IrPsu = tk.Label(frame_1_bot, text="IR PSuccess Rate:")
-        self.scl_IrPsu = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.00001, orient="horizontal",
+        lbl_IrPsu = tk.Label(frame_bot, text="IR PSuccess Rate:")
+        self.scl_IrPsu = tk.Scale(frame_bot, from_=0, to=1, resolution=0.00001, orient="horizontal",
                                   command=self.updateModel)
 
-        lbl_IlPsu = tk.Label(frame_1_bot, text="IL PSuccess Rate:")
-        self.scl_IlPsu = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+        lbl_IlPsu = tk.Label(frame_bot, text="IL PSuccess Rate:")
+        self.scl_IlPsu = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                                   command=self.updateModel)
 
-        lbl_IpPsu = tk.Label(frame_1_bot, text="IP PSuccess Rate:")
-        self.scl_IpPsu = tk.Scale(frame_1_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
+        lbl_IpPsu = tk.Label(frame_bot, text="IP PSuccess Rate:")
+        self.scl_IpPsu = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                                   command=self.updateModel)
 
-        lbl_MSG = tk.Label(frame_1_bot, text="Mean Message Size (Bytes):")
+        lbl_MSG = tk.Label(frame_bot, text="Mean Message Size (Bytes):")
         MSG_Options = ["10", "20", "50", "100"]
-        self.cmb_MSG = ttk.Combobox(frame_1_bot, values=MSG_Options, state="readonly")
+        self.cmb_MSG = ttk.Combobox(frame_bot, values=MSG_Options, state="readonly")
 
-        lbl_PWR = tk.Label(frame_1_bot, text="Mean Power to Send Message (mA):")
+        lbl_PWR = tk.Label(frame_bot, text="Mean Power to Send Message (mA):")
         PWR_Options = ["0.25", "0.5", "0.75", "1", "1.25"]
-        self.cmb_PWR = ttk.Combobox(frame_1_bot, values=PWR_Options, state="readonly")
+        self.cmb_PWR = ttk.Combobox(frame_bot, values=PWR_Options, state="readonly")
 
-        lbl_BTRY = tk.Label(frame_1_bot, text="Total Node Battery Capacity (mAs):")
+        lbl_BTRY = tk.Label(frame_bot, text="Total Node Battery Capacity (mAs):")
         BTRY_Options = ["432000", "864000", "1728000"]
-        self.cmb_BTRY = ttk.Combobox(frame_1_bot, values=BTRY_Options, state="readonly")
+        self.cmb_BTRY = ttk.Combobox(frame_bot, values=BTRY_Options, state="readonly")
 
-        lbl_RR = tk.Label(frame_1_bot, text="Recovery rate:")
-        self.scl_RR = tk.Scale(frame_1_bot, from_=0, to=1, digits=3, resolution=0.250, orient="horizontal",
+        lbl_RR = tk.Label(frame_bot, text="Recovery rate:")
+        self.scl_RR = tk.Scale(frame_bot, from_=0, to=1, digits=3, resolution=0.250, orient="horizontal",
                                command=self.updateModel)
 
-        lbl_T = tk.Label(frame_1_bot, text="Days to Observe:")
-        self.scl_T = tk.Scale(frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal",
+        lbl_T = tk.Label(frame_bot, text="Days to Observe:")
+        self.scl_T = tk.Scale(frame_bot, from_=0, to=900, resolution=1, orient="horizontal",
                               command=self.updateModel)
 
-        btn_INSP = tk.Button(frame_1_bot, text="Inspect model")
-        self.entry_Name = tk.Entry(frame_1_bot)
-        btn_SAVE = tk.Button(frame_1_bot, text="Save model", command=lambda: [self.updateModel(1), controller.overwriteModel(self.activeModelIndex, self.activeModel)])
-        btn_SAVE_NEW = tk.Button(frame_1_bot, text="Save New model", command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
-        btn_RTRN = tk.Button(frame_1_bot, text="Return to Home", command=lambda: controller.display("ControlInterface", "HomeInterface"))
+        btn_INSP = tk.Button(frame_bot, text="Inspect model")
+        lbl_Model_Name = tk.Label(frame_bot, text="Model Name:", bg="green")
+        self.entry_Name = tk.Entry(frame_bot)
+        btn_SAVE = tk.Button(frame_bot, text="Save model",
+                             command=lambda: [self.updateModel(1),
+                                              controller.overwriteModel(self.activeModelIndex, self.activeModel)])
+        btn_SAVE_NEW = tk.Button(frame_bot, text="Save New model",
+                                 command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
+        btn_RTRN = tk.Button(frame_bot, text="Return to Home",
+                             command=lambda: controller.display("ControlInterface", "HomeInterface"))
 
         # Placing all elements
-        ## Frame 1 Top Half
-        frame_1_top.place(relheight=0.75, relwidth=1)
-        ## Frame 1 Bottom Half
-        frame_1_bot.place(y=648, relheight=0.27, relwidth=1)
+        ## Frame Top Half
+        frame_top.place(relheight=0.75, relwidth=1)
+        btn_Refresh_Graph.place(x=10, y=13)
+        btn_Reset.place(x=10, y=64)
+        canvas_frame.place(relheight=0.93, relwidth=0.956, x=58, y=12)
+        ## Frame Mid
+        frame_mid.place(y=625, relheight=0.05, relwidth=1)
+        lbl_Options.pack()
+        ## Frame Bottom Half
+        frame_bot.place(y=648, relheight=0.27, relwidth=1)
         # 1st Block
         lbl_N.grid(row=0, column=0, padx=(10, 5), pady=(7, 0), sticky="e")
         self.cmb_N.grid(row=0, column=1, padx=5, pady=(7, 0))
@@ -161,7 +184,7 @@ class ControlInterface(tk.Frame):
         self.scl_T.grid(row=4, column=7, padx=5, sticky="ew")
         # 5th Block
         btn_INSP.grid(row=0, column=8, padx=(60, 5), pady=4, sticky="ew")
-        self.entry_Name.grid(row=1, column=8, padx=(60, 5), pady=4, sticky="ew")
+        self.entry_Name.grid(row=1, column=8, padx=(60, 5), sticky="ew")
         btn_SAVE.grid(row=2, column=8, padx=(60, 5), pady=4, sticky="ew")
         btn_SAVE_NEW.grid(row=3, column=8, padx=(60, 5), pady=4, sticky="ew")
         btn_RTRN.grid(row=4, column=8, padx=(60, 5), pady=4, sticky="ew")
@@ -169,9 +192,9 @@ class ControlInterface(tk.Frame):
         # Calling the method to allign the variables and populate all fields
         self.updateVariables(controller)
 
-        # Setting up the canvas area for the graphs in frame_1_top
+        # Setting up the canvas area for the graphs in frame_top
         figure = plt.figure(facecolor="#453354")
-        self.canvas = FigureCanvasTkAgg(figure, frame_1_top)
+        self.canvas = FigureCanvasTkAgg(figure, canvas_frame)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.ax = [figure.add_subplot(2, 2, x + 1, facecolor="#453354") for x in range(4)]
 
@@ -252,7 +275,8 @@ class ControlInterface(tk.Frame):
 
             self.activeModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
-            self.updateGraphs()
+            # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
+            #self.updateGraphs()
 
     # This method is called once when this interface is created and is called everytime this interface
     # is opened to ensure all variables are updated and correct

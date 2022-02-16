@@ -73,12 +73,10 @@ class BaseApp(tk.Tk):
 
     def getActiveModel(self): return self.activeModel
 
-    def setActiveModel(self, index):
-        self.activeModel = self.models[index]
+    def setActiveModel(self, index): self.activeModel = self.models[index]
 
     def addModel(self, newModel): self.models.append(newModel)
 
     def removeModel(self, index): self.models.remove(index)
 
-    def overwriteModel(self, index, model):
-        self.models[index] = model
+    def overwriteModel(self, index, model): self.models[index] = model
