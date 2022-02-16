@@ -12,7 +12,7 @@ class HomeInterface(tk.Frame):
 
         ## Left frame initialisation
         frame_left = tk.Frame(self, bg="red")
-
+        # The page title gui
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#453354")
         lblTitle = tk.Label(titleBgInner, text="IoT-SIS Sim:", bg="#453354",font=("Courier", 30, "underline"), fg="white")
@@ -21,7 +21,7 @@ class HomeInterface(tk.Frame):
 
         # Left frame placement
         frame_left.place(x=0, y=0, height="864", width="718")
-
+        # The page title gui
         lblTitle.place(x=5, y=2)
         lblTitle2.place(x=5, y=50)
         titleBgBorder.place(x=25, y=23, height="100", width="635")
@@ -29,7 +29,7 @@ class HomeInterface(tk.Frame):
 
         ## Right frame initialisation
         frame_right = tk.Frame(self, bg="blue")
-
+        # Creating the listbox where the list of all saved models will appear
         self.lstModels = tk.Listbox(frame_right, height=5, width=40, bg="yellow", font=("Calibri", 15))
         self.updateModelList()
         self.lstModels.bind("<<ListboxSelect>>",
@@ -51,9 +51,9 @@ class HomeInterface(tk.Frame):
         for M in self.controller.models:
             self.lstModels.insert(END, M)
 
+    # Method that is called everytime a different entry in the listbox is selected, updating the controllers
+    # (base windows) current active model and an index variable that is used when saving the models
     def updateActiveModel(self, controller, stub):
         if self.lstModels.curselection() != ():
             controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
             controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
-            print(self.lstModels.get(self.lstModels.curselection()))
-            print(int(''.join(map(str, self.lstModels.curselection()))))
