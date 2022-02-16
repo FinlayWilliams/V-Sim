@@ -39,7 +39,7 @@ class HomeInterface(tk.Frame):
                               command=lambda: [controller.display("HomeInterface", "ControlInterface")])
 
         # Right frame placement
-        frame_right.place(x=717, y=0, height="864", width="818")
+        frame_right.place(x=717, y=0, height="864", width="819")
 
         self.lstModels.pack()
 

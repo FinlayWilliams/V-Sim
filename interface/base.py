@@ -31,7 +31,7 @@ class BaseApp(tk.Tk):
         self.activeModelIndex = 0
         self.activeModel = defaultModel
 
-        # Initialising all interfaces and displaying the Home interface
+        # Manually initialising all interfaces and displaying the Home interface
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
