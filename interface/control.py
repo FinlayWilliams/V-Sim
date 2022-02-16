@@ -255,7 +255,6 @@ class ControlInterface(tk.Frame):
     # This method is called whenever a value option is changed, to automatically update the active models parameters
     # so that when the model is run and the graphs are shown, they are correct
     def updateModel(self, Stub):
-        OtherStub = Stub
 
         if len(self.entry_Name.get()) == 0:
             self.controller.popup("Invalid Save", "Please enter a unique name for the model")
@@ -283,5 +282,33 @@ class ControlInterface(tk.Frame):
             T = int(self.scl_T.get())
 
             self.activeModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
-                                       MSG,
-                                       PWR, BTRY, RR, T)
+                                       MSG, PWR, BTRY, RR, T)
+
+
+    def updateVariables(self, controller):
+        self.activeModel = controller.getActiveModel()
+        self.activeModelIndex = controller.getActiveModelIndex()
+
+        self.cmb_N.set(self.activeModel.N)
+        self.scl_S.set(self.activeModel.percentS)
+        self.scl_IR.set(self.activeModel.percentIr)
+        self.scl_IL.set(self.activeModel.percentIl)
+        self.scl_IP.set(self.activeModel.percentIp)
+        self.cmb_WSN.set(self.activeModel.WSNnumber)
+        self.cmb_DEP.set(self.activeModel.deploymentArea)
+        self.cmb_TRNS.set(self.activeModel.transmissionRange)
+        self.cmb_CNTCT.set(self.activeModel.contactRate)
+        self.scl_SCAN.set(self.activeModel.botScanningRate)
+        self.scl_Ptrns.set(self.activeModel.botPtransmission)
+        self.scl_IrPsu.set(self.activeModel.IrPsuccess)
+        self.scl_IlPsu.set(self.activeModel.IlPsuccess)
+        self.scl_IpPsu.set(self.activeModel.IpPsuccess)
+        self.entry_Name.delete(0, 'end')
+        self.entry_Name.insert(END, self.activeModel.Name[5:])
+        self.cmb_MSG.set(self.activeModel.meanMessageSize)
+        self.cmb_PWR.set(self.activeModel.meanPower)
+        self.cmb_BTRY.set(self.activeModel.totalBattery)
+        self.scl_RR.set(self.activeModel.recoveryRate)
+        self.scl_T.set(self.activeModel.Timesteps)
+
+        self.updateGraphs(self.activeModel)

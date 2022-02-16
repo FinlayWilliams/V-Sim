@@ -33,10 +33,10 @@ class HomeInterface(tk.Frame):
         self.lstModels = tk.Listbox(frame_right, height=5, width=40, bg="yellow", font=("Calibri", 15))
         self.updateModelList()
         self.lstModels.bind("<<ListboxSelect>>",
-                            self.updateActiveModel)
+                            lambda x: self.updateActiveModel(controller, 1))
 
         btnConfig = tk.Button(frame_right, text="Configure Selected model",
-                              command=lambda: controller.display("HomeInterface", "ControlInterface"))
+                              command=lambda: [controller.display("HomeInterface", "ControlInterface")])
 
         # Right frame placement
         frame_right.place(x=717, y=0, height="864", width="818")
@@ -48,14 +48,12 @@ class HomeInterface(tk.Frame):
     # Method that is called from base whenever the frame is repacked so the list of models is always refreshed on screen
     def updateModelList(self):
         self.lstModels.delete(0, END)
-        idx = 1
         for M in self.controller.models:
-            self.lstModels.insert(idx, M)
-            idx = idx + 1
+            self.lstModels.insert(END, M)
 
-    def updateActiveModel(self, stub):
-        # if self.lstModels.curselection() != ():
-        #     selected = self.lstModels.get(self.lstModels.curselection())
-        #     controller.setActiveModel(selected)
-        print(self.lstModels.get(self.lstModels.curselection()))
-        self.controller.activeModel = self.lstModels.get(self.lstModels.curselection())
+    def updateActiveModel(self, controller, stub):
+        if self.lstModels.curselection() != ():
+            controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
+            controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
+            print(self.lstModels.get(self.lstModels.curselection()))
+            print(int(''.join(map(str, self.lstModels.curselection()))))

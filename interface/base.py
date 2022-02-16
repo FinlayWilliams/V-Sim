@@ -62,6 +62,8 @@ class BaseApp(tk.Tk):
 
         if show == "HomeInterface":
             self.interfaces[show].updateModelList()
+        if show == "ControlInterface":
+            self.interfaces[show].updateVariables(self)
 
     # A range of methods controlling the model list and active model
     def getActiveModelIndex(self): return self.activeModelIndex
@@ -70,11 +72,12 @@ class BaseApp(tk.Tk):
 
     def getActiveModel(self): return self.activeModel
 
-    def setActiveModel(self, index): self.activeModel = self.models[index]
+    def setActiveModel(self, index):
+        self.activeModel = self.models[index]
 
     def addModel(self, newModel): self.models.append(newModel)
 
     def removeModel(self, index): self.models.remove(index)
 
-    def overwriteModel(self, index, model): self.models[index] = model
-
+    def overwriteModel(self, index, model):
+        self.models[index] = model
