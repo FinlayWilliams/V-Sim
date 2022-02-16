@@ -15,8 +15,8 @@ class ControlInterface(tk.Frame):
 
         self.controller = controller
 
-        self.activeModel = controller.getActiveModel()
-        self.activeModelIndex = controller.getActiveModelIndex()
+        # self.activeModel = controller.getActiveModel()
+        # self.activeModelIndex = controller.getActiveModelIndex()
 
         # Frame 1 Top (Upper area for displaying graphs)
         frame_1_top = tk.Frame(self, bg="red")
@@ -104,7 +104,7 @@ class ControlInterface(tk.Frame):
         self.scl_T = tk.Scale(frame_1_bot, from_=0, to=900, resolution=1, orient="horizontal",
                               command=self.updateModel)
 
-        btn_RUN = tk.Button(frame_1_bot, text="Run model HERE 4 NOW", command=lambda: self.updateGraphs(self.activeModel))
+        btn_RUN = tk.Button(frame_1_bot, text="Run model HERE 4 NOW", command=lambda: self.updateGraphs())
         btn_INSP = tk.Button(frame_1_bot, text="Inspect model")
         btn_SAVE = tk.Button(frame_1_bot, text="Save model", command=lambda: [self.updateModel(1), controller.overwriteModel(self.activeModelIndex, self.activeModel)])
         btn_SAVE_NEW = tk.Button(frame_1_bot, text="Save New model", command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
@@ -118,75 +118,75 @@ class ControlInterface(tk.Frame):
         # 1st Block
         lbl_N.grid(row=0, column=0, padx=(10, 5), pady=(7, 0), sticky="e")
         self.cmb_N.grid(row=0, column=1, padx=5, pady=(7, 0))
-        self.cmb_N.set(self.activeModel.N)
+        #self.cmb_N.set(self.activeModel.N)
         self.cmb_N.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_S.grid(row=1, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_S.grid(row=1, column=1, padx=5, sticky="ew")
-        self.scl_S.set(self.activeModel.percentS)
+        #self.scl_S.set(self.activeModel.percentS)
         lbl_IR.grid(row=2, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IR.grid(row=2, column=1, padx=5, sticky="ew")
-        self.scl_IR.set(self.activeModel.percentIr)
+        #self.scl_IR.set(self.activeModel.percentIr)
         lbl_IL.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IL.grid(row=3, column=1, padx=5, sticky="ew")
-        self.scl_IL.set(self.activeModel.percentIl)
+        #self.scl_IL.set(self.activeModel.percentIl)
         lbl_IP.grid(row=4, column=0, padx=(10, 5), pady=5, sticky="e")
         self.scl_IP.grid(row=4, column=1, padx=5, sticky="ew")
-        self.scl_IP.set(self.activeModel.percentIp)
+        #self.scl_IP.set(self.activeModel.percentIp)
         # 2nd Block
         lbl_WSN.grid(row=0, column=2, padx=5, pady=(7, 0), sticky="e")
         self.cmb_WSN.grid(row=0, column=3, padx=5, pady=(7, 0))
-        self.cmb_WSN.set(self.activeModel.WSNnumber)
+        #self.cmb_WSN.set(self.activeModel.WSNnumber)
         self.cmb_WSN.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_DEP.grid(row=1, column=2, padx=5, pady=5, sticky="e")
         self.cmb_DEP.grid(row=1, column=3, padx=5, pady=5)
-        self.cmb_DEP.set(self.activeModel.deploymentArea)
+        #self.cmb_DEP.set(self.activeModel.deploymentArea)
         self.cmb_DEP.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_TRNS.grid(row=2, column=2, padx=5, pady=5, sticky="e")
         self.cmb_TRNS.grid(row=2, column=3, padx=5, pady=5)
-        self.cmb_TRNS.set(self.activeModel.transmissionRange)
+        #self.cmb_TRNS.set(self.activeModel.transmissionRange)
         self.cmb_TRNS.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_CNTCT.grid(row=3, column=2, padx=5, pady=5, sticky="e")
         self.cmb_CNTCT.grid(row=3, column=3, padx=5, pady=5, sticky="ew")
-        self.cmb_CNTCT.set(self.activeModel.contactRate)
+        #self.cmb_CNTCT.set(self.activeModel.contactRate)
         self.cmb_CNTCT.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_SCAN.grid(row=4, column=2, padx=5, pady=5, sticky="e")
         self.scl_SCAN.grid(row=4, column=3, padx=5, sticky="ew")
-        self.scl_SCAN.set(self.activeModel.botScanningRate)
+        #self.scl_SCAN.set(self.activeModel.botScanningRate)
         # 3rd Block
         lbl_Ptrns.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e")
         self.scl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0))
-        self.scl_Ptrns.set(self.activeModel.botPtransmission)
+        #self.scl_Ptrns.set(self.activeModel.botPtransmission)
         lbl_IrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e")
         self.scl_IrPsu.grid(row=1, column=5, padx=5, sticky="ew")
-        self.scl_IrPsu.set(self.activeModel.IrPsuccess)
+        #self.scl_IrPsu.set(self.activeModel.IrPsuccess)
         lbl_IlPsu.grid(row=2, column=4, padx=5, pady=5, sticky="e")
         self.scl_IlPsu.grid(row=2, column=5, padx=5, sticky="ew")
-        self.scl_IlPsu.set(self.activeModel.IlPsuccess)
+        #self.scl_IlPsu.set(self.activeModel.IlPsuccess)
         lbl_IpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e")
         self.scl_IpPsu.grid(row=3, column=5, padx=5, sticky="ew")
-        self.scl_IpPsu.set(self.activeModel.IpPsuccess)
+        #self.scl_IpPsu.set(self.activeModel.IpPsuccess)
         lbl_Name.grid(row=4, column=4, padx=5, pady=5, sticky="e")
         self.entry_Name.grid(row=4, column=5, padx=5, pady=5, sticky="e")
-        self.entry_Name.insert(END, self.activeModel.Name[5:])
+        #self.entry_Name.insert(END, self.activeModel.Name[5:])
         # 4th Block
         lbl_MSG.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e")
         self.cmb_MSG.grid(row=0, column=7, padx=5, pady=(7, 0))
-        self.cmb_MSG.set(self.activeModel.meanMessageSize)
+        #self.cmb_MSG.set(self.activeModel.meanMessageSize)
         self.cmb_MSG.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_PWR.grid(row=1, column=6, padx=5, pady=5, sticky="e")
         self.cmb_PWR.grid(row=1, column=7, padx=5, pady=5)
-        self.cmb_PWR.set(self.activeModel.meanPower)
+        #self.cmb_PWR.set(self.activeModel.meanPower)
         self.cmb_PWR.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_BTRY.grid(row=2, column=6, padx=5, pady=5, sticky="e")
         self.cmb_BTRY.grid(row=2, column=7, padx=5, pady=5)
-        self.cmb_BTRY.set(self.activeModel.totalBattery)
+        #self.cmb_BTRY.set(self.activeModel.totalBattery)
         self.cmb_BTRY.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_RR.grid(row=3, column=6, padx=5, pady=5, sticky="e")
         self.scl_RR.grid(row=3, column=7, padx=5, sticky="ew")
-        self.scl_RR.set(self.activeModel.recoveryRate)
+        #self.scl_RR.set(self.activeModel.recoveryRate)
         lbl_T.grid(row=4, column=6, padx=5, pady=5, sticky="e")
         self.scl_T.grid(row=4, column=7, padx=5, sticky="ew")
-        self.scl_T.set(self.activeModel.Timesteps)
+        #self.scl_T.set(self.activeModel.Timesteps)
         # 5th Block
         btn_RUN.grid(row=0, column=8, padx=(60, 5), pady=(7, 4), sticky="ew")
         btn_INSP.grid(row=1, column=8, padx=(60, 5), pady=4, sticky="ew")
@@ -194,8 +194,10 @@ class ControlInterface(tk.Frame):
         btn_SAVE_NEW.grid(row=3, column=8, padx=(60, 5), pady=4, sticky="ew")
         btn_RTRN.grid(row=4, column=8, padx=(60, 5), pady=4, sticky="ew")
 
+        self.updateVariables(controller)
+
         # Matching the model to the default figures
-        self.updateModel(1)
+        #self.updateModel(1)
 
         # Setting up the canvas area for the graphs in frame_1_top
         figure = plt.figure(facecolor="#453354")
@@ -207,13 +209,13 @@ class ControlInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
 
         # Calling the graphs
-        self.updateGraphs(self.activeModel)
+        #self.updateGraphs()
 
     # Method to update the onscreen graphs to whatever the current model configuration is
-    def updateGraphs(self, model):
-        S1, Ir1, Il1, Ip1 = model.runModel()
+    def updateGraphs(self):
+        S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, model.Timesteps, 101)
+        T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(4)]
@@ -267,7 +269,7 @@ class ControlInterface(tk.Frame):
             IL = float(self.scl_IL.get())
             IP = float(self.scl_IP.get())
             WSN = int(self.cmb_WSN.get())
-            DEP = int(self.cmb_DEP.get()) * int(self.cmb_DEP.get())
+            DEP = int(self.cmb_DEP.get())
             TRNS = int(self.cmb_TRNS.get())
             CNTCT = int(self.cmb_CNTCT.get())
             SCAN = int(self.scl_SCAN.get())
@@ -283,6 +285,8 @@ class ControlInterface(tk.Frame):
 
             self.activeModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
+
+
 
 
     def updateVariables(self, controller):
@@ -310,5 +314,3 @@ class ControlInterface(tk.Frame):
         self.cmb_BTRY.set(self.activeModel.totalBattery)
         self.scl_RR.set(self.activeModel.recoveryRate)
         self.scl_T.set(self.activeModel.Timesteps)
-
-        self.updateGraphs(self.activeModel)

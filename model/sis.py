@@ -45,7 +45,7 @@ class SIS:
         self.SLoc = 1 / self.WSNnumber
 
         # S Neighbour Set Range
-        self.density = self.N / self.deploymentArea
+        self.density = self.N / (self.deploymentArea * self.deploymentArea)
         self.SNhb = 1 / (self.density * self.transmissionRange)
 
         # Contact rates

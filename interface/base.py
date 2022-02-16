@@ -64,6 +64,7 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateModelList()
         if show == "ControlInterface":
             self.interfaces[show].updateVariables(self)
+            self.interfaces[show].updateGraphs()
 
     # A range of methods controlling the model list and active model
     def getActiveModelIndex(self): return self.activeModelIndex
