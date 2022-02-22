@@ -15,7 +15,7 @@ class ControlInterface(tk.Frame):
 
         self.controller = controller
 
-        # Frame Top (Upper area for displaying graphs)
+        # Frame Top (Upper area for displaying and model option buttons)
         frame_top = tk.Frame(self, bg="#453354")
         # This button serves as a refresh button for the graphs (as doing it live is slow)
         btn_Refresh_Graph = tk.Button(frame_top, wraplength=40, width=5, text="Refresh Graphs", font=("Arial", 7), command=self.updateGraphs)
@@ -25,7 +25,7 @@ class ControlInterface(tk.Frame):
         # This button will open the inspect model page with the currently selected model
         btn_Inspect = tk.Button(frame_top, wraplength=40, width=5, text="Inspect model", font=("Arial", 7))
         # This button overwrites the current model "saving" it
-        btn_Save = tk.Button(frame_top, wraplength=40, width=5, text="Save", font=("Arial", 7),
+        btn_Save = tk.Button(frame_top, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
                              command=lambda: [self.updateModel(1),
                                               controller.overwriteModel(self.activeModelIndex, self.activeModel)])
         # This button take the current model configuration and adds a new model to the list
@@ -35,8 +35,10 @@ class ControlInterface(tk.Frame):
         btn_Return = tk.Button(frame_top, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
                              command=lambda: controller.display("ControlInterface", "HomeInterface"))
 
+        # Top buffer (visual improvement to lower the graphs)
+        buffer_frame = tk.Frame(frame_top, bg="#654e78")
         # Canvas frame (to hold the graphs)
-        canvas_frame = tk.Frame(frame_top, bg="blue")
+        canvas_frame = tk.Frame(frame_top, bg="#6e6e6e")
 
         # Frame Mid (For a single label)
         frame_mid = tk.Frame(self, bg="#6e6e6e")
@@ -127,6 +129,7 @@ class ControlInterface(tk.Frame):
 
         # Placing all elements
         ## Frame Top Half
+        buffer_frame.place(relheight=0.05, relwidth=1, x=58, y=0)
         frame_top.place(relheight=0.70, relwidth=1)
         btn_Refresh_Graph.place(x=10, y=13)
         btn_Reset.place(x=10, y=64)
@@ -134,7 +137,7 @@ class ControlInterface(tk.Frame):
         btn_Save.place(x=10, y=166)
         btn_Save_New.place(x=10, y=217)
         btn_Return.place(x=10, y=560)
-        canvas_frame.place(relheight=1, relwidth=0.963, x=58, y=0)
+        canvas_frame.place(relheight=0.95, relwidth=0.963, x=58, y=30)
         ## Frame Mid
         frame_mid.place(y=605, relheight=0.05, relwidth=1)
         lbl_Options.pack()
@@ -205,6 +208,8 @@ class ControlInterface(tk.Frame):
 
         for x in range(4):
             self.ax[x].ticklabel_format(style="plain")
+
+        figure.tight_layout()
 
     # Method to update the onscreen graphs to whatever the current model configuration is
     def updateGraphs(self):
