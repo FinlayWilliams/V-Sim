@@ -45,11 +45,11 @@ class BaseApp(tk.Tk):
         popup = tk.Tk()
         popup.wm_title(title)
         popup.configure(bg="#453354")
-        center_x = int(self.screen_width / 2 - 300 / 2)
+        center_x = int(self.screen_width / 2 - 400 / 2)
         center_y = int(self.screen_height / 2 - 100 / 2)
-        popup.geometry(f"300x100+{center_x}+{center_y}")
+        popup.geometry(f"400x100+{center_x}+{center_y}")
         popup.resizable(0, 0)
-        lbl_Msg = tk.Label(popup, text=message, bg="#453354")
+        lbl_Msg = tk.Label(popup, text=message, bg="#453354", fg="white")
         lbl_Msg.pack(side="top", fill="x", pady=10, anchor="center")
         btn_Close = tk.Button(popup, text="Close", command=popup.destroy)
         btn_Close.pack()
@@ -62,6 +62,7 @@ class BaseApp(tk.Tk):
 
         if show == "HomeInterface":
             self.interfaces[show].updateModelList()
+            self.interfaces[show].updateCompareModelList()
         if show == "ControlInterface":
             self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs()
@@ -77,6 +78,6 @@ class BaseApp(tk.Tk):
 
     def addModel(self, newModel): self.models.append(newModel)
 
-    def removeModel(self, index): self.models.remove(index)
+    def removeModel(self, index): self.models.remove(self.models[index])
 
     def overwriteModel(self, index, model): self.models[index] = model

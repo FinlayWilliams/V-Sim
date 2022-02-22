@@ -42,12 +42,18 @@ class ControlInterface(tk.Frame):
         # Frame for the legend to sit in + legend labels
         canvas_info_frame_border = tk.Frame(frame_top, bg="#453354")
         canvas_info_frame = tk.Frame(frame_top, bg="#654e78")
-        lbl_legend_title = tk.Label(canvas_info_frame, bg="#654e78", width=25, pady=4, text="Legend :", font=("Arial", 14))
-        lbl_legend1 = tk.Label(canvas_info_frame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 12), fg="white")
-        lbl_legend2 = tk.Label(canvas_info_frame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning", font=("Arial", 12), fg="white")
-        lbl_legend3 = tk.Label(canvas_info_frame, bg="#1f77b4", width=25, pady=4, text="(IL) Local Scanning", font=("Arial", 12), fg="white")
-        lbl_legend4 = tk.Label(canvas_info_frame, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 12), fg="white")
-        lbl_legend5 = tk.Label(canvas_info_frame, bg="#d62728", width=25, pady=4, text="(I) Grouped Infection Types", font=("Arial", 12), fg="white")
+        lbl_legend_title = tk.Label(canvas_info_frame, bg="#654e78", width=25, pady=4, text="Legend :",
+                                    font=("Arial", 14))
+        lbl_legend1 = tk.Label(canvas_info_frame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
+                               font=("Arial", 12), fg="white")
+        lbl_legend2 = tk.Label(canvas_info_frame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
+                               font=("Arial", 12), fg="white")
+        lbl_legend3 = tk.Label(canvas_info_frame, bg="#1f77b4", width=25, pady=4, text="(IL) Local Scanning",
+                               font=("Arial", 12), fg="white")
+        lbl_legend4 = tk.Label(canvas_info_frame, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer",
+                               font=("Arial", 12), fg="white")
+        lbl_legend5 = tk.Label(canvas_info_frame, bg="#d62728", width=25, pady=4,
+                               text="(I) All Infection Types Grouped", font=("Arial", 12), fg="white")
 
         # Separates graphs from the controls
         frame_mid = tk.Frame(self, bg="#6e6e6e")
