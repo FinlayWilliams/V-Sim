@@ -12,7 +12,6 @@ class ControlInterface(tk.Frame):
     # it also creates and places all widgets for this interface
     def __init__(self, master, controller):
         super().__init__(master)
-
         self.controller = controller
 
         # Frame Top (Upper area for displaying and model option buttons)
@@ -39,6 +38,15 @@ class ControlInterface(tk.Frame):
         buffer_frame = tk.Frame(frame_top, bg="#654e78")
         # Canvas frame (to hold the graphs)
         canvas_frame = tk.Frame(frame_top, bg="#6e6e6e")
+        # This frame is positioned over the bottom right of the canvas frame to provide information on the graphs
+        canvas_info_frame_border = tk.Frame(frame_top, bg="#453354")
+        canvas_info_frame = tk.Frame(frame_top, bg="#654e78")
+        lbl_legend_title = tk.Label(canvas_info_frame, bg="#654e78", width=25, pady=4, text="Legend :", font=("Arial", 14))
+        lbl_legend1 = tk.Label(canvas_info_frame, bg="#2ca02c", width=25, pady=4, text="Susceptible", font=("Arial", 12), fg="white")
+        lbl_legend2 = tk.Label(canvas_info_frame, bg="#9467bd", width=25, pady=4, text="Random-Scanning", font=("Arial", 12), fg="white")
+        lbl_legend3 = tk.Label(canvas_info_frame, bg="#1f77b4", width=25, pady=4, text="Local Scanning", font=("Arial", 12), fg="white")
+        lbl_legend4 = tk.Label(canvas_info_frame, bg="#17becf", width=25, pady=4, text="Peer-to-Peer", font=("Arial", 12), fg="white")
+        lbl_legend5 = tk.Label(canvas_info_frame, bg="#d62728", width=25, pady=4, text="Grouped Infection Types", font=("Arial", 12), fg="white")
 
         # Frame Mid (For a single label)
         frame_mid = tk.Frame(self, bg="#6e6e6e")
@@ -138,6 +146,15 @@ class ControlInterface(tk.Frame):
         btn_Save_New.place(x=10, y=217)
         btn_Return.place(x=10, y=560)
         canvas_frame.place(relheight=0.95, relwidth=0.963, x=58, y=30)
+        canvas_info_frame_border.place(relheight=0.5, relwidth=0.47, x=814, y=303)
+        canvas_info_frame.place(relheight=0.485, relwidth=0.465, x=824, y=312)
+        lbl_legend_title.pack()
+        lbl_legend1.pack()
+        lbl_legend2.pack()
+        lbl_legend3.pack()
+        lbl_legend4.pack()
+        lbl_legend5.pack()
+
         ## Frame Mid
         frame_mid.place(y=605, relheight=0.05, relwidth=1)
         lbl_Options.pack()
@@ -204,9 +221,9 @@ class ControlInterface(tk.Frame):
         figure = plt.figure(facecolor="#654e78")
         self.canvas = FigureCanvasTkAgg(figure, canvas_frame)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-        self.ax = [figure.add_subplot(2, 2, x + 1, facecolor="#453354") for x in range(4)]
+        self.ax = [figure.add_subplot(2, 2, x + 1, facecolor="#453354") for x in range(3)]
 
-        for x in range(4):
+        for x in range(3):
             self.ax[x].ticklabel_format(style="plain")
 
         figure.tight_layout()
@@ -218,49 +235,36 @@ class ControlInterface(tk.Frame):
         T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
-        [self.ax[x].clear() for x in range(4)]
+        [self.ax[x].clear() for x in range(3)]
 
         # Plotting the first graph
-        self.ax[0].plot(T1, S1, 'g', label="Susceptible")
-        self.ax[0].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
-        self.ax[0].plot(T1, Il1, 'b', label="Local Scanning Infected")
-        self.ax[0].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
-        self.ax[0].set_title("Population Sizes Over Time - Individual Virus Infection Types")
+        self.ax[0].plot(T1, S1, "#2ca02c", label="Susceptible")
+        self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
+        self.ax[0].plot(T1, Il1, "#1f77b4", label="Local Scanning Infected")
+        self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
+        self.ax[0].set_title("Population Sizes Over Time - Individual Infection Types - S, IR, IL, IP")
 
         # Plotting the second graph
         pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
-        # Temporary save for every time a population goes negative
-        for x in range(len(pop)):
-            if pop[x] < 0:
-                pop[x] = 0
-
         explode = (0.1, 0, 0, 0)
-        labels = ["Susceptible", "Random-Scanning Infected", "Local Scanning Infected", "Peer-to-Peer Infected"]
-        self.ax[1].pie(pop, explode=explode, labels=labels)
+        labels = ["Susceptible: {:.0f}".format(pop[0]), "Random-Scanning Infected: {:.0f}".format(pop[1]),
+                  "Local Scanning Infected: {:.0f}".format(pop[2]), "Peer-to-Peer Infected: {:.0f}".format(pop[3])]
+        colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
+        self.ax[1].pie(pop, explode=explode, labels=labels, colors=colours)
         self.ax[1].set_title("Population Sizes on the Final Recorded Day")
 
         # Plotting the third graph
-        self.ax[2].plot(T1, S1, 'g', label="Susceptible")
-        self.ax[2].plot(T1, I1, 'r', label="All Infected")
-        self.ax[2].set_title("Population Sizes Over Time - Grouped Virus Infection Types")
-
-        # Plotting fourth graph
-        self.ax[3].plot(T1, S1, 'g', label="Susceptible")
-        self.ax[3].plot(T1, Ir1, 'y', label="Random-Scanning Infected")
-        self.ax[3].plot(T1, Il1, 'b', label="Local Scanning Infected")
-        self.ax[3].plot(T1, Ip1, 'c', label="Peer-to-Peer Infected")
-        self.ax[3].legend(loc="best")
-        self.ax[3].set_title("Legend")
+        self.ax[2].plot(T1, S1, '#2ca02c', label="Susceptible")
+        self.ax[2].plot(T1, I1, '#d62728', label="All Infected")
+        self.ax[2].set_title("Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
 
         self.canvas.draw()
 
     # This method is called whenever a value option is changed, to automatically update the active models parameters
     # so that when the model is run and the graphs are shown, they are correct
     def updateModel(self, Stub):
-
         if len(self.entry_Name.get()) == 0:
-            self.controller.popup("Invalid Save", "Please enter a unique name for the model")
-
+            self.controller.popup("Invalid Save", "Please enter a name for the model!")
         else:
             Name = str("SIS: " + self.entry_Name.get())
             N = int(self.cmb_N.get())
@@ -283,10 +287,16 @@ class ControlInterface(tk.Frame):
             RR = float(self.scl_RR.get())
             T = int(self.scl_T.get())
 
-            self.activeModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
+            newActiveModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
-            # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
-            #self.updateGraphs()
+
+            if not self.checkValid(newActiveModel):
+                self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
+            else:
+                self.activeModel = newActiveModel
+
+    # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
+    # self.updateGraphs()
 
     # This method is called once when this interface is created and is called everytime this interface
     # is opened to ensure all variables are updated and correct
@@ -315,3 +325,13 @@ class ControlInterface(tk.Frame):
         self.cmb_BTRY.set(self.activeModel.totalBattery)
         self.scl_RR.set(self.activeModel.recoveryRate)
         self.scl_T.set(self.activeModel.Timesteps)
+
+    # This method will check if the current configuration is valid by checking no population size dips below zero
+    def checkValid(self, newActiveModel):
+        S1, Ir1, Il1, Ip1 = newActiveModel.runModel()
+        populations = [S1, Ir1, Il1, Ip1]
+        for P in populations:
+            for value in P:
+                if value < 0:
+                    return False
+        return True
