@@ -81,9 +81,6 @@ class SIS:
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
 
-        #Sloc = S * Sloc
-        #Snhb = S * Snhb
-
         dSdt = -bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
 
         dIrdt = bR * S * I - a * Ir - dthB * Ir - dthR * Ir
@@ -91,8 +88,6 @@ class SIS:
         dIldt = bL * Sloc * I - a * Il - dthB * Il - dthL * Il
 
         dIpdt = bP * Snhb * I - a * Ip - dthB * Ip - dthP * Ip
-
-        #print(dthR)
 
         return dSdt, dIrdt, dIldt, dIpdt
 
