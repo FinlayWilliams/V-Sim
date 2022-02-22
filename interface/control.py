@@ -34,19 +34,17 @@ class ControlInterface(tk.Frame):
         btn_Return = tk.Button(frame_top, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
                              command=lambda: controller.display("ControlInterface", "HomeInterface"))
 
-        # Top buffer (visual improvement to lower the graphs)
-        buffer_frame = tk.Frame(frame_top, bg="#654e78")
         # Canvas frame (to hold the graphs)
         canvas_frame = tk.Frame(frame_top, bg="#6e6e6e")
         # This frame is positioned over the bottom right of the canvas frame to provide information on the graphs
         canvas_info_frame_border = tk.Frame(frame_top, bg="#453354")
         canvas_info_frame = tk.Frame(frame_top, bg="#654e78")
         lbl_legend_title = tk.Label(canvas_info_frame, bg="#654e78", width=25, pady=4, text="Legend :", font=("Arial", 14))
-        lbl_legend1 = tk.Label(canvas_info_frame, bg="#2ca02c", width=25, pady=4, text="Susceptible", font=("Arial", 12), fg="white")
-        lbl_legend2 = tk.Label(canvas_info_frame, bg="#9467bd", width=25, pady=4, text="Random-Scanning", font=("Arial", 12), fg="white")
-        lbl_legend3 = tk.Label(canvas_info_frame, bg="#1f77b4", width=25, pady=4, text="Local Scanning", font=("Arial", 12), fg="white")
-        lbl_legend4 = tk.Label(canvas_info_frame, bg="#17becf", width=25, pady=4, text="Peer-to-Peer", font=("Arial", 12), fg="white")
-        lbl_legend5 = tk.Label(canvas_info_frame, bg="#d62728", width=25, pady=4, text="Grouped Infection Types", font=("Arial", 12), fg="white")
+        lbl_legend1 = tk.Label(canvas_info_frame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 12), fg="white")
+        lbl_legend2 = tk.Label(canvas_info_frame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning", font=("Arial", 12), fg="white")
+        lbl_legend3 = tk.Label(canvas_info_frame, bg="#1f77b4", width=25, pady=4, text="(IL) Local Scanning", font=("Arial", 12), fg="white")
+        lbl_legend4 = tk.Label(canvas_info_frame, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 12), fg="white")
+        lbl_legend5 = tk.Label(canvas_info_frame, bg="#d62728", width=25, pady=4, text="(I) Grouped Infection Types", font=("Arial", 12), fg="white")
 
         # Frame Mid (For a single label)
         frame_mid = tk.Frame(self, bg="#6e6e6e")
@@ -137,7 +135,6 @@ class ControlInterface(tk.Frame):
 
         # Placing all elements
         ## Frame Top Half
-        buffer_frame.place(relheight=0.05, relwidth=1, x=58, y=0)
         frame_top.place(relheight=0.70, relwidth=1)
         btn_Refresh_Graph.place(x=10, y=13)
         btn_Reset.place(x=10, y=64)
@@ -145,7 +142,8 @@ class ControlInterface(tk.Frame):
         btn_Save.place(x=10, y=166)
         btn_Save_New.place(x=10, y=217)
         btn_Return.place(x=10, y=560)
-        canvas_frame.place(relheight=0.95, relwidth=0.963, x=58, y=30)
+
+        canvas_frame.place(relheight=1, relwidth=0.963, x=58)
         canvas_info_frame_border.place(relheight=0.5, relwidth=0.47, x=814, y=303)
         canvas_info_frame.place(relheight=0.485, relwidth=0.465, x=824, y=312)
         lbl_legend_title.pack()
@@ -158,6 +156,7 @@ class ControlInterface(tk.Frame):
         ## Frame Mid
         frame_mid.place(y=605, relheight=0.05, relwidth=1)
         lbl_Options.pack()
+
         ## Frame Bottom Half
         frame_bot.place(y=628, relheight=0.30, relwidth=1)
         # 1st Block
@@ -226,7 +225,7 @@ class ControlInterface(tk.Frame):
         for x in range(3):
             self.ax[x].ticklabel_format(style="plain")
 
-        figure.tight_layout()
+        figure.tight_layout(rect=[0, 0.03, 1, 0.95], h_pad=3)
 
     # Method to update the onscreen graphs to whatever the current model configuration is
     def updateGraphs(self):
@@ -242,6 +241,8 @@ class ControlInterface(tk.Frame):
         self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
         self.ax[0].plot(T1, Il1, "#1f77b4", label="Local Scanning Infected")
         self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
+        self.ax[0].set_xlabel("Timesteps (Days)")
+        self.ax[0].set_ylabel("Node Count")
         self.ax[0].set_title("Population Sizes Over Time - Individual Infection Types - S, IR, IL, IP")
 
         # Plotting the second graph
@@ -256,6 +257,8 @@ class ControlInterface(tk.Frame):
         # Plotting the third graph
         self.ax[2].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.ax[2].plot(T1, I1, '#d62728', label="All Infected")
+        self.ax[2].set_xlabel("Timesteps (Days)")
+        self.ax[2].set_ylabel("Node Count")
         self.ax[2].set_title("Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
 
         self.canvas.draw()
