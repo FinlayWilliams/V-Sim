@@ -11,7 +11,7 @@ class BaseApp(tk.Tk):
     # (setting default sizes, default models, all interfaces)
     def __init__(self):
         super().__init__()
-        self.title("IoT-SIS model Simulation")
+        self.title("V - Sim")
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
@@ -50,10 +50,11 @@ class BaseApp(tk.Tk):
         center_y = int(self.screen_height / 2 - 100 / 2)
         popup.geometry(f"400x100+{center_x}+{center_y}")
         popup.resizable(0, 0)
-        lbl_Msg = tk.Label(popup, text=message, bg="#453354", fg="white")
-        lbl_Msg.pack(side="top", fill="x", pady=10, anchor="center")
-        btn_Close = tk.Button(popup, text="Close", command=popup.destroy)
-        btn_Close.pack()
+        lbl_Msg = tk.Label(popup, text=message, bg="#453354", font=("Arial", 10), fg="white")
+        lbl_Msg.pack(side="top", fill="x", pady=15, anchor="center")
+        btn_Close = tk.Button(popup, text="Okay", command=popup.destroy)
+        btn_Close.pack(pady=10)
+        popup.iconbitmap("assets/virus_icon.ico")
         popup.mainloop()
 
     # A method created to display all interfaces from any interface

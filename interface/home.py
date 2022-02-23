@@ -22,9 +22,9 @@ class HomeInterface(tk.Frame):
         # Page title gui
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#654e78")
-        lblTitle = tk.Label(titleBgInner, text="IoT-SIS Sim:", bg="#654e78",font=("Courier", 30, "underline"),
+        lblTitle = tk.Label(titleBgInner, text="V - Sim:", bg="#654e78",font=("Courier", 30, "underline"),
                             fg="white")
-        lblTitle2 = tk.Label(titleBgInner, text="An IoT-SIS Virus model Simulation Tool", bg="#654e78",
+        lblTitle2 = tk.Label(titleBgInner, text="A Virus Model Simulation Tool", bg="#654e78",
                              font=("Courier", 20), fg="white")
 
         ####################################### Placing LEFT-side elements #############################################
@@ -167,41 +167,41 @@ class HomeInterface(tk.Frame):
         if self.checkModelType(self.controller.activeModel) == "SIS":
             # This outputs the SIS model Information
             # Instantiating the information labels
-            lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Variable Explanation", font=("Arial", 14),
+            lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14),
                                  bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
             lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node count", font=("Arial", 10), bg="#654e78")
+            lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10), bg="#654e78")
             lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_S_Desc = tk.Label(infoFrame, text=" A percentage of the number chosen for the N value, "
-                                                  "a decimal between 0-1 (default is 99%).",
+            lbl_S_Desc = tk.Label(infoFrame, text=" The Susceptible population, "
+                                                  "a percentage of N (default is 99%).",
                                   font=("Arial", 10), bg="#654e78")
             lbl_IR_Title = tk.Label(infoFrame, text="IR", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IR_Desc = tk.Label(infoFrame, text=" A percentage of the number chosen for the N value, "
-                                                   "a decimal between 0-1 (default is 0.3%).",
+            lbl_IR_Desc = tk.Label(infoFrame, text=" The Random-Scanning Infected population count, "
+                                                   "a percentage of N (default is 0.3%).",
                                    font=("Arial", 10), bg="#654e78")
             lbl_IL_Title = tk.Label(infoFrame, text="IL", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IL_Desc = tk.Label(infoFrame, text=" A percentage of the number chosen for the N value, "
-                                                   "a decimal between 0-1 (default is 0.3%).",
+            lbl_IL_Desc = tk.Label(infoFrame, text=" The Local-Scanning Infected population count, "
+                                                   "a percentage of N (default is 0.3%).",
                                    font=("Arial", 10), bg="#654e78")
             lbl_IP_Title = tk.Label(infoFrame, text="IP", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IP_Desc = tk.Label(infoFrame, text=" A percentage of the number chosen for the N value, "
-                                                   "a decimal between 0-1 (default is 0.4%).",
+            lbl_IP_Desc = tk.Label(infoFrame, text=" The Peer-to-Peer Infected population count, "
+                                                   "a percentage of N (default is 0.4%).",
                                    font=("Arial", 10), bg="#654e78")
             lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within your "
+            lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
                                                     "hypothetical ", font=("Arial", 10), bg="#654e78")
             lbl_WSN_Desc2 = tk.Label(infoFrame, text=" network. This option determines how many Local groups the "
                                                      "N population is split into.", font=("Arial", 10), bg="#654e78")
             lbl_DEP_Title = tk.Label(infoFrame, text="Deployment Area", font=("Arial", 10, "bold"), bg="#654e78",
                                      fg="white")
-            lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that your hypothetical network is deployed over, "
+            lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that the hypothetical network is deployed over, "
                                                     "in Meters Squared", font=("Arial", 10), bg="#654e78")
-            lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far a message must travel before "
+            lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far messages must travel before "
                                                      "reaching a node.", font=("Arial", 10), bg="#654e78")
             lbl_TRNS_Title = tk.Label(infoFrame, text="Transmission Range", font=("Arial", 10, "bold"), bg="#654e78",
                                       fg="white")
-            lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate at, in Meters. "
+            lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate, in Meters. "
                                                      "This variable", font=("Arial", 10), bg="#654e78")
             lbl_TRNS_Desc2 = tk.Label(infoFrame, text=" changes how far each node can send a message and propagate "
                                                       "a payload ...", font=("Arial", 10), bg="#654e78")
@@ -265,63 +265,93 @@ class HomeInterface(tk.Frame):
                                   bg="#654e78")
 
             # Placing all information labels
-            lbl_Title.pack(pady=7, anchor="w")
+            lbl_Title.pack(padx=7, pady=7, anchor="w")
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
-            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=2)
-            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=2)
-            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=2)
-            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=2)
-            lbl_IR_Title.grid(row=2, column=0, sticky="e", pady=2)
-            lbl_IR_Desc.grid(row=2, column=1, sticky="w", pady=2)
-            lbl_IL_Title.grid(row=3, column=0, sticky="e", pady=2)
-            lbl_IL_Desc.grid(row=3, column=1, sticky="w", pady=2)
-            lbl_IP_Title.grid(row=4, column=0, sticky="e", pady=2)
-            lbl_IP_Desc.grid(row=4, column=1, sticky="w", pady=2)
-            lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=2)
-            lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=2)
-            lbl_WSN_Desc2.grid(row=6, column=1, sticky="w", pady=2)
-            lbl_DEP_Title.grid(row=7, column=0, sticky="e", pady=2)
-            lbl_DEP_Desc.grid(row=7, column=1, sticky="w", pady=2)
-            lbl_DEP_Desc2.grid(row=8, column=1, sticky="w", pady=2)
-            lbl_TRNS_Title.grid(row=9, column=0, sticky="e", pady=2)
-            lbl_TRNS_Desc.grid(row=9, column=1, sticky="w", pady=2)
-            lbl_TRNS_Desc2.grid(row=10, column=1, sticky="w", pady=2)
-            lbl_CNTCT_Title.grid(row=11, column=0, sticky="e", pady=2)
-            lbl_CNTCT_Desc.grid(row=11, column=1, sticky="w", pady=2)
-            lbl_CNTCT_Desc2.grid(row=12, column=1, sticky="w", pady=2)
-            lbl_SCAN_Title.grid(row=13, column=0, sticky="e", pady=2)
-            lbl_SCAN_Desc.grid(row=13, column=1, sticky="w", pady=2)
-            lbl_SCAN_Desc2.grid(row=14, column=1, sticky="w", pady=2)
-            lbl_PTrns_Title.grid(row=15, column=0, sticky="e", pady=2)
-            lbl_PTrns_Desc.grid(row=15, column=1, sticky="w", pady=2)
-            lbl_IrPsu_Title.grid(row=14, column=0, sticky="e", pady=2)
-            lbl_IrPsu_Desc.grid(row=14, column=1, sticky="w", pady=2)
-            lbl_IlPsu_Title.grid(row=15, column=0, sticky="e", pady=2)
-            lbl_IlPsu_Desc.grid(row=15, column=1, sticky="w", pady=2)
-            lbl_IpPsu_Title.grid(row=16, column=0, sticky="e", pady=2)
-            lbl_IpPsu_Desc.grid(row=16, column=1, sticky="w", pady=2)
-            lbl_MSG_Title.grid(row=17, column=0, sticky="e", pady=2)
-            lbl_MSG_Desc.grid(row=17, column=1, sticky="w", pady=2)
-            lbl_MSG_Desc2.grid(row=18, column=1, sticky="w", pady=2)
-            lbl_PWR_Title.grid(row=19, column=0, sticky="e", pady=2)
-            lbl_PWR_Desc.grid(row=19, column=1, sticky="w", pady=2)
-            lbl_PWR_Desc2.grid(row=20, column=1, sticky="w", pady=2)
-            lbl_BTRY_Title.grid(row=21, column=0, sticky="e", pady=2)
-            lbl_BTRY_Desc.grid(row=21, column=1, sticky="w", pady=2)
-            lbl_BTRY_Desc2.grid(row=22, column=1, sticky="w", pady=2)
-            lbl_RR_Title.grid(row=23, column=0, sticky="e", pady=2)
-            lbl_RR_Desc.grid(row=23, column=1, sticky="w", pady=2)
-            lbl_RR_Desc2.grid(row=24, column=1, sticky="w", pady=2)
-            lbl_T_Title.grid(row=25, column=0, sticky="e", pady=2)
-            lbl_T_Desc.grid(row=25, column=1, sticky="w", pady=2)
+            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
+            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
+
+            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
+            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
+
+            lbl_IR_Title.grid(row=2, column=0, sticky="e", pady=3)
+            lbl_IR_Desc.grid(row=2, column=1, sticky="w", pady=3)
+
+            lbl_IL_Title.grid(row=3, column=0, sticky="e", pady=3)
+            lbl_IL_Desc.grid(row=3, column=1, sticky="w", pady=3)
+
+            lbl_IP_Title.grid(row=4, column=0, sticky="e", pady=3)
+            lbl_IP_Desc.grid(row=4, column=1, sticky="w", pady=3)
+
+            lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3,0))
+            lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3,0))
+            lbl_WSN_Desc2.grid(row=6, column=1, sticky="w")
+
+            lbl_DEP_Title.grid(row=7, column=0, sticky="e", pady=(3,0))
+            lbl_DEP_Desc.grid(row=7, column=1, sticky="w", pady=(3,0))
+            lbl_DEP_Desc2.grid(row=8, column=1, sticky="w")
+
+            lbl_TRNS_Title.grid(row=9, column=0, sticky="e", pady=(3,0))
+            lbl_TRNS_Desc.grid(row=9, column=1, sticky="w", pady=(3,0))
+            lbl_TRNS_Desc2.grid(row=10, column=1, sticky="w")
+
+            lbl_CNTCT_Title.grid(row=11, column=0, sticky="e", pady=(3,0))
+            lbl_CNTCT_Desc.grid(row=11, column=1, sticky="w", pady=(3,0))
+            lbl_CNTCT_Desc2.grid(row=12, column=1, sticky="w")
+
+            lbl_SCAN_Title.grid(row=13, column=0, sticky="e", pady=(3,0))
+            lbl_SCAN_Desc.grid(row=13, column=1, sticky="w", pady=(3,0))
+            lbl_SCAN_Desc2.grid(row=14, column=1, sticky="w")
+
+            lbl_PTrns_Title.grid(row=14, column=0, sticky="e", pady=3)
+            lbl_PTrns_Desc.grid(row=14, column=1, sticky="w", pady=3)
+
+            lbl_IrPsu_Title.grid(row=15, column=0, sticky="e", pady=3)
+            lbl_IrPsu_Desc.grid(row=15, column=1, sticky="w", pady=3)
+
+            lbl_IlPsu_Title.grid(row=16, column=0, sticky="e", pady=3)
+            lbl_IlPsu_Desc.grid(row=16, column=1, sticky="w", pady=3)
+
+            lbl_IpPsu_Title.grid(row=17, column=0, sticky="e", pady=3)
+            lbl_IpPsu_Desc.grid(row=17, column=1, sticky="w", pady=3)
+
+            lbl_MSG_Title.grid(row=18, column=0, sticky="e", pady=(3,0))
+            lbl_MSG_Desc.grid(row=18, column=1, sticky="w", pady=(3,0))
+            lbl_MSG_Desc2.grid(row=19, column=1, sticky="w")
+
+            lbl_PWR_Title.grid(row=20, column=0, sticky="e", pady=(3,0))
+            lbl_PWR_Desc.grid(row=20, column=1, sticky="w", pady=(3,0))
+            lbl_PWR_Desc2.grid(row=21, column=1, sticky="w")
+
+            lbl_BTRY_Title.grid(row=22, column=0, sticky="e", pady=(3,0))
+            lbl_BTRY_Desc.grid(row=22, column=1, sticky="w", pady=(3,0))
+            lbl_BTRY_Desc2.grid(row=23, column=1, sticky="w")
+
+            lbl_RR_Title.grid(row=24, column=0, sticky="e", pady=(3,0))
+            lbl_RR_Desc.grid(row=24, column=1, sticky="w", pady=(3,0))
+            lbl_RR_Desc2.grid(row=25, column=1, sticky="w")
+
+            lbl_T_Title.grid(row=26, column=0, sticky="e", pady=3)
+            lbl_T_Desc.grid(row=26, column=1, sticky="w", pady=3)
 
         if self.checkModelType(self.controller.activeModel) == "SIR":
-            # This outputs the _____ model information
-            lbl_Title = tk.Label(self.column_left_frame, text="SIR Model Variable Explanation", font=("Arial", 14),
+            # This outputs the SIR model information
+            # Instantiating the information labels
+            lbl_Title = tk.Label(self.column_left_frame, text="SIR Model Starting Condition Variables :", font=("Arial", 14),
                                  bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
+
+            # Placing all information labels
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_Title.pack(pady=7)
 
         if self.checkModelType(self.controller.activeModel) == "SIRD":
-            pass
+            # This outputs the SIRD model information
+            # Instantiating the information labels
+            lbl_Title = tk.Label(self.column_left_frame, text="SIRD Model Starting Condition Variables :",
+                                 font=("Arial", 14),
+                                 bg="#654e78")
+            infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
+
+            # Placing all information labels
+            infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
+            lbl_Title.pack(pady=7)
