@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from .home import HomeInterface
-from .control import ControlInterface
+from .siscontrol import SISControlInterface
 from model.sis import SIS
 
 
@@ -35,8 +35,8 @@ class BaseApp(tk.Tk):
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
-        controlInterface = ControlInterface(master=base, controller=self)
-        self.interfaces[ControlInterface.__name__] = controlInterface
+        sisControlInterface = SISControlInterface(master=base, controller=self)
+        self.interfaces[SISControlInterface.__name__] = sisControlInterface
 
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
@@ -58,12 +58,21 @@ class BaseApp(tk.Tk):
     # A method created to display all interfaces from any interface
     def display(self, hide, show):
         self.interfaces[hide].pack_forget()
-        self.interfaces[show].pack(side="top", fill="both", expand=True)
 
         if show == "HomeInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateModelList()
             self.interfaces[show].updateCompareModelList()
-        if show == "ControlInterface":
+        if show == "SISControlInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateVariables(self)
+            self.interfaces[show].updateGraphs()
+        if show == "SIRControlInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateVariables(self)
+            self.interfaces[show].updateGraphs()
+        if show == "SIRDControlInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs()
 

@@ -7,7 +7,7 @@ import numpy as np
 from model import sis
 
 
-class ControlInterface(tk.Frame):
+class SISControlInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
     # it also creates and places all widgets for this interface
     def __init__(self, master, controller):
@@ -35,7 +35,7 @@ class ControlInterface(tk.Frame):
                                  command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
         # Button: takes the user to the home page
         btn_Return = tk.Button(frame_top, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
-                             command=lambda: controller.display("ControlInterface", "HomeInterface"))
+                             command=lambda: controller.display("SISControlInterface", "HomeInterface"))
 
         # This frame holds the graphs
         canvas_frame = tk.Frame(frame_top, bg="#6e6e6e")
@@ -244,7 +244,7 @@ class ControlInterface(tk.Frame):
         self.ax[2].plot(T1, I1, '#d62728', label="All Infected")
         self.ax[2].set_xlabel("Timesteps (Days)")
         self.ax[2].set_ylabel("Node Count")
-        self.ax[2].set_title("Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
+        self.ax[2].set_title("Node Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
 
         self.canvas.draw()
 
