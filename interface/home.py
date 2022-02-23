@@ -13,7 +13,7 @@ class HomeInterface(tk.Frame):
         ##################################### Instantiating LEFT-side elements #########################################
 
         # Left side of the screen frame
-        frame_left = tk.Frame(self, bg="#654e78")
+        frame_left = tk.Frame(self, bg="#453354")
         column_left_border = tk.Frame(frame_left, bg="white")
         self.column_left_frame = tk.Frame(frame_left, bg="#654e78")
         # Page title gui
@@ -24,7 +24,6 @@ class HomeInterface(tk.Frame):
         lblTitle2 = tk.Label(titleBgInner, text="An IoT-SIS Virus model Simulation Tool", bg="#654e78",
                                   font=("Courier", 20), fg="white")
 
-
         ####################################### Placing LEFT-side elements #############################################
 
         frame_left.place(x=0, y=0, height="864", width="718")
@@ -32,8 +31,8 @@ class HomeInterface(tk.Frame):
         self.column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
         lblTitle.place(x=5, y=2)
         lblTitle2.place(x=5, y=50)
-        titleBgBorder.place(x=25, y=23, height="100", width="635")
-        titleBgInner.place(x=30, y=28, height="90", width="625")
+        titleBgBorder.place(x=82, y=23, height="100", width="635")
+        titleBgInner.place(x=87, y=28, height="90", width="625")
 
         ##################################### Instantiating RIGHT-side elements ########################################
 
