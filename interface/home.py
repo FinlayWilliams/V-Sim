@@ -34,7 +34,6 @@ class HomeInterface(tk.Frame):
         lblTitle2.place(x=5, y=50)
         titleBgBorder.place(x=25, y=23, height="100", width="635")
         titleBgInner.place(x=30, y=28, height="90", width="625")
-        self.setModelInfo()
 
         ##################################### Instantiating RIGHT-side elements ########################################
 
@@ -92,23 +91,8 @@ class HomeInterface(tk.Frame):
         self.lstCompareModels.place(x=220, y=450)
         btn_Compare.place(x=220, y=710)
 
-    # Method: Called whenever a model is selected to display the correct model information
-    def setModelInfo(self):
-        validate = 0
-
-        if validate == 0:
-            # This outputs the SIS model Information
-            infoFrame = tk.Frame(self.column_left_frame, bg="blue")
-            lblTitle = tk.Label(infoFrame, text="Heya")
-            infoFrame.place(relwidth=0.95, relheight=0.9, x=5, y=10)
-            lblTitle.pack()
-
-        if validate ==1:
-            # This outputs the _____ model information
-            infoFrame = tk.Frame(self.column_left_frame, bg="red")
-            lblTitle = tk.Label(infoFrame, text="OORAH")
-            infoFrame.place(relwidth=0.95, relheight=0.9, x=5, y=10)
-            lblTitle.pack()
+        # This method must be called after the listbox is placed
+        self.setModelInfo()
 
     # Method: called from base whenever the frame is repacked so the list of models is always refreshed on screen
     def updateModelList(self):
@@ -141,3 +125,44 @@ class HomeInterface(tk.Frame):
             self.updateModelList()
             self.updateCompareModelList()
             self.controller.popup("Model Deleted", "The Active Model is now {}".format(controller.models[0].Name))
+
+    # Method: checks to see what virus model is currently selected
+    def checkModelType(self):
+        modelName = str(self.lstModels.get(self.lstModels.curselection()).Name)
+        modelPrefix = modelName.partition(":")
+
+        if modelPrefix[0] == "SIS":
+            return "SIS"
+        if modelPrefix[0] == "SIR":
+            return "SIR"
+        if modelPrefix[0] == "SIRD":
+            return "SIRD"
+
+    # Method: Called whenever a model is selected to display the correct model information
+    def setModelInfo(self):
+        validate = 0
+
+        if validate == 0:
+            # This outputs the SIS model Information
+            lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Variable Explanation", font=("Arial", 14),
+                                 bg="#654e78")
+            infoFrame = tk.Frame(self.column_left_frame, bg="blue")
+            lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 12, "bold"), bg="#654e78")
+            lbl_N_Desc = tk.Label(infoFrame, text=" - This the the starting Node count", font=("Arial", 11),
+                                  bg="#654e78")
+            lbl__Title = tk.Label(infoFrame, text="", font=("Arial", 12, "bold"), bg="#654e78")
+            lbl__Desc = tk.Label(infoFrame, text=" - ", font=("Arial", 11),
+                                  bg="#654e78")
+
+
+            lbl_Title.pack(pady=7)
+            infoFrame.place(relwidth=0.95, relheight=0.9, x=11, y=40)
+            lbl_N_Title.grid(row=0, column=0)
+            lbl_N_Desc.grid(row=0, column=1)
+
+        if validate == 1:
+            # This outputs the _____ model information
+            infoFrame = tk.Frame(self.column_left_frame, bg="red")
+            lbl_Title = tk.Label(infoFrame, text="OORAH")
+            infoFrame.place(relwidth=0.95, relheight=0.9, x=11, y=40)
+            lbl_Title.pack()
