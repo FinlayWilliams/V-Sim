@@ -18,9 +18,6 @@ class SISControlInterface(tk.Frame):
 
         # Upper area for displaying and model option buttons
         frame_top = tk.Frame(self, bg="#453354")
-        # Button: refreshes graphs to current model config
-        btn_Refresh_Graph = tk.Button(frame_top, wraplength=40, width=5, text="Refresh Graphs", font=("Arial", 7),
-                                      command=self.updateGraphs)
         # Button: Resets model config and refreshes graphs
         btn_Reset = tk.Button(frame_top, wraplength=40, width=5, text="Reset Model", font=("Arial", 7),
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
@@ -69,17 +66,13 @@ class SISControlInterface(tk.Frame):
         N_Options = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
         self.cmb_N = ttk.Combobox(frame_bot, values=N_Options, state="readonly")
         lbl_S = tk.Label(frame_bot, text="Initial S Size (%):")
-        self.scl_S = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
-                              command=self.updateModel)
+        self.scl_S = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal")
         lbl_IR = tk.Label(frame_bot, text="Initial IR Size (%):")
-        self.scl_IR = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
-                               command=self.updateModel)
+        self.scl_IR = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
         lbl_IL = tk.Label(frame_bot, text="Initial IL Size (%):")
-        self.scl_IL = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
-                               command=self.updateModel)
+        self.scl_IL = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
         lbl_IP = tk.Label(frame_bot, text="Initial IP Size (%):")
-        self.scl_IP = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
-                               command=self.updateModel)
+        self.scl_IP = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
         lbl_WSN = tk.Label(frame_bot, text="Wireless Sensor Network Count:")
         WSN_Options = ["1", "5", "10", "20", "50"]
         self.cmb_WSN = ttk.Combobox(frame_bot, values=WSN_Options, state="readonly")
@@ -93,20 +86,15 @@ class SISControlInterface(tk.Frame):
         CNTCT_Options = ["1", "5", "10", "20", "50", "75", "100", "250"]
         self.cmb_CNTCT = ttk.Combobox(frame_bot, values=CNTCT_Options, state="readonly")
         lbl_SCAN = tk.Label(frame_bot, text="Botnet Scanning Rate (/sec):")
-        self.scl_SCAN = tk.Scale(frame_bot, from_=1, to=250, resolution=1, orient="horizontal",
-                                 command=self.updateModel)
+        self.scl_SCAN = tk.Scale(frame_bot, from_=1, to=250, resolution=1, orient="horizontal")
         lbl_Ptrns = tk.Label(frame_bot, text="PTransmission Rate:")
-        self.scl_Ptrns = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal",
-                                  command=self.updateModel)
+        self.scl_Ptrns = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
         lbl_IrPsu = tk.Label(frame_bot, text="IR PSuccess Rate:")
-        self.scl_IrPsu = tk.Scale(frame_bot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal",
-                                  command=self.updateModel)
+        self.scl_IrPsu = tk.Scale(frame_bot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal")
         lbl_IlPsu = tk.Label(frame_bot, text="IL PSuccess Rate:")
-        self.scl_IlPsu = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal",
-                                  command=self.updateModel)
+        self.scl_IlPsu = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
         lbl_IpPsu = tk.Label(frame_bot, text="IP PSuccess Rate:")
-        self.scl_IpPsu = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal",
-                                  command=self.updateModel)
+        self.scl_IpPsu = tk.Scale(frame_bot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
         lbl_MSG = tk.Label(frame_bot, text="Mean Message Size (Bytes):")
         MSG_Options = ["10", "20", "50", "100"]
         self.cmb_MSG = ttk.Combobox(frame_bot, values=MSG_Options, state="readonly")
@@ -117,21 +105,18 @@ class SISControlInterface(tk.Frame):
         BTRY_Options = ["216000", "432000", "864000", "1728000", "3456000"]
         self.cmb_BTRY = ttk.Combobox(frame_bot, values=BTRY_Options, state="readonly")
         lbl_RR = tk.Label(frame_bot, text="Recovery rate:")
-        self.scl_RR = tk.Scale(frame_bot, from_=0.250, to=1, digits=3, resolution=0.250, orient="horizontal",
-                               command=self.updateModel)
+        self.scl_RR = tk.Scale(frame_bot, from_=0.250, to=1, digits=3, resolution=0.250, orient="horizontal")
         lbl_T = tk.Label(frame_bot, text="Days to Observe:")
-        self.scl_T = tk.Scale(frame_bot, from_=1, to=365, resolution=1, orient="horizontal",
-                              command=self.updateModel)
+        self.scl_T = tk.Scale(frame_bot, from_=1, to=365, resolution=1, orient="horizontal")
 
         ####################################### Placing ALL elements ############################################
 
         ## Frame Top Half
         frame_top.place(relheight=0.70, relwidth=1)
-        btn_Refresh_Graph.place(x=10, y=13)
-        btn_Reset.place(x=10, y=64)
-        btn_Inspect.place(x=10, y=115)
-        btn_Save.place(x=10, y=166)
-        btn_Save_New.place(x=10, y=217)
+        btn_Reset.place(x=10, y=13)
+        btn_Inspect.place(x=10, y=64)
+        btn_Save.place(x=10, y=115)
+        btn_Save_New.place(x=10, y=166)
         btn_Return.place(x=10, y=560)
         canvas_frame.place(relheight=1, relwidth=0.963, x=58)
         canvas_info_frame_border.place(relheight=0.5, relwidth=0.47, x=814, y=303)
@@ -158,12 +143,16 @@ class SISControlInterface(tk.Frame):
         self.cmb_N.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_S.grid(row=1, column=1, padx=(10, 5), pady=5, sticky="e")
         self.scl_S.grid(row=1, column=2, padx=5, sticky="ew")
+        self.scl_S.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IR.grid(row=2, column=1, padx=(10, 5), pady=5, sticky="e")
         self.scl_IR.grid(row=2, column=2, padx=5, sticky="ew")
+        self.scl_IR.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IL.grid(row=3, column=1, padx=(10, 5), pady=5, sticky="e")
         self.scl_IL.grid(row=3, column=2, padx=5, sticky="ew")
+        self.scl_IL.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IP.grid(row=4, column=1, padx=(10, 5), pady=5, sticky="e")
         self.scl_IP.grid(row=4, column=2, padx=5, sticky="ew")
+        self.scl_IP.bind("<ButtonRelease-1>", self.updateModel)
         # 3rd Block
         lbl_WSN.grid(row=0, column=3, padx=5, pady=(7, 0), sticky="e")
         self.cmb_WSN.grid(row=0, column=4, padx=5, pady=(7, 0))
@@ -179,15 +168,20 @@ class SISControlInterface(tk.Frame):
         self.cmb_CNTCT.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_SCAN.grid(row=4, column=3, padx=5, pady=5, sticky="e")
         self.scl_SCAN.grid(row=4, column=4, padx=5, sticky="ew")
+        self.scl_SCAN.bind("<ButtonRelease-1>", self.updateModel)
         # 4th Block
         lbl_Ptrns.grid(row=0, column=5, padx=5, pady=(7, 0), sticky="e")
         self.scl_Ptrns.grid(row=0, column=6, padx=5, pady=(7, 0))
+        self.scl_Ptrns.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IrPsu.grid(row=1, column=5, padx=5, pady=5, sticky="e")
         self.scl_IrPsu.grid(row=1, column=6, padx=5, sticky="ew")
+        self.scl_IrPsu.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IlPsu.grid(row=2, column=5, padx=5, pady=5, sticky="e")
         self.scl_IlPsu.grid(row=2, column=6, padx=5, sticky="ew")
+        self.scl_IlPsu.bind("<ButtonRelease-1>", self.updateModel)
         lbl_IpPsu.grid(row=3, column=5, padx=5, pady=5, sticky="e")
         self.scl_IpPsu.grid(row=3, column=6, padx=5, sticky="ew")
+        self.scl_IpPsu.bind("<ButtonRelease-1>", self.updateModel)
         # 5th Block
         lbl_MSG.grid(row=0, column=7, padx=5, pady=(7, 0), sticky="e")
         self.cmb_MSG.grid(row=0, column=8, padx=5, pady=(7, 0))
@@ -200,8 +194,10 @@ class SISControlInterface(tk.Frame):
         self.cmb_BTRY.bind("<<ComboboxSelected>>", self.updateModel)
         lbl_RR.grid(row=3, column=7, padx=5, pady=5, sticky="e")
         self.scl_RR.grid(row=3, column=8, padx=5, sticky="ew")
+        self.scl_RR.bind("<ButtonRelease-1>", self.updateModel)
         lbl_T.grid(row=4, column=7, padx=5, pady=5, sticky="e")
         self.scl_T.grid(row=4, column=8, padx=5, sticky="ew")
+        self.scl_T.bind("<ButtonRelease-1>", self.updateModel)
 
         # Calling the method to allign the variables and populate all fields
         self.updateVariables(controller)
@@ -282,7 +278,7 @@ class SISControlInterface(tk.Frame):
                 self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
             else:
                 self.activeModel = newActiveModel
-
+                self.updateGraphs()
 
     # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
     # self.updateGraphs()
