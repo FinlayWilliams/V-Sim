@@ -9,7 +9,9 @@ class HomeInterface(tk.Frame):
         super().__init__(master)
         self.controller = controller
 
+        # Variables used to switch interfaces set to a default option
         self.controlInterfaceShow = "SISControlInterface"
+        self.inspectInterfaceShow = "SISInspectInterface"
 
         ##################################### Instantiating LEFT-side elements #########################################
 
@@ -52,7 +54,8 @@ class HomeInterface(tk.Frame):
         btn_Configure = tk.Button(frame_right, width=17, text="Configure Model",
                                   command=lambda: [controller.display("HomeInterface", self.controlInterfaceShow)])
         # Button: opens inspect page with the current active model
-        btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Model")
+        btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Model",
+                                  command=lambda: [controller.display("HomeInterface", self.inspectInterfaceShow)])
         # Button: Deletes selected model from model list
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Model",
                                command=lambda: self.deleteSelectedModel(controller, 1))
@@ -126,7 +129,7 @@ class HomeInterface(tk.Frame):
 
     # Method: called everytime a different entry in the listbox is selected, updating the controllers
     # (base windows) current active model and an index variable that is used when saving the models
-    # also calls other methods that update the GUI
+    # also calls other methods that update the GUI and validate the model type
     def updateActiveModel(self, controller, stub):
         if self.lstModels.curselection() != ():
             # Long prefixes to take the listbox index and obtain a single integer to be used to
@@ -142,10 +145,13 @@ class HomeInterface(tk.Frame):
 
                 if self.checkModelType(self.controller.activeModel) == "SIS":
                     self.controlInterfaceShow = "SISControlInterface"
+                    self.inspectInterfaceShow = "SISInspectInterface"
                 if self.checkModelType(self.controller.activeModel) == "SIR":
                     self.controlInterfaceShow = "SIRControlInterface"
+                    self.inspectInterfaceShow = "SIRInspectInterface"
                 if self.checkModelType(self.controller.activeModel) == "SIRD":
                     self.controlInterfaceShow = "SIRDControlInterface"
+                    self.inspectInterfaceShow = "SIRDInspectInterface"
 
     # Method: This method populates the compare box with models of the same virus model type
     def updateCompareModelList(self):

@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from .home import HomeInterface
 from .siscontrol import SISControlInterface
+from .sisinspect import SISInspectInterface
 from model.sis import SIS
 
 
@@ -35,6 +36,8 @@ class BaseApp(tk.Tk):
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
+        sisInspectInterface = SISInspectInterface(master=base, controller=self)
+        self.interfaces[SISInspectInterface.__name__] = sisInspectInterface
         sisControlInterface = SISControlInterface(master=base, controller=self)
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
 
@@ -63,18 +66,20 @@ class BaseApp(tk.Tk):
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateModelList()
             self.interfaces[show].updateCompareModelList()
+        if show == "SISInspectInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs()
         if show == "SIRControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateVariables(self)
-            self.interfaces[show].updateGraphs()
+            # self.interfaces[show].updateVariables(self)
+            # self.interfaces[show].updateGraphs()
         if show == "SIRDControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateVariables(self)
-            self.interfaces[show].updateGraphs()
+            # self.interfaces[show].updateVariables(self)
+            # self.interfaces[show].updateGraphs()
 
     # A range of methods controlling the model list and active model
     def getActiveModelIndex(self): return self.activeModelIndex
