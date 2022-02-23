@@ -13,6 +13,7 @@ class SISControlInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
+        self.activeModel = controller.activeModel
 
         ####################################### Instantiating ALL elements ############################################
 
@@ -67,12 +68,8 @@ class SISControlInterface(tk.Frame):
         self.cmb_N = ttk.Combobox(frame_bot, values=N_Options, state="readonly")
         lbl_S = tk.Label(frame_bot, text="Initial S Size (%):")
         self.scl_S = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal")
-        lbl_IR = tk.Label(frame_bot, text="Initial IR Size (%):")
-        self.scl_IR = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
-        lbl_IL = tk.Label(frame_bot, text="Initial IL Size (%):")
-        self.scl_IL = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
-        lbl_IP = tk.Label(frame_bot, text="Initial IP Size (%):")
-        self.scl_IP = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal")
+        lbl_I = tk.Label(frame_bot, text="Initial I Size (%):")
+        self.lbl_I_match = tk.Label(frame_bot, text="{}".format(1 - self.scl_S.get()), bg="#a8a8a8")
         lbl_WSN = tk.Label(frame_bot, text="Wireless Sensor Network Count:")
         WSN_Options = ["1", "5", "10", "20", "50"]
         self.cmb_WSN = ttk.Combobox(frame_bot, values=WSN_Options, state="readonly")
@@ -144,15 +141,8 @@ class SISControlInterface(tk.Frame):
         lbl_S.grid(row=1, column=1, padx=(10, 5), pady=5, sticky="e")
         self.scl_S.grid(row=1, column=2, padx=5, sticky="ew")
         self.scl_S.bind("<ButtonRelease-1>", self.updateModel)
-        lbl_IR.grid(row=2, column=1, padx=(10, 5), pady=5, sticky="e")
-        self.scl_IR.grid(row=2, column=2, padx=5, sticky="ew")
-        self.scl_IR.bind("<ButtonRelease-1>", self.updateModel)
-        lbl_IL.grid(row=3, column=1, padx=(10, 5), pady=5, sticky="e")
-        self.scl_IL.grid(row=3, column=2, padx=5, sticky="ew")
-        self.scl_IL.bind("<ButtonRelease-1>", self.updateModel)
-        lbl_IP.grid(row=4, column=1, padx=(10, 5), pady=5, sticky="e")
-        self.scl_IP.grid(row=4, column=2, padx=5, sticky="ew")
-        self.scl_IP.bind("<ButtonRelease-1>", self.updateModel)
+        lbl_I.grid(row=2, column=1, padx=(10, 5), pady=5, sticky="e")
+        self.lbl_I_match.grid(row=2, column=2, padx=5, sticky="ew")
         # 3rd Block
         lbl_WSN.grid(row=0, column=3, padx=5, pady=(7, 0), sticky="e")
         self.cmb_WSN.grid(row=0, column=4, padx=5, pady=(7, 0))
@@ -253,9 +243,7 @@ class SISControlInterface(tk.Frame):
             Name = str("SIS: " + self.entry_Name.get())
             N = int(self.cmb_N.get())
             S = float(self.scl_S.get())
-            IR = float(self.scl_IR.get())
-            IL = float(self.scl_IL.get())
-            IP = float(self.scl_IP.get())
+            I = float(1 - self.scl_S.get())
             WSN = int(self.cmb_WSN.get())
             DEP = int(self.cmb_DEP.get())
             TRNS = int(self.cmb_TRNS.get())
@@ -271,8 +259,10 @@ class SISControlInterface(tk.Frame):
             RR = float(self.scl_RR.get())
             T = int(self.scl_T.get())
 
-            newActiveModel = sis.SIS(Name, N, S, IR, IL, IP, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
+            newActiveModel = sis.SIS(Name, N, S, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
+
+            self.lbl_I_match.config(text="{:.2f}".format(I))
 
             if not self.checkValid(newActiveModel):
                 self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
@@ -291,9 +281,7 @@ class SISControlInterface(tk.Frame):
 
         self.cmb_N.set(self.activeModel.N)
         self.scl_S.set(self.activeModel.percentS)
-        self.scl_IR.set(self.activeModel.percentIr)
-        self.scl_IL.set(self.activeModel.percentIl)
-        self.scl_IP.set(self.activeModel.percentIp)
+        self.lbl_I_match.config(text="{}".format(self.activeModel.percentI))
         self.cmb_WSN.set(self.activeModel.WSNnumber)
         self.cmb_DEP.set(self.activeModel.deploymentArea)
         self.cmb_TRNS.set(self.activeModel.transmissionRange)

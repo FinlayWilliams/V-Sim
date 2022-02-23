@@ -3,14 +3,12 @@ from scipy.integrate import odeint
 
 class SIS:
     # Preliminary Constructor to Initialise Variables and Allow for easy class creation
-    def __init__(self, name, n, prcntS, prcntIr, prcntIl, prcntIp, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
+    def __init__(self, name, n, prcntS, prcntI, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
                  irPsuc, ilPsuc, ipPsuc, meanMsgSize, meanPwr, ttlBattery, rcvryRate, timesteps):
         self.Name = name
         self.N = n
         self.percentS = prcntS
-        self.percentIr = prcntIr
-        self.percentIl = prcntIl
-        self.percentIp = prcntIp
+        self.percentI = prcntI
         self.WSNnumber = wsnNo
         self.deploymentArea = depArea
         self.transmissionRange = transRange
@@ -36,9 +34,9 @@ class SIS:
     def calculateVariables(self):
         # SI Population
         self.S = self.N * self.percentS
-        self.Ir = self.N * self.percentIr
-        self.Il = self.N * self.percentIl
-        self.Ip = self.N * self.percentIp
+        self.Ir = (self.N * self.percentI) / 3
+        self.Il = (self.N * self.percentI) / 3
+        self.Ip = (self.N * self.percentI) / 3
         self.I = self.Ir + self.Il + self.Ip
 
         # S Local Set Range

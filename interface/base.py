@@ -91,7 +91,7 @@ class BaseApp(tk.Tk):
 
     def addModel(self, newModel): self.models.append(newModel)
 
-    def addDefaultSISModel(self): self.models.append(SIS("SIS: DefaultModel", 10000, 0.99, 0.003, 0.003, 0.004, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
+    def addDefaultSISModel(self): self.models.append(SIS("SIS: DefaultModel", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
                            0.09, 50, 0.75, 864000, 0.75, 10))
 
     def removeModel(self, index): self.models.remove(self.models[index])

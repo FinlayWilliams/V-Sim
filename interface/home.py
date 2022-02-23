@@ -173,21 +173,14 @@ class HomeInterface(tk.Frame):
             lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10), bg="#654e78")
             lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_S_Desc = tk.Label(infoFrame, text=" The Susceptible population, "
+            lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
                                                   "a percentage of N (default is 99%).",
                                   font=("Arial", 10), bg="#654e78")
-            lbl_IR_Title = tk.Label(infoFrame, text="IR", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IR_Desc = tk.Label(infoFrame, text=" The Random-Scanning Infected population count, "
-                                                   "a percentage of N (default is 0.3%).",
-                                   font=("Arial", 10), bg="#654e78")
-            lbl_IL_Title = tk.Label(infoFrame, text="IL", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IL_Desc = tk.Label(infoFrame, text=" The Local-Scanning Infected population count, "
-                                                   "a percentage of N (default is 0.3%).",
-                                   font=("Arial", 10), bg="#654e78")
-            lbl_IP_Title = tk.Label(infoFrame, text="IP", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_IP_Desc = tk.Label(infoFrame, text=" The Peer-to-Peer Infected population count, "
-                                                   "a percentage of N (default is 0.4%).",
-                                   font=("Arial", 10), bg="#654e78")
+            lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count, "
+                                                  "set so when added to the S percentage - "
+                                                  "it totals 100% of N.",
+                                  font=("Arial", 10), bg="#654e78")
             lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
                                                     "hypothetical ", font=("Arial", 10), bg="#654e78")
@@ -273,14 +266,8 @@ class HomeInterface(tk.Frame):
             lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
             lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
 
-            lbl_IR_Title.grid(row=2, column=0, sticky="e", pady=3)
-            lbl_IR_Desc.grid(row=2, column=1, sticky="w", pady=3)
-
-            lbl_IL_Title.grid(row=3, column=0, sticky="e", pady=3)
-            lbl_IL_Desc.grid(row=3, column=1, sticky="w", pady=3)
-
-            lbl_IP_Title.grid(row=4, column=0, sticky="e", pady=3)
-            lbl_IP_Desc.grid(row=4, column=1, sticky="w", pady=3)
+            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=3)
+            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=3)
 
             lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3,0))
             lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3,0))
