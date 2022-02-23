@@ -25,7 +25,8 @@ class SISControlInterface(tk.Frame):
         btn_Reset = tk.Button(frame_top, wraplength=40, width=5, text="Reset Model", font=("Arial", 7),
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
         # Button: opens the inspect model page with the currently selected model
-        btn_Inspect = tk.Button(frame_top, wraplength=40, width=5, text="Inspect model", font=("Arial", 7))
+        btn_Inspect = tk.Button(frame_top, wraplength=40, width=5, text="Inspect model", font=("Arial", 7),
+                                command=lambda: controller.display("SISControlInterface", "SISInspectInterface"))
         # Button: overwrites the current model "saving" it
         btn_Save = tk.Button(frame_top, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
                              command=lambda: [self.updateModel(1),
@@ -281,6 +282,7 @@ class SISControlInterface(tk.Frame):
                 self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
             else:
                 self.activeModel = newActiveModel
+
 
     # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
     # self.updateGraphs()

@@ -60,7 +60,9 @@ class HomeInterface(tk.Frame):
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Model",
                                command=lambda: self.deleteSelectedModel(controller, 1))
         # Button: creates new default SIS model
-        btn_New_SIS = tk.Button(frame_right, width=17, text="New SIS Model")
+        btn_New_SIS = tk.Button(frame_right, width=17, text="New SIS Model",
+                                command=lambda:[controller.addDefaultSISModel(), self.updateModelList(),
+                                                self.updateCompareModelList()])
         # Button:
         btn_New_B1 = tk.Button(frame_right, width=17, text="PLACEHOLDER")
         # Button:
@@ -113,7 +115,7 @@ class HomeInterface(tk.Frame):
             controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
             self.updateModelList()
             self.updateCompareModelList()
-            self.controller.popup("Model Deleted", "The Active Model is now {}".format(controller.models[0].Name))
+            self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
 
     # Method: checks to see what type of virus model is currently selected, used in a range of other GUI updates
     def checkModelType(self, model):
@@ -263,7 +265,7 @@ class HomeInterface(tk.Frame):
                                   bg="#654e78")
 
             # Placing all information labels
-            lbl_Title.pack(pady=7)
+            lbl_Title.pack(pady=7, anchor="w")
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_N_Title.grid(row=0, column=0, sticky="e", pady=2)
             lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=2)

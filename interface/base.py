@@ -26,11 +26,9 @@ class BaseApp(tk.Tk):
 
         # Initialising a model list and a default model
         self.models = []
-        defaultModel = SIS("SIS: DefaultModel", 10000, 0.99, 0.003, 0.003, 0.004, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
-                           0.09, 50, 0.75, 864000, 0.75, 10)
-        self.models.append(defaultModel)
+        self.addDefaultSISModel()
         self.activeModelIndex = 0
-        self.activeModel = defaultModel
+        self.activeModel = self.models[self.activeModelIndex]
 
         # Manually initialising all interfaces and displaying the Home interface
         self.interfaces = {}
@@ -91,6 +89,9 @@ class BaseApp(tk.Tk):
     def setActiveModel(self, index): self.activeModel = self.models[index]
 
     def addModel(self, newModel): self.models.append(newModel)
+
+    def addDefaultSISModel(self): self.models.append(SIS("SIS: DefaultModel", 10000, 0.99, 0.003, 0.003, 0.004, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
+                           0.09, 50, 0.75, 864000, 0.75, 10))
 
     def removeModel(self, index): self.models.remove(self.models[index])
 
