@@ -67,16 +67,16 @@ class ControlInterface(tk.Frame):
         lbl_N = tk.Label(frame_bot, text="Initial Node Population Size (N):")
         N_Options = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
         self.cmb_N = ttk.Combobox(frame_bot, values=N_Options, state="readonly")
-        lbl_S = tk.Label(frame_bot, text="Initial S Size (% of N):")
+        lbl_S = tk.Label(frame_bot, text="Initial S Size (%):")
         self.scl_S = tk.Scale(frame_bot, from_=0, to=1, resolution=0.01, orient="horizontal",
                               command=self.updateModel)
-        lbl_IR = tk.Label(frame_bot, text="Initial IR Size (% of N):")
+        lbl_IR = tk.Label(frame_bot, text="Initial IR Size (%):")
         self.scl_IR = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
-        lbl_IL = tk.Label(frame_bot, text="Initial IL Size (% of N):")
+        lbl_IL = tk.Label(frame_bot, text="Initial IL Size (%):")
         self.scl_IL = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
-        lbl_IP = tk.Label(frame_bot, text="Initial IP Size (% of N):")
+        lbl_IP = tk.Label(frame_bot, text="Initial IP Size (%):")
         self.scl_IP = tk.Scale(frame_bot, from_=0, to=1, resolution=0.001, orient="horizontal",
                                command=self.updateModel)
         lbl_WSN = tk.Label(frame_bot, text="Wireless Sensor Network Count:")
