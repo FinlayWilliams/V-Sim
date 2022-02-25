@@ -11,7 +11,7 @@ class BaseApp(tk.Tk):
     # (setting default sizes, default models, all interfaces)
     def __init__(self):
         super().__init__()
-        self.title("V - Sim")
+        self.title("V-Sim")
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
@@ -91,8 +91,9 @@ class BaseApp(tk.Tk):
 
     def addModel(self, newModel): self.models.append(newModel)
 
-    def addDefaultSISModel(self): self.models.append(SIS("SIS: DefaultModel", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06,
-                           0.09, 50, 0.75, 864000, 0.75, 10))
+    def addDefaultSISModel(self):
+        self.models.append(SIS("SIS: DefaultModel",
+                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75, 10))
 
     def removeModel(self, index): self.models.remove(self.models[index])
 

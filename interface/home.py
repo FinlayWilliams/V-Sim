@@ -22,7 +22,7 @@ class HomeInterface(tk.Frame):
         # Page title gui
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#654e78")
-        lblTitle = tk.Label(titleBgInner, text="V - Sim:", bg="#654e78",font=("Courier", 30, "underline"),
+        lblTitle = tk.Label(titleBgInner, text="V-Sim:", bg="#654e78",font=("Courier", 30, "underline"),
                             fg="white")
         lblTitle2 = tk.Label(titleBgInner, text="A Virus Model Simulation Tool", bg="#654e78",
                              font=("Courier", 20), fg="white")
@@ -60,7 +60,7 @@ class HomeInterface(tk.Frame):
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Model",
                                command=lambda: self.deleteSelectedModel(controller, 1))
         # Button: creates new default SIS model
-        btn_New_SIS = tk.Button(frame_right, width=17, text="New SIS Model",
+        btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model",
                                 command=lambda:[controller.addDefaultSISModel(), self.updateModelList(),
                                                 self.updateCompareModelList()])
         # Button:
@@ -177,10 +177,10 @@ class HomeInterface(tk.Frame):
                                                   "a percentage of N (default is 99%).",
                                   font=("Arial", 10), bg="#654e78")
             lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count, "
-                                                  "set so when added to the S percentage - "
-                                                  "it totals 100% of N.",
-                                  font=("Arial", 10), bg="#654e78")
+            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
+                                                  "configured by changing the", font=("Arial", 10), bg="#654e78")
+            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial", 10),
+                                   bg="#654e78")
             lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
                                                     "hypothetical ", font=("Arial", 10), bg="#654e78")
@@ -266,8 +266,9 @@ class HomeInterface(tk.Frame):
             lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
             lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
 
-            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=3)
-            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=3)
+            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3,0))
+            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3,0))
+            lbl_I_Desc2.grid(row=3, column=1, sticky="w")
 
             lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3,0))
             lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3,0))
