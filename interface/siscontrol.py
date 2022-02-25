@@ -37,10 +37,10 @@ class SISControlInterface(tk.Frame):
                              command=lambda: controller.display("SISControlInterface", "HomeInterface"))
 
         # This frame holds the graphs
-        canvasFrame = tk.Frame(frameTop, bg="#6e6e6e")
+        canvasFrame = tk.Frame(frameTop, bg="#654e78")
         # Frame for the legend to sit in + legend labels
         lblLegendTitle = tk.Label(frameTop, bg="#453354", width=25, pady=4, text="Legend :",
-                                    font=("Arial", 14))
+                                    font=("Calibri", 14, "bold"), fg="white")
         lblLegend1 = tk.Label(frameTop, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
                                font=("Arial", 12), fg="white")
         lblLegend2 = tk.Label(frameTop, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
@@ -50,7 +50,7 @@ class SISControlInterface(tk.Frame):
         lblLegend4 = tk.Label(frameTop, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer",
                                font=("Arial", 12), fg="white")
         lblLegend5 = tk.Label(frameTop, bg="#d62728", width=25, pady=4,
-                               text="(I) All Infection Types Grouped", font=("Arial", 12), fg="white")
+                               text="(I) Infection Types Grouped", font=("Arial", 12), fg="white")
 
         # Separates graphs from the controls
         frameMid = tk.Frame(self, bg="#6e6e6e")
@@ -114,12 +114,12 @@ class SISControlInterface(tk.Frame):
         btnInspect.place(x=10, y=509)
         btnReturn.place(x=10, y=560)
         canvasFrame.place(relheight=1, relwidth=0.73, x=58)
-        lblLegendTitle.place(x=1220, y=167)
-        lblLegend1.place(x=1243, y=200)
-        lblLegend2.place(x=1243, y=233)
-        lblLegend3.place(x=1243, y=266)
-        lblLegend4.place(x=1243, y=299)
-        lblLegend5.place(x=1243, y=332)
+        lblLegendTitle.place(x=1229, y=194)
+        lblLegend1.place(x=1243, y=227)
+        lblLegend2.place(x=1243, y=260)
+        lblLegend3.place(x=1243, y=293)
+        lblLegend4.place(x=1243, y=326)
+        lblLegend5.place(x=1243, y=359)
 
         ## Frame Mid
         frameMid.place(y=605, relheight=0.05, relwidth=1)

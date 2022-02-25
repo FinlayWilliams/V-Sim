@@ -38,10 +38,26 @@ class SISInspectInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(pad=2)
 
+        lblLegend1 = tk.Label(graphFrame, bg="#2ca02c", width=14, pady=4, text="(S) Susceptible",
+                              font=("Arial", 9), fg="white")
+        lblLegend2 = tk.Label(graphFrame, bg="#9467bd", width=18, pady=4, text="(IR) Random-Scanning",
+                              font=("Arial", 9), fg="white")
+        lblLegend3 = tk.Label(graphFrame, bg="#1f77b4", width=16, pady=4, text="(IL) Local-Scanning",
+                              font=("Arial", 9), fg="white")
+        lblLegend4 = tk.Label(graphFrame, bg="#17becf", width=14, pady=4, text="(IP) Peer-to-Peer",
+                              font=("Arial", 9), fg="white")
+        lblLegend5 = tk.Label(graphFrame, bg="#d62728", width=22, pady=4,
+                              text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
+
         ############################################# Placing Graphs ################################################
 
         graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
         self.updateGraphs()
+        lblLegend1.place(x=0, y=837)
+        lblLegend2.place(x=104, y=837)
+        lblLegend3.place(x=236, y=837)
+        lblLegend5.place(x=456, y=837)
+        lblLegend4.place(x=354, y=837)
 
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeModel.runModel()
