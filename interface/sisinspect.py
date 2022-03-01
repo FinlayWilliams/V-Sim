@@ -21,8 +21,17 @@ class SISInspectInterface(tk.Frame):
         btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: controller.display("SISInspectInterface", "HomeInterface"))
-        lblControl = tk.Label(controlBar, bg="#453354", text="Press the buttons below to explore the assessment",
+        self.lblControl = tk.Label(controlBar, bg="#453354", text="Press the buttons below to explore the assessment",
                               font=("Arial", 14, "italic"), fg="white" )
+        btnOverview = tk.Button(mainFrame, text="Overview", font=("Arial", 9), width=13)
+        btnPopulation = tk.Button(mainFrame, text="Population", font=("Arial", 9), width=13)
+        btnPhysicalSize = tk.Button(mainFrame, text="Physical Size", font=("Arial", 9), width=13)
+        btnNeighbourSets = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=13)
+        btnInfectionRates = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=13)
+        btnDeathRates = tk.Button(mainFrame, text="Death Rates", font=("Arial", 9), width=13)
+        btnMiscellaneous = tk.Button(mainFrame, text="Miscellaneous", font=("Arial", 9), width=13)
+
+        informationFrame = tk.Frame(mainFrame, bg="#453354")
 
         lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
                               font=("Arial", 9), fg="white")
@@ -40,7 +49,15 @@ class SISInspectInterface(tk.Frame):
         mainFrame.place(relheight=1, relwidth=0.6)
         controlBar.place(relheight=0.087, relwidth=1)
         btnReturn.place(x=21, y=21)
-        lblControl.pack(ipady=21)
+        self.lblControl.pack(ipady=21)
+        btnOverview.place(x=51, y=87)
+        btnPopulation.place(x=166, y=87)
+        btnPhysicalSize.place(x=281, y=87)
+        btnNeighbourSets.place(x=396, y=87)
+        btnInfectionRates.place(x=511, y=87)
+        btnDeathRates.place(x=626, y=87)
+        btnMiscellaneous.place(x=741, y=87)
+        informationFrame.place(x=0, y=125, relheight=0.82, relwidth=1)
 
         lblLegend1.place(x=0, y=837)
         lblLegend2.place(x=172, y=837)
@@ -51,9 +68,7 @@ class SISInspectInterface(tk.Frame):
         ########################################## Instantiating Graphs #############################################
 
         graphFrame = tk.Frame(self, bg="#453354")
-        self.lblGraphTitle = tk.Label(graphFrame, bg="#453354",
-                                      text="",
-                                      font=("Arial", 14, "italic"), fg="white")
+        self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="", font=("Arial", 14, "italic"), fg="white")
         btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                  relief="ridge", fg="white", bg="#6e6e6e",
                                  command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
@@ -75,6 +90,7 @@ class SISInspectInterface(tk.Frame):
         graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
         self.updateGraphs()
 
+    # Method: Updates the on-screen graphs
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
