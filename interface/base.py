@@ -67,6 +67,7 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateCompareModelList()
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs()
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
@@ -82,11 +83,11 @@ class BaseApp(tk.Tk):
             # self.interfaces[show].updateGraphs()
 
     # A range of methods controlling the model list and active model
-    def getActiveModelIndex(self): return self.activeModelIndex
+    #def getActiveModelIndex(self): return self.activeModelIndex
 
     def setActiveModelIndex(self, index): self.activeModelIndex = index
 
-    def getActiveModel(self): return self.activeModel
+    #def getActiveModel(self): return self.activeModel
 
     def setActiveModel(self, index): self.activeModel = self.models[index]
 

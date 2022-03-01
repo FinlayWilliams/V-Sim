@@ -25,10 +25,12 @@ class SISControlInterface(tk.Frame):
         # Button: overwrites the current model "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
                              command=lambda: [self.updateModel(1),
-                                              controller.overwriteModel(self.activeModelIndex, self.activeModel)])
+                                              controller.overwriteModel(self.activeModelIndex, self.activeModel),
+                                              controller.setActiveModel(self.activeModelIndex)])
         # Button: add this model configuration to the list
         btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7),
-                                 command=lambda: [self.updateModel(1), controller.addModel(self.activeModel)])
+                               command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
+                                                controller.setActiveModel(len(controller.models)-1)])
         # Button: opens the inspect model page with the currently selected model
         btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect model", font=("Arial", 7),
                                 command=lambda: controller.display("SISControlInterface", "SISInspectInterface"))
@@ -195,7 +197,7 @@ class SISControlInterface(tk.Frame):
         self.ax = [figure.add_subplot(2, 1, x + 1, facecolor="#453354") for x in range(2)]
         for x in range(2):
             self.ax[x].ticklabel_format(style="plain")
-        figure.tight_layout(rect=[0, 0.03, 1, 0.95], h_pad=3)
+        figure.tight_layout(rect=[0.01, 0.03, 1, 0.95], h_pad=3)
 
     # Method to update the onscreen graphs to whatever the current model configuration is
     def updateGraphs(self):
@@ -259,14 +261,11 @@ class SISControlInterface(tk.Frame):
                 self.activeModel = newActiveModel
                 self.updateGraphs()
 
-    # Good to have it here but it makes it really slow so it is for now, #### out and the R button is in place
-    # self.updateGraphs()
-
     # Method: called once when this interface is created + everytime this interface is opened to ensure all variables
     # are updated and correct
     def updateVariables(self, controller):
-        self.activeModel = controller.getActiveModel()
-        self.activeModelIndex = controller.getActiveModelIndex()
+        self.activeModel = controller.activeModel
+        self.activeModelIndex = controller.activeModelIndex
 
         self.cmbN.set(self.activeModel.N)
         self.sclS.set(self.activeModel.percentS)

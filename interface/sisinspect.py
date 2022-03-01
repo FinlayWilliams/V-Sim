@@ -10,6 +10,7 @@ class SISInspectInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
+        self.activeModel = controller.activeModel
 
         #################################### Instantiating Information Frame ########################################
 
@@ -20,49 +21,59 @@ class SISInspectInterface(tk.Frame):
         btnReturn = tk.Button(frameLeft, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                                command=lambda: controller.display("SISInspectInterface", "HomeInterface"))
 
+        lblLegend1 = tk.Label(frameLeft, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
+                              font=("Arial", 9), fg="white")
+        lblLegend2 = tk.Label(frameLeft, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
+                              font=("Arial", 9), fg="white")
+        lblLegend3 = tk.Label(frameLeft, bg="#1f77b4", width=27, pady=4, text="(IL) Local-Scanning",
+                              font=("Arial", 9), fg="white")
+        lblLegend4 = tk.Label(frameLeft, bg="#17becf", width=27, pady=4, text="(IP) Peer-to-Peer",
+                              font=("Arial", 9), fg="white")
+        lblLegend5 = tk.Label(frameLeft, bg="#d62728", width=27, pady=4,
+                              text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
+
         ####################################### Placing Information Frame ###########################################
 
         frameLeft.place(relheight=1, relwidth=0.6)
         btnConfigure.pack()
         btnReturn.pack()
 
+        lblLegend1.place(x=0, y=837)
+        lblLegend2.place(x=172, y=837)
+        lblLegend3.place(x=353, y=837)
+        lblLegend4.place(x=548, y=837)
+        lblLegend5.place(x=731, y=837)
+
         ########################################## Instantiating Graphs #############################################
 
         graphFrame = tk.Frame(self, bg="#654e78")
+        self.lblGraphTitle = tk.Label(graphFrame, bg="#654e78",
+                                      text="Virus Propagation Results",
+                                      font=("Arial", 14, "italic"), fg="white")
+        graphContainer = tk.Frame(graphFrame, bg="#654e78")
 
         figure = plt.figure(facecolor="#654e78")
-        self.canvas = FigureCanvasTkAgg(figure, graphFrame)
+        self.canvas = FigureCanvasTkAgg(figure, graphContainer)
         self.canvas.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
         self.ax = [figure.add_subplot(3, 1, x + 1, facecolor="#453354") for x in range(3)]
         for x in range(3):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(pad=2)
 
-        lblLegend1 = tk.Label(graphFrame, bg="#2ca02c", width=14, pady=4, text="(S) Susceptible",
-                              font=("Arial", 9), fg="white")
-        lblLegend2 = tk.Label(graphFrame, bg="#9467bd", width=18, pady=4, text="(IR) Random-Scanning",
-                              font=("Arial", 9), fg="white")
-        lblLegend3 = tk.Label(graphFrame, bg="#1f77b4", width=16, pady=4, text="(IL) Local-Scanning",
-                              font=("Arial", 9), fg="white")
-        lblLegend4 = tk.Label(graphFrame, bg="#17becf", width=14, pady=4, text="(IP) Peer-to-Peer",
-                              font=("Arial", 9), fg="white")
-        lblLegend5 = tk.Label(graphFrame, bg="#d62728", width=22, pady=4,
-                              text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
-
         ############################################# Placing Graphs ################################################
 
         graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
+        self.lblGraphTitle.pack(ipady=25)
+        graphContainer.place(x=0, y=50, relheight=0.95, relwidth=1)
         self.updateGraphs()
-        lblLegend1.place(x=0, y=837)
-        lblLegend2.place(x=104, y=837)
-        lblLegend3.place(x=236, y=837)
-        lblLegend5.place(x=456, y=837)
-        lblLegend4.place(x=354, y=837)
 
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, self.controller.activeModel.Timesteps, 101)
+
+        # Setting the title
+        self.lblGraphTitle.config(text="{} - Virus Propagation Results".format(self.controller.activeModel.Name))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(3)]
@@ -91,3 +102,6 @@ class SISInspectInterface(tk.Frame):
         self.ax[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeModel.Timesteps))
 
         self.canvas.draw()
+
+    def updateVariables(self, controller):
+        self.modelName = controller.activeModel.Name
