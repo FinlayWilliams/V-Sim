@@ -21,21 +21,26 @@ class SISControlInterface(tk.Frame):
         frameTop = tk.Frame(self, bg="#453354")
         # Button: Resets model config and refreshes graphs
         btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Model", font=("Arial", 7),
+                             relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
         # Button: overwrites the current model "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
+                            relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: [self.updateModel(1),
                                               controller.overwriteModel(self.activeModelIndex, self.activeModel),
                                               controller.setActiveModel(self.activeModelIndex)])
         # Button: add this model configuration to the list
-        btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7),
+        btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e",
+                               relief="ridge", fg="white",
                                command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
                                                 controller.setActiveModel(len(controller.models)-1)])
         # Button: opens the inspect model page with the currently selected model
         btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect model", font=("Arial", 7),
-                                command=lambda: controller.display("SISControlInterface", "SISInspectInterface"))
+                               relief="ridge", fg="white", bg="#6e6e6e",
+                               command=lambda: self.checkModelSaved(controller, 1))
         # Button: takes the user to the home page
         btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
+                              relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: controller.display("SISControlInterface", "HomeInterface"))
 
         # This frame holds the graphs
@@ -230,6 +235,8 @@ class SISControlInterface(tk.Frame):
     def updateModel(self, Stub):
         if len(self.entryName.get()) == 0:
             self.controller.popup("Invalid Save", "Please enter a name for the model!")
+        if len(self.entryName.get()) > 24:
+            self.controller.popup("Invalid Save", "Please enter a shorter name for the model!")
         else:
             Name = str("SIS: " + self.entryName.get())
             N = int(self.cmbN.get())
@@ -286,6 +293,14 @@ class SISControlInterface(tk.Frame):
         self.cmbBTRY.set(self.activeModel.totalBattery)
         self.sclRR.set(self.activeModel.recoveryRate)
         self.sclT.set(self.activeModel.Timesteps)
+
+    # Method: Checks whether the model is saved or not before the user proceeds to the inspect screen and looses
+    # the current configuration
+    def checkModelSaved(self, controller, stub):
+        if self.activeModel != controller.activeModel:
+            self.controller.popup("Warning", "Current model configuration not saved")
+        else:
+            controller.display("SISControlInterface", "SISInspectInterface")
 
     # Method: checks if the current configuration is valid by checking no population size dips below zero
     def checkValid(self, newActiveModel):

@@ -14,29 +14,33 @@ class SISInspectInterface(tk.Frame):
 
         #################################### Instantiating Information Frame ########################################
 
-        frameLeft = tk.Frame(self, bg="#453354")
+        mainFrame = tk.Frame(self, bg="#654e78")
 
-        btnConfigure = tk.Button(frameLeft, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
-                                 command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
-        btnReturn = tk.Button(frameLeft, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
+        controlBar = tk.Frame(mainFrame, bg="#453354")
+
+        btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
+                              relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: controller.display("SISInspectInterface", "HomeInterface"))
+        lblControl = tk.Label(controlBar, bg="#453354", text="Press the buttons below to explore the assessment",
+                              font=("Arial", 14, "italic"), fg="white" )
 
-        lblLegend1 = tk.Label(frameLeft, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
+        lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
                               font=("Arial", 9), fg="white")
-        lblLegend2 = tk.Label(frameLeft, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
+        lblLegend2 = tk.Label(mainFrame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
                               font=("Arial", 9), fg="white")
-        lblLegend3 = tk.Label(frameLeft, bg="#1f77b4", width=27, pady=4, text="(IL) Local-Scanning",
+        lblLegend3 = tk.Label(mainFrame, bg="#1f77b4", width=27, pady=4, text="(IL) Local-Scanning",
                               font=("Arial", 9), fg="white")
-        lblLegend4 = tk.Label(frameLeft, bg="#17becf", width=27, pady=4, text="(IP) Peer-to-Peer",
+        lblLegend4 = tk.Label(mainFrame, bg="#17becf", width=27, pady=4, text="(IP) Peer-to-Peer",
                               font=("Arial", 9), fg="white")
-        lblLegend5 = tk.Label(frameLeft, bg="#d62728", width=27, pady=4,
+        lblLegend5 = tk.Label(mainFrame, bg="#d62728", width=27, pady=4,
                               text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
 
         ####################################### Placing Information Frame ###########################################
 
-        frameLeft.place(relheight=1, relwidth=0.6)
-        btnConfigure.pack()
-        btnReturn.pack()
+        mainFrame.place(relheight=1, relwidth=0.6)
+        controlBar.place(relheight=0.087, relwidth=1)
+        btnReturn.place(x=21, y=21)
+        lblControl.pack(ipady=21)
 
         lblLegend1.place(x=0, y=837)
         lblLegend2.place(x=172, y=837)
@@ -46,10 +50,13 @@ class SISInspectInterface(tk.Frame):
 
         ########################################## Instantiating Graphs #############################################
 
-        graphFrame = tk.Frame(self, bg="#654e78")
-        self.lblGraphTitle = tk.Label(graphFrame, bg="#654e78",
-                                      text="Virus Propagation Results",
+        graphFrame = tk.Frame(self, bg="#453354")
+        self.lblGraphTitle = tk.Label(graphFrame, bg="#453354",
+                                      text="",
                                       font=("Arial", 14, "italic"), fg="white")
+        btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+                                 relief="ridge", fg="white", bg="#6e6e6e",
+                                 command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
         graphContainer = tk.Frame(graphFrame, bg="#654e78")
 
         figure = plt.figure(facecolor="#654e78")
@@ -58,13 +65,14 @@ class SISInspectInterface(tk.Frame):
         self.ax = [figure.add_subplot(3, 1, x + 1, facecolor="#453354") for x in range(3)]
         for x in range(3):
             self.ax[x].ticklabel_format(style="plain")
-        figure.tight_layout(pad=2)
+        figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
 
         ############################################# Placing Graphs ################################################
 
         graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
-        self.lblGraphTitle.pack(ipady=25)
-        graphContainer.place(x=0, y=50, relheight=0.95, relwidth=1)
+        self.lblGraphTitle.pack(ipady=21)
+        btnConfigure.place(x=541, y=21)
+        graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
         self.updateGraphs()
 
     def updateGraphs(self):
@@ -73,7 +81,7 @@ class SISInspectInterface(tk.Frame):
         T1 = np.linspace(0, self.controller.activeModel.Timesteps, 101)
 
         # Setting the title
-        self.lblGraphTitle.config(text="{} - Virus Propagation Results".format(self.controller.activeModel.Name))
+        self.lblGraphTitle.config(text="{} - Virus Propagation".format(self.controller.activeModel.Name))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(3)]
@@ -103,5 +111,6 @@ class SISInspectInterface(tk.Frame):
 
         self.canvas.draw()
 
-    def updateVariables(self, controller):
-        self.modelName = controller.activeModel.Name
+    # Method: Called each time the page is opened so that all model variables are updated and ready to be inspected
+    def updateVariables(self, activeModel):
+        self.modelName = activeModel.Name

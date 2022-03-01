@@ -83,19 +83,19 @@ class HomeInterface(tk.Frame):
         frame_right.place(x=717, y=0, height="864", width="819")
         column_right_frame.place(relheight=1, relwidth=0.7, x=135)
 
-        lbl_model_list.place(x=218, y=20)
-        self.lstModels.place(x=220, y=50)
+        lbl_model_list.place(x=218, y=60)
+        self.lstModels.place(x=220, y=90)
         self.lstModels.select_set(0)
-        btn_Configure.place(x=220, y=310)
-        btn_Inspect.place(x=358, y=310)
-        btn_Delete.place(x=496, y=310)
-        btn_New_SIS.place(x=220, y=344)
-        btn_New_B1.place(x=358, y=344)
-        btn_New_B2.place(x=496, y=344)
+        btn_Inspect.place(x=220, y=350)
+        btn_Configure.place(x=358, y=350)
+        btn_Delete.place(x=496, y=350)
+        btn_New_SIS.place(x=220, y=384)
+        btn_New_B1.place(x=358, y=384)
+        btn_New_B2.place(x=496, y=384)
 
-        lbl_compare_model_list.place(x=218, y=420)
-        self.lstCompareModels.place(x=220, y=450)
-        btn_Compare.place(x=220, y=710)
+        lbl_compare_model_list.place(x=218, y=460)
+        self.lstCompareModels.place(x=220, y=490)
+        btn_Compare.place(x=220, y=750)
 
         # This method must be called after the listbox is placed
         self.setModelInfoBox()
@@ -167,7 +167,7 @@ class HomeInterface(tk.Frame):
         if self.checkModelType(self.controller.activeModel) == "SIS":
             # This outputs the SIS model Information
             # Instantiating the information labels
-            lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14),
+            lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"),
                                  bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
             lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
@@ -258,7 +258,7 @@ class HomeInterface(tk.Frame):
                                   bg="#654e78")
 
             # Placing all information labels
-            lbl_Title.pack(padx=7, pady=7, anchor="w")
+            lbl_Title.pack(padx=15, pady=7, anchor="w")
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
             lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
