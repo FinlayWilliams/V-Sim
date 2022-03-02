@@ -10,29 +10,41 @@ class SISInspectInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        self.activeModel = controller.activeModel
+        self.index = 0
 
         #################################### Instantiating Information Frame ########################################
 
+        # These are the basic controls of this page alling the user to navigate
         mainFrame = tk.Frame(self, bg="#654e78")
-
         controlBar = tk.Frame(mainFrame, bg="#453354")
-
         btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: controller.display("SISInspectInterface", "HomeInterface"))
-        self.lblControl = tk.Label(controlBar, bg="#453354", text="Press the buttons below to explore the assessment",
+        self.lblControl = tk.Label(controlBar, bg="#453354", text="",
                               font=("Arial", 14, "italic"), fg="white" )
-        btnOverview = tk.Button(mainFrame, text="Overview", font=("Arial", 9), width=13)
-        btnPopulation = tk.Button(mainFrame, text="Population", font=("Arial", 9), width=13)
-        btnPhysicalSize = tk.Button(mainFrame, text="Physical Size", font=("Arial", 9), width=13)
-        btnNeighbourSets = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=13)
-        btnInfectionRates = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=13)
-        btnDeathRates = tk.Button(mainFrame, text="Death Rates", font=("Arial", 9), width=13)
-        btnMiscellaneous = tk.Button(mainFrame, text="Miscellaneous", font=("Arial", 9), width=13)
+        btnOverview = tk.Button(mainFrame, text="Overview", font=("Arial", 9), width=13,
+                                command=lambda : self.switchInfoFrame(0, 1))
+        btnPopulation = tk.Button(mainFrame, text="Population", font=("Arial", 9), width=13,
+                                  command=lambda : self.switchInfoFrame(1, 1))
+        btnPhysicalSize = tk.Button(mainFrame, text="Physical Size", font=("Arial", 9), width=13,
+                                    command=lambda : self.switchInfoFrame(2, 1))
+        btnNeighbourSets = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=13,
+                                     command=lambda : self.switchInfoFrame(3, 1))
+        btnInfectionRates = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=13,
+                                      command=lambda : self.switchInfoFrame(4, 1))
+        btnDeathRates = tk.Button(mainFrame, text="Death Rates", font=("Arial", 9), width=13,
+                                  command=lambda : self.switchInfoFrame(5, 1))
+        btnMiscellaneous = tk.Button(mainFrame, text="Miscellaneous", font=("Arial", 9), width=13,
+                                     command=lambda : self.switchInfoFrame(6, 1))
 
-        informationFrame = tk.Frame(mainFrame, bg="#453354")
+        # This area will contain the assessment and a starter list is created
+        self.informationFrame = tk.Frame(mainFrame, bg="#453354")
+        self.frames = [tk.Frame(self.informationFrame, bg="red"), tk.Frame(self.informationFrame, bg="blue"),
+                       tk.Frame(self.informationFrame, bg="green"), tk.Frame(self.informationFrame, bg="yellow"),
+                       tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
+                       tk.Frame(self.informationFrame, bg="#6e6e6e")]
 
+        # This is the legend footer of the page
         lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
                               font=("Arial", 9), fg="white")
         lblLegend2 = tk.Label(mainFrame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
@@ -57,7 +69,8 @@ class SISInspectInterface(tk.Frame):
         btnInfectionRates.place(x=511, y=87)
         btnDeathRates.place(x=626, y=87)
         btnMiscellaneous.place(x=741, y=87)
-        informationFrame.place(x=0, y=125, relheight=0.82, relwidth=1)
+
+        self.informationFrame.place(x=14, y=135, relheight=0.81, relwidth=0.97)
 
         lblLegend1.place(x=0, y=837)
         lblLegend2.place(x=172, y=837)
@@ -68,7 +81,7 @@ class SISInspectInterface(tk.Frame):
         ########################################## Instantiating Graphs #############################################
 
         graphFrame = tk.Frame(self, bg="#453354")
-        self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="", font=("Arial", 14, "italic"), fg="white")
+        self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="Assessment Overview", font=("Arial", 14, "italic"), fg="white")
         btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                  relief="ridge", fg="white", bg="#6e6e6e",
                                  command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
@@ -127,6 +140,84 @@ class SISInspectInterface(tk.Frame):
 
         self.canvas.draw()
 
-    # Method: Called each time the page is opened so that all model variables are updated and ready to be inspected
-    def updateVariables(self, activeModel):
-        self.modelName = activeModel.Name
+    # Method: Called each time the page is set to display the assessment of the current model
+    # also provides the functionality to switch between the frames
+    def switchInfoFrame(self, index, stub):
+        if index == 0:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 0
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Assessment Overview")
+        if index == 1:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 1
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Population")
+        if index == 2:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 2
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Physical Size")
+        if index == 3:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 3
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Neighbour Sets")
+        if index == 4:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 4
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Infection Rates")
+        if index == 5:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 5
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Death Rates")
+        if index == 6:
+            #self.frames[index].destroy()
+            self.frames[self.index].pack_forget()
+            self.index = 6
+            self.frames[index].pack(fill="both", expand=1)
+            self.lblControl.config(text="Miscellaneous")
+
+    # Method: Populates all of the information frames, ready to be deployed, the bulk of content on this page
+    def populateFrames(self):
+        model = self.controller.activeModel
+
+        # This loop ensures the frames are destroyed and reconstructed with correct information when the frame is opened
+        if self.frames:
+            for frame in self.frames:
+                frame.destroy()
+
+            self.frames = [tk.Frame(self.informationFrame, bg="red"), tk.Frame(self.informationFrame, bg="blue"),
+                           tk.Frame(self.informationFrame, bg="green"), tk.Frame(self.informationFrame, bg="yellow"),
+                           tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
+                           tk.Frame(self.informationFrame, bg="#6e6e6e")]
+
+        # This section populates each of the frames with updated information conforming to the active models simulation
+        # There are many if statements indicating thresholds that change the displayed information while also scoring
+        # the active model
+
+        ########## Overview Frame ##########
+
+
+        ########## Overview Frame #########
+        lblTitle2 = tk.Label(self.frames[1], text="Bitch")
+        lblTitle2.pack()
+
+        ########## Overview Frame #########
+
+        ########## Overview Frame #########
+
+        ########## Overview Frame #########
+
+        ########## Overview Frame #########
+
+        ########## Overview Frame #########
+

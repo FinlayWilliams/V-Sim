@@ -67,8 +67,9 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateCompareModelList()
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateVariables(self.activeModel)
             self.interfaces[show].updateGraphs()
+            self.interfaces[show].populateFrames()
+            self.interfaces[show].switchInfoFrame(0, 1)
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
