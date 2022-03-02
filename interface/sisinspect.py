@@ -188,6 +188,7 @@ class SISInspectInterface(tk.Frame):
 
     # Method: Populates all of the information frames, ready to be deployed, the bulk of content on this page
     def populateFrames(self):
+        modelScore = 0
         model = self.controller.activeModel
 
         # This loop ensures the frames are destroyed and reconstructed with correct information when the frame is opened
@@ -204,20 +205,39 @@ class SISInspectInterface(tk.Frame):
         # There are many if statements indicating thresholds that change the displayed information while also scoring
         # the active model
 
-        ########## Overview Frame ##########
-
-
-        ########## Overview Frame #########
+        ########## Population Frame #########
         lblTitle2 = tk.Label(self.frames[1], text="Bitch")
         lblTitle2.pack()
 
-        ########## Overview Frame #########
+        ########## Size Frame #########
 
-        ########## Overview Frame #########
+        ########## Neighbour Sets Frame #########
 
-        ########## Overview Frame #########
+        ########## Infection Rates Frame #########
 
-        ########## Overview Frame #########
+        ########## Death Rates Frame #########
 
-        ########## Overview Frame #########
+        ########## Miscellaneous Frame #########
+
+        ########## Overview Frame ########## (Done last to score correctly)
+        lbl1 = tk.Label(self.frames[0], text="{} Overview".format(model.Name), font=("Arial", 12))
+
+        lblScoreAc = tk.Label(self.frames[0], text="{}".format(modelScore), font=("Arial", 10))
+        lblScore = tk.Label(self.frames[0], text=": Overall Model Score", font=("Arial", 10))
+        lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="green")
+        if modelScore < 1:
+            lblScoreDes.config(text="A low score; This model has a configuration that results in a generally slower and less potent propagation.")
+        if modelScore < 2:
+            lblScoreDes.config(text="A medium score; This model has a configuration that results in an average propagation of a virus.")
+        if modelScore < 3:
+            lblScoreDes.config(text="A high score; This model has a configuration that results in a fast and potent virus propagation.")
+        lblExplain = tk.Label(self.frames[0], text="The score is broken down into different categories and combine to produce the overall score.", font=("Arial", 10))
+        lblExplain2 = tk.Label(self.frames[0], text="The scores for those categories are as follow:", font=("Arial", 10))
+
+        lbl1.grid(row=0, column=1, sticky="w")
+        lblScoreAc.grid(row=1, column=0, sticky="w")
+        lblScore.grid(row=1, column=1, sticky="w")
+        lblScoreDes.grid(row=2, column=1, sticky="w")
+        lblExplain.grid(row=3, column=1, sticky="w", pady=(3, 0))
+        lblExplain.grid(row=3, column=1, sticky="w", pady=(3, 0))
 
