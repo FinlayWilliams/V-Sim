@@ -30,6 +30,29 @@ class SIS:
     def __str__(self):
         return self.Name
 
+    # Method to calculate the score of the model used in the inspection page
+    def calculateScores(self):
+        populationScore = 0
+        sizeScore = 0
+        neighbourScore = 0
+        infectionRateScore = 0
+        deathRateScore = 0
+        miscScore = 0
+
+        # Calculating the population score
+
+        # Calculating the size score
+
+        # Calculating the neighbour score
+
+        # Calculating the infection rate score
+
+        # Calculating the death rate score
+
+        # Calculating the miscellaneous score
+
+        return populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore
+
     # Method to create all remaining variables and calculate their values based off of the input values
     def calculateVariables(self):
         # SI Population

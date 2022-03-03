@@ -188,15 +188,6 @@ class SISInspectInterface(tk.Frame):
 
     # Method: Populates all of the information frames, ready to be deployed, the bulk of content on this page
     def populateFrames(self):
-        populationScore = 0
-        sizeScore = 0
-        neighbourScore = 1
-        infectionRateScore = 1
-        deathRateScore = 0
-        miscScore = 3
-
-        model = self.controller.activeModel
-
         # This loop ensures the frames are destroyed and reconstructed with correct information when the frame is opened
         if self.frames:
             for frame in self.frames:
@@ -207,48 +198,53 @@ class SISInspectInterface(tk.Frame):
                            tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
                            tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
+        model = self.controller.activeModel
+        populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore = model.calculateScores()
+
         # This section populates each of the frames with updated information conforming to the active models simulation
-        # There are many if statements indicating thresholds that change the displayed information while also scoring
-        # the active model
+        # By calling the methods that add the page widgets
+        # There are many if statements indicating thresholds that change the displayed information
+        self.populateOverview(model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore)
+        self.populatePopulationFrame(model, populationScore)
+        self.populateSizeFrame(model, sizeScore)
+        self.populateNeighbourFrame(model, neighbourScore)
+        self.populateInfectionFrame(model, infectionRateScore)
+        self.populateDeathFrame(model, deathRateScore)
+        self.populateMiscFrame(model, miscScore)
 
-        ########## Population Frame #########
+    # The following 7 methods are the assessment frame contents
+    def populateOverview(self, model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore):
+        modelScore = populationScore + sizeScore + neighbourScore + infectionRateScore + deathRateScore + miscScore
 
-        ########## Size Frame #########
+        lbl1 = tk.Label(self.frames[0], text="{} Score Overview".format(model.Name), font=("Arial", 12), bg="#e0e0e0")
 
-        ########## Neighbour Sets Frame #########
-
-        ########## Infection Rates Frame #########
-
-        ########## Death Rates Frame #########
-
-        ########## Miscellaneous Frame #########
-
-        ########## Overview Frame ########## (Done last to score correctly)
-        modelScore = sizeScore + neighbourScore + infectionRateScore + deathRateScore + miscScore
-
-        lbl1 = tk.Label(self.frames[0], text="{} Overview".format(model.Name), font=("Arial", 12), bg="#e0e0e0")
-
-        lblScoreAc = tk.Label(self.frames[0], text="{}  | ".format(modelScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblScoreAc = tk.Label(self.frames[0], text="{}  | ".format(modelScore), font=("Arial", 11, "bold"),
+                              bg="#e0e0e0")
         lblScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblScore = tk.Label(self.frames[0], text=": Overall Model Score", font=("Arial", 10), bg="#e0e0e0")
+        lblScore = tk.Label(self.frames[0], text="> Overall Model Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if modelScore < 1:
             lblScoreAc2.config(text="Low", fg="#2d802f")
-            lblScoreDes.config(text="This model has a configuration that results in a generally slower and less potent propagation.")
+            lblScoreDes.config(
+                text="This model has a configuration that results in a generally slower and less potent propagation.")
         if 1 <= modelScore < 3:
             lblScoreAc2.config(text="Medium", fg="#b35827")
             lblScoreDes.config(text="This model has a configuration that results in an average propagation of a virus.")
         if modelScore >= 3:
             lblScoreAc2.config(text="High", fg="#b81d28")
-            lblScoreDes.config(text="This model has a configuration that results in a fast and potent virus propagation.")
+            lblScoreDes.config(
+                text="This model has a configuration that results in a fast and potent virus propagation.")
 
+        lblExplain = tk.Label(self.frames[0],
+                              text="The score is broken down into different categories and combine to produce the overall score.",
+                              font=("Arial", 10, "italic"), bg="#e0e0e0")
+        lblExplain2 = tk.Label(self.frames[0], text="The scores for those categories are as follow:",
+                               font=("Arial", 10, "italic"), bg="#e0e0e0")
 
-        lblExplain = tk.Label(self.frames[0], text="The score is broken down into different categories and combine to produce the overall score.", font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain2 = tk.Label(self.frames[0], text="The scores for those categories are as follow:", font=("Arial", 10, "italic"), bg="#e0e0e0")
-
-        lblPopScoreAc = tk.Label(self.frames[0], text="{}  | ".format(populationScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblPopScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"),bg="#e0e0e0")
-        lblPopScore = tk.Label(self.frames[0], text=": Population Score", font=("Arial", 10), bg="#e0e0e0")
+        lblPopScoreAc = tk.Label(self.frames[0], text="{}  | ".format(populationScore), font=("Arial", 11, "bold"),
+                                 bg="#e0e0e0")
+        lblPopScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblPopScore = tk.Label(self.frames[0], text="> Population Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblPopScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if populationScore < 1:
             lblPopScoreAc2.config(text="Low", fg="#2d802f")
@@ -260,23 +256,26 @@ class SISInspectInterface(tk.Frame):
             lblPopScoreAc2.config(text="High", fg="#b81d28")
             lblPopScoreDes.config(text="The pre and post population sizes are weighted heavily towards the Infected.")
 
-        lblSizeScoreAc = tk.Label(self.frames[0], text="{}  | ".format(sizeScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblSizeScoreAc = tk.Label(self.frames[0], text="{}  | ".format(sizeScore), font=("Arial", 11, "bold"),
+                                  bg="#e0e0e0")
         lblSizeScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblSizeScore = tk.Label(self.frames[0], text=": Physical Size Score", font=("Arial", 10), bg="#e0e0e0")
+        lblSizeScore = tk.Label(self.frames[0], text="> Physical Size Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblSizeScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if sizeScore < 1:
             lblSizeScoreAc2.config(text="Low", fg="#2d802f")
             lblSizeScoreDes.config(text="The Physical Size of the network makes life difficult for the Infected.")
         if 1 <= sizeScore < 3:
             lblSizeScoreAc2.config(text="Medium", fg="#e68f39")
-            lblSizeScoreDes.config(text="The Physical Size of the network makes life evenly uneasy for both the Infected and Susceptible")
+            lblSizeScoreDes.config(
+                text="The Physical Size of the network makes life evenly uneasy for both the Infected and Susceptible")
         if sizeScore >= 3:
             lblSizeScoreAc2.config(text="High", fg="#b81d28")
             lblSizeScoreDes.config(text="The Physical Size of the network makes life difficult for the Susceptible.")
 
-        lblNeighbourScoreAc = tk.Label(self.frames[0], text="{}  | ".format(neighbourScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblNeighbourScoreAc = tk.Label(self.frames[0], text="{}  | ".format(neighbourScore), font=("Arial", 11, "bold"),
+                                       bg="#e0e0e0")
         lblNeighbourScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblNeighbourScore = tk.Label(self.frames[0], text=": Neighbour Set Score", font=("Arial", 10), bg="#e0e0e0")
+        lblNeighbourScore = tk.Label(self.frames[0], text="> Neighbour Set Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblNeighbourScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if neighbourScore < 1:
             lblNeighbourScoreAc2.config(text="Low", fg="#2d802f")
@@ -288,9 +287,10 @@ class SISInspectInterface(tk.Frame):
             lblNeighbourScoreAc2.config(text="High", fg="#b81d28")
             lblNeighbourScoreDes.config(text="The Neighbour Sets make virus propagation easy.")
 
-        lblInfRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(infectionRateScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblInfRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(infectionRateScore),
+                                     font=("Arial", 11, "bold"), bg="#e0e0e0")
         lblInfRateScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblInfRateScore = tk.Label(self.frames[0], text=": Infection Rates Score", font=("Arial", 10), bg="#e0e0e0")
+        lblInfRateScore = tk.Label(self.frames[0], text="> Infection Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblInfRateScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if infectionRateScore < 1:
             lblInfRateScoreAc2.config(text="Low", fg="#2d802f")
@@ -302,23 +302,28 @@ class SISInspectInterface(tk.Frame):
             lblInfRateScoreAc2.config(text="High", fg="#b81d28")
             lblInfRateScoreDes.config(text="The infection rates are very high.")
 
-        lblDeathRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(deathRateScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblDeathRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(deathRateScore), font=("Arial", 11, "bold"),
+                                       bg="#e0e0e0")
         lblDeathRateScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblDeathRateScore = tk.Label(self.frames[0], text=": Death Rates Score", font=("Arial", 10), bg="#e0e0e0")
+        lblDeathRateScore = tk.Label(self.frames[0], text="> Death Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblDeathRateScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if deathRateScore < 1:
             lblDeathRateScoreAc2.config(text="Low", fg="#2d802f")
-            lblDeathRateScoreDes.config(text="The death rates are very high for the Infected Nodes; Mass virus propagation is difficult.")
+            lblDeathRateScoreDes.config(
+                text="The death rates are very high for the Infected Nodes; Mass virus propagation is difficult.")
         if 1 <= deathRateScore < 3:
             lblDeathRateScoreAc2.config(text="Medium", fg="#e68f39")
-            lblDeathRateScoreDes.config(text="The death rates are mild for the Infected Nodes; Viruses are propagating.")
+            lblDeathRateScoreDes.config(
+                text="The death rates are mild for the Infected Nodes; Viruses are propagating.")
         if deathRateScore >= 3:
             lblDeathRateScoreAc2.config(text="High", fg="#b81d28")
-            lblDeathRateScoreDes.config(text="The death rates are very low for the Infected Nodes; The Infected have plenty of time to propagate viruses!")
+            lblDeathRateScoreDes.config(
+                text="The death rates are very low for the Infected Nodes; The Infected have plenty of time to propagate viruses!")
 
-        lblMiscScoreAc = tk.Label(self.frames[0], text="{}  | ".format(miscScore), font=("Arial", 11, "bold"), bg="#e0e0e0")
+        lblMiscScoreAc = tk.Label(self.frames[0], text="{}  | ".format(miscScore), font=("Arial", 11, "bold"),
+                                  bg="#e0e0e0")
         lblMiscScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblMiscScore = tk.Label(self.frames[0], text=": Miscellaneous Score", font=("Arial", 10), bg="#e0e0e0")
+        lblMiscScore = tk.Label(self.frames[0], text="> Miscellaneous Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblMiscScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if miscScore < 1:
             lblMiscScoreAc2.config(text="Low", fg="#2d802f")
@@ -330,11 +335,17 @@ class SISInspectInterface(tk.Frame):
             lblMiscScoreAc2.config(text="High", fg="#b81d28")
             lblMiscScoreDes.config(text="This score indicates not a whole lot without context.")
 
-        lblExplain3 = tk.Label(self.frames[0], text="The score ranges from ___ to ___ to ___", font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain4 = tk.Label(self.frames[0], text="Below ___ is Low", font=("Arial", 10, "italic"), bg="#e0e0e0", fg="#2d802f")
-        lblExplain5 = tk.Label(self.frames[0], text="Between ___ and ___ is Medium", font=("Arial", 10, "italic"), bg="#e0e0e0", fg="#e68f39")
-        lblExplain6 = tk.Label(self.frames[0], text="Above ___ is High", font=("Arial", 10, "italic"), bg="#e0e0e0", fg="#b81d28")
-        lblExplain7 = tk.Label(self.frames[0], text="Press the labelled buttons above to inspect the correspoinding categories' score breakdown ...", font=("Arial", 10, "italic"), bg="#e0e0e0")
+        lblExplain3 = tk.Label(self.frames[0], text="The overall score ranges from a minimum of ___ to ___ and to a maximum of ___",
+                               font=("Arial", 10, "italic"), bg="#e0e0e0")
+        lblExplain4 = tk.Label(self.frames[0], text="Below ___ is a Low Score", font=("Arial", 10, "italic"), bg="#e0e0e0",
+                               fg="#2d802f")
+        lblExplain5 = tk.Label(self.frames[0], text="Between ___ and ___ is Medium Score", font=("Arial", 10, "italic"),
+                               bg="#e0e0e0", fg="#e68f39")
+        lblExplain6 = tk.Label(self.frames[0], text="Above ___ is High Score", font=("Arial", 10, "italic"), bg="#e0e0e0",
+                               fg="#b81d28")
+        lblExplain7 = tk.Label(self.frames[0],
+                               text="Press the labelled buttons above to inspect the correspoinding categories' score breakdown.",
+                               font=("Arial", 10, "italic"), bg="#e0e0e0")
 
         lbl1.grid(row=0, column=2, sticky="w", pady=(7, 15), padx=(7, 0))
 
@@ -382,3 +393,21 @@ class SISInspectInterface(tk.Frame):
         lblExplain6.grid(row=20, column=2, sticky="w", padx=(7, 0))
 
         lblExplain7.grid(row=21, column=2, stick="w", pady=(15, 0), padx=(7, 0))
+
+    def populatePopulationFrame(self, model, populationScore):
+        pass
+
+    def populateSizeFrame(self, model, sizeScore):
+        pass
+
+    def populateNeighbourFrame(self, model, neighbourScore):
+        pass
+
+    def populateInfectionFrame(self, model, infectionScore):
+        pass
+
+    def populateDeathFrame(self, model, deathScore):
+        pass
+
+    def populateMiscFrame(self, model, miscScore):
+        pass
