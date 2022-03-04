@@ -32,18 +32,80 @@ class SIS:
 
     # Method to calculate the score of the model used in the inspection page
     def calculateScores(self):
-        populationScore = 0
-        sizeScore = 0
-        neighbourScore = 0
-        infectionRateScore = 0
-        deathRateScore = 0
-        miscScore = 0
+        # The scores are broken down into their categories with an overall score as well as individual scores
+        S1, Ir1, Il1, Ip1 = self.runModel()
 
-        # Calculating the population score
+        ovrSizeScore = 0
+
+        ovrInfectionRateScore = 0
+
+        ovrDeathRateScore = 0
+
+        ovrMiscScore = 0
+
+        # Calculating the population scores
+        startPopScore = 0
+        endPopScore = 0
+
+        if self.percentS >= 0.9:
+            startPopScore = startPopScore + 100
+        elif 0.8 <= self.percentS < 0.9:
+            startPopScore = startPopScore + 200
+        elif 0.7 <= self.percentS < 0.8:
+            startPopScore = startPopScore + 300
+        elif self.percentS < 0.7:
+            startPopScore = startPopScore + 400
+
+        S2 = S1[len(S1) - 1]
+        Ir2 = Ir1[len(Ir1) - 1]
+        Il2 = Il1[len(Il1) - 1]
+        Ip2 = Ip1[len(Ip1) - 1]
+        I2 = Ir2 + Il2 + Ip2
+
+        if S2 <= 0.25 * I2:
+            endPopScore = 400
+        elif 0.25 * I2 <= S2 < 0.5 * I2:
+            endPopScore = 350
+        elif 0.5 * I2 <= S2 < 0.75 * I2:
+            endPopScore = 300
+        elif 0.75 * I2 <= S2 < I2:
+            endPopScore = 250
+        elif I2 <= S2 < 2 * I2:
+            endPopScore = 200
+        elif 2 * I2 <= S2 < 3 * I2:
+            endPopScore = 150
+        elif S2 >= 3 * I2:
+            endPopScore = 100
+
+        ovrPopulationScore = startPopScore + endPopScore
 
         # Calculating the size score
 
         # Calculating the neighbour score
+        slocNeighbourScore = 0
+        snhbNeighbourScore = 0
+
+        if self.SLoc == 1/1:
+            slocNeighbourScore = 300
+        if self.SLoc == 1/5:
+            slocNeighbourScore = 250
+        if self.SLoc == 1/10:
+            slocNeighbourScore = 200
+        if self.SLoc == 1/20:
+            slocNeighbourScore = 150
+        if self.SLoc == 1/50:
+            slocNeighbourScore = 100
+
+        if self.SNhb == self.N / 150:
+            snhbNeighbourScore = 250
+        if self.SNhb == self.N / 100:
+            snhbNeighbourScore = 200
+        if self.SNhb == self.N / 50:
+            snhbNeighbourScore = 150
+        if self.SNhb == self.N / 25:
+            snhbNeighbourScore = 100
+
+        ovrNeighbourScore = slocNeighbourScore + snhbNeighbourScore
 
         # Calculating the infection rate score
 
@@ -51,7 +113,7 @@ class SIS:
 
         # Calculating the miscellaneous score
 
-        return populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore
+        return ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore
 
     # Method to create all remaining variables and calculate their values based off of the input values
     def calculateVariables(self):
@@ -117,6 +179,6 @@ class SIS:
 
         solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 101), args=(self.SLoc, self.SNhb, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
-        S, Ir, Il, Ip = solution.T
+        self.S1, self.Ir1, self.Il1, self.Ip1 = solution.T
 
-        return S, Ir, Il, Ip
+        return self.S1, self.Ir1, self.Il1, self.Ip1

@@ -27,7 +27,7 @@ class SISInspectInterface(tk.Frame):
         btnPopulation = tk.Button(mainFrame, text="Population", font=("Arial", 9), width=13,
                                   command=lambda : self.switchInfoFrame(1, 1))
         btnPhysicalSize = tk.Button(mainFrame, text="Physical Size", font=("Arial", 9), width=13,
-                                    command=lambda : self.switchInfoFrame(2, 1))
+                                    command=self.controller.activeModel.calculateScores())
         btnNeighbourSets = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=13,
                                      command=lambda : self.switchInfoFrame(3, 1))
         btnInfectionRates = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=13,
@@ -199,18 +199,19 @@ class SISInspectInterface(tk.Frame):
                            tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
         model = self.controller.activeModel
-        populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore = model.calculateScores()
+
+        ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore = model.calculateScores()
 
         # This section populates each of the frames with updated information conforming to the active models simulation
         # By calling the methods that add the page widgets
         # There are many if statements indicating thresholds that change the displayed information
-        self.populateOverview(model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore)
-        self.populatePopulationFrame(model, populationScore)
-        self.populateSizeFrame(model, sizeScore)
-        self.populateNeighbourFrame(model, neighbourScore)
-        self.populateInfectionFrame(model, infectionRateScore)
-        self.populateDeathFrame(model, deathRateScore)
-        self.populateMiscFrame(model, miscScore)
+        self.populateOverview(model, ovrPopulationScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore)
+        self.populatePopulationFrame(model, ovrPopulationScore, startPopScore, endPopScore)
+        self.populateSizeFrame(model, ovrSizeScore)
+        self.populateNeighbourFrame(model, ovrNeighbourScore)
+        self.populateInfectionFrame(model, ovrInfectionRateScore)
+        self.populateDeathFrame(model, ovrDeathRateScore)
+        self.populateMiscFrame(model, ovrMiscScore)
 
     # The following 7 methods are the assessment frame contents
     def populateOverview(self, model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore):
@@ -394,7 +395,7 @@ class SISInspectInterface(tk.Frame):
 
         lblExplain7.grid(row=21, column=2, stick="w", pady=(15, 0), padx=(7, 0))
 
-    def populatePopulationFrame(self, model, populationScore):
+    def populatePopulationFrame(self, model, populationScore, startPopScore, endPopScore):
         pass
 
     def populateSizeFrame(self, model, sizeScore):
