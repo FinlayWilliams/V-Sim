@@ -9,6 +9,8 @@ class HomeInterface(tk.Frame):
         super().__init__(master)
         self.controller = controller
 
+        self.newCompareModelList = []
+
         # Variables used to switch interfaces set to a default option
         self.controlInterfaceShow = "SISControlInterface"
         self.inspectInterfaceShow = "SISInspectInterface"
@@ -49,7 +51,7 @@ class HomeInterface(tk.Frame):
                                     selectbackground="#453354", font=("Calibri", 15))
         self.updateModelList()
         self.lstModels.bind("<<ListboxSelect>>",
-                            lambda x: self.updateActiveModel(controller, 1))
+                            lambda x: [self.updateActiveModel(controller, 1)])
         # Button: opens control page with the current active model
         btn_Configure = tk.Button(frame_right, width=17, text="Configure Model",
                                   command=lambda: [controller.display("HomeInterface", self.controlInterfaceShow)])
@@ -75,8 +77,11 @@ class HomeInterface(tk.Frame):
         self.lstCompareModels = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
         self.updateCompareModelList()
+        self.lstCompareModels.bind("<<ListboxSelect>>",
+                            lambda x: [self.updateCompareModel(controller, 1)])
         # Button: Deletes selected model from model list
-        btn_Compare = tk.Button(frame_right, width=17, text="Compare Model")
+        self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Model", state="disabled",
+                                command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
 
         ####################################### Placing RIGHT-side elements ############################################
 
@@ -95,7 +100,7 @@ class HomeInterface(tk.Frame):
 
         lbl_compare_model_list.place(x=218, y=460)
         self.lstCompareModels.place(x=220, y=490)
-        btn_Compare.place(x=220, y=750)
+        self.btn_Compare.place(x=220, y=750)
 
         # This method must be called after the listbox is placed
         self.setModelInfoBox()
@@ -106,16 +111,32 @@ class HomeInterface(tk.Frame):
         for M in self.controller.models:
             self.lstModels.insert(END, M)
 
+    # Method: This method populates the compare box with models of the same virus model type
+    def updateCompareModelList(self):
+        self.lstCompareModels.delete(0, END)
+
+        self.newCompareModelList = []
+
+        for M in self.controller.models:
+            if self.checkModelType(self.controller.activeModel) == self.checkModelType(M):
+                if self.controller.activeModel != M:
+                    self.newCompareModelList.append(M)
+
+        for M in self.newCompareModelList:
+            self.lstCompareModels.insert(END, M)
+
     # Method: Deletes the currently selected model from the controllers list, replaces the active model with another
     def deleteSelectedModel(self, controller, stub):
         if len(controller.models) == 1:
             self.controller.popup("Invalid Delete", "There is only one model left!")
         else:
-            controller.setActiveModel(0)
-            controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
-            self.updateModelList()
-            self.updateCompareModelList()
-            self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
+            if self.lstModels.curselection() != ():
+
+                controller.setActiveModel(0)
+                controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
+                self.updateModelList()
+                self.updateCompareModelList()
+                self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
 
     # Method: checks to see what type of virus model is currently selected, used in a range of other GUI updates
     def checkModelType(self, model):
@@ -141,8 +162,10 @@ class HomeInterface(tk.Frame):
             controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
             self.controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
 
+            self.updateCompareModelList()
+            self.updateCompareModel(controller, 1)
+
             if self.checkModelType(controller.activeModel) != self.checkModelType(oldActive):
-                self.updateCompareModelList()
                 self.setModelInfoBox()
 
                 if self.checkModelType(self.controller.activeModel) == "SIS":
@@ -155,12 +178,13 @@ class HomeInterface(tk.Frame):
                     self.controlInterfaceShow = "SIRDControlInterface"
                     self.inspectInterfaceShow = "SIRDInspectInterface"
 
-    # Method: This method populates the compare box with models of the same virus model type
-    def updateCompareModelList(self):
-        self.lstCompareModels.delete(0, END)
-        for M in self.controller.models:
-            if self.checkModelType(self.controller.activeModel) == self.checkModelType(M):
-                self.lstCompareModels.insert(END, M)
+    # Method: Called to update the compare model selection
+    def updateCompareModel(self, controller, stub):
+        if self.lstCompareModels.curselection() == ():
+            self.btn_Compare.config(state="disabled")
+        if self.lstCompareModels.curselection() != ():
+            self.btn_Compare.config(state="active")
+            controller.setCompareModel(self.newCompareModelList[int(''.join(map(str, self.lstCompareModels.curselection())))])
 
     # Method: Called whenever a model is selected to display the correct model information box
     def setModelInfoBox(self):

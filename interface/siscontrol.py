@@ -72,7 +72,7 @@ class SISControlInterface(tk.Frame):
         NOptions = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
         self.cmbN = ttk.Combobox(frameBot, values=NOptions, state="readonly")
         lblS = tk.Label(frameBot, text="Initial S Size (%):")
-        self.sclS = tk.Scale(frameBot, from_=0, to=1, resolution=0.01, orient="horizontal")
+        self.sclS = tk.Scale(frameBot, from_=0, to=1, resolution=0.0001, orient="horizontal")
         lblI = tk.Label(frameBot, text="Initial I Size (%):")
         self.lblIMatch = tk.Label(frameBot, text="{}".format(1 - self.sclS.get()), bg="white", bd=3)
         lblWSN = tk.Label(frameBot, text="Wireless Sensor Network Count:")
@@ -94,9 +94,9 @@ class SISControlInterface(tk.Frame):
         lblIrPsu = tk.Label(frameBot, text="IR PSuccess Rate:")
         self.sclIrPsu = tk.Scale(frameBot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal")
         lblIlPsu = tk.Label(frameBot, text="IL PSuccess Rate:")
-        self.sclIlPsu = tk.Scale(frameBot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
+        self.sclIlPsu = tk.Scale(frameBot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal")
         lblIpPsu = tk.Label(frameBot, text="IP PSuccess Rate:")
-        self.sclIpPsu = tk.Scale(frameBot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
+        self.sclIpPsu = tk.Scale(frameBot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal")
         lblMSG = tk.Label(frameBot, text="Mean Message Size (Bytes):")
         MSGOptions = ["10", "20", "50", "100"]
         self.cmbMSG = ttk.Combobox(frameBot, values=MSGOptions, state="readonly")
@@ -216,7 +216,7 @@ class SISControlInterface(tk.Frame):
         # Plotting the first graph
         self.ax[0].plot(T1, S1, "#2ca02c", label="Susceptible")
         self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
-        self.ax[0].plot(T1, Il1, "#1f77b4", label="Local Scanning Infected")
+        self.ax[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning Infected")
         self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
         self.ax[0].set_xlabel("Timesteps (Days)")
         self.ax[0].set_ylabel("Node Count")
@@ -260,13 +260,21 @@ class SISControlInterface(tk.Frame):
             newActiveModel = sis.SIS(Name, N, S, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
 
-            self.lblIMatch.config(text="{:.2f}".format(I))
+            self.lblIMatch.config(text="{:.6f}".format(I))
 
-            if not self.checkValid(newActiveModel):
-                self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
-            else:
-                self.activeModel = newActiveModel
-                self.updateGraphs()
+            # if not self.checkValid(newActiveModel):
+            #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
+            # else:
+            #     self.activeModel = newActiveModel
+            #     self.updateGraphs()
+
+            # delete what is below this and uncomment what is above
+            print("Ir Death Rate: {}".format(newActiveModel.dthR))
+            print("Ir Contact Rate: {}".format(newActiveModel.IrContactRate))
+            print("")
+
+            self.activeModel = newActiveModel
+            self.updateGraphs()
 
     # Method: called once when this interface is created + everytime this interface is opened to ensure all variables
     # are updated and correct

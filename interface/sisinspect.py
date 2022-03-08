@@ -118,7 +118,7 @@ class SISInspectInterface(tk.Frame):
         # Plotting the first graph
         self.ax[0].plot(T1, S1, "#2ca02c", label="Susceptible")
         self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
-        self.ax[0].plot(T1, Il1, "#1f77b4", label="Local Scanning Infected")
+        self.ax[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning Infected")
         self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
         self.ax[0].set_xlabel("Timesteps (Days)")
         self.ax[0].set_ylabel("Node Count")
@@ -200,7 +200,7 @@ class SISInspectInterface(tk.Frame):
 
         model = self.controller.activeModel
 
-        ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore = model.calculateScores()
+        ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore, ovrScore = model.calculateScores()
 
         # This section populates each of the frames with updated information conforming to the active models simulation
         # By calling the methods that add the page widgets

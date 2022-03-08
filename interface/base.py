@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from .home import HomeInterface
+from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
 from .sisinspect import SISInspectInterface
 from model.sis import SIS
@@ -30,6 +31,9 @@ class BaseApp(tk.Tk):
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
 
+        self.compareModel = SIS("SIS: Comparison Model",
+                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50)
+
         # Manually initialising all interfaces and displaying the Home interface
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
@@ -38,6 +42,8 @@ class BaseApp(tk.Tk):
         self.interfaces[SISInspectInterface.__name__] = sisInspectInterface
         sisControlInterface = SISControlInterface(master=base, controller=self)
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
+        sisCompareInterface = SISCompareInterface(master=base, controller=self)
+        self.interfaces[SISCompareInterface.__name__] = sisCompareInterface
 
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
@@ -74,6 +80,12 @@ class BaseApp(tk.Tk):
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs()
+        if show == "SISCompareInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].setModels(self)
+            self.interfaces[show].updateLeftGraph()
+            self.interfaces[show].updateRightGraph()
+            self.interfaces[show].updateColumnInfo()
         if show == "SIRControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             # self.interfaces[show].updateVariables(self)
@@ -83,20 +95,21 @@ class BaseApp(tk.Tk):
             # self.interfaces[show].updateVariables(self)
             # self.interfaces[show].updateGraphs()
 
-    # A range of methods controlling the model list and active model
-    #def getActiveModelIndex(self): return self.activeModelIndex
-
     def setActiveModelIndex(self, index): self.activeModelIndex = index
 
-    #def getActiveModel(self): return self.activeModel
-
     def setActiveModel(self, index): self.activeModel = self.models[index]
+
+    def setCompareModel(self, model): self.compareModel = model
 
     def addModel(self, newModel): self.models.append(newModel)
 
     def addDefaultSISModel(self):
+        # This is the original one you were using - if you go back to it, also consider changing the Sloc and Snhb back to fractions
+        # self.models.append(SIS("SIS: Default Model",
+        #                        10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75,
+        #                        10))
         self.models.append(SIS("SIS: Default Model",
-                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 10))
+                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50))
 
     def removeModel(self, index): self.models.remove(self.models[index])
 
