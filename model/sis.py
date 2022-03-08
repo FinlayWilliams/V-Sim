@@ -41,11 +41,11 @@ class SIS:
         self.I = self.Ir + self.Il + self.Ip
 
         # S Local Set Range
-        self.SLoc = 1 / self.WSNnumber
+        self.SLoc = self.S * (1 / self.WSNnumber)
 
         # S Neighbour Set Range
         self.density = self.N / (self.deploymentArea * self.deploymentArea)
-        self.SNhb = 1 / (self.density * self.transmissionRange)
+        self.SNhb = self.S * (1 / (self.density * self.transmissionRange))
 
         # Contact rates
         self.IrContactRate = self.botScanningRate * self.IrPsuccess
