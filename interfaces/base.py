@@ -4,7 +4,7 @@ from .home import HomeInterface
 from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
 from .sisinspect import SISInspectInterface
-from model.sis import SIS
+from models.sis import SIS
 
 
 class BaseApp(tk.Tk):
@@ -21,11 +21,11 @@ class BaseApp(tk.Tk):
         self.geometry(f"1536x864+{center_x}+{center_y}")
         self.iconbitmap("assets/virus_icon.ico")
 
-        # Creating a base frame interface for all other interfaces to use as the master class
+        # Creating a base frame interfaces for all other interfaces to use as the master class
         base = tk.Frame(self, background="#453354")
         base.pack(side="top", fill="both", expand=True)
 
-        # Initialising a model list and a default model
+        # Initialising a models list and a default models
         self.models = []
         self.addDefaultSISModel()
         self.activeModelIndex = 0
@@ -34,7 +34,7 @@ class BaseApp(tk.Tk):
         self.compareModel = SIS("SIS: Comparison Model",
                             10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50)
 
-        # Manually initialising all interfaces and displaying the Home interface
+        # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
@@ -47,7 +47,7 @@ class BaseApp(tk.Tk):
 
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
-    # A method to call from any interface to display a custom popup message box for any cause
+    # A method to call from any interfaces to display a custom popup message box for any cause
     def popup(self, title, message):
         popup = tk.Tk()
         popup.wm_title(title)
@@ -63,7 +63,7 @@ class BaseApp(tk.Tk):
         popup.iconbitmap("assets/virus_icon.ico")
         popup.mainloop()
 
-    # A method created to display all interfaces from any interface
+    # A method created to display all interfaces from any interfaces
     def display(self, hide, show):
         self.interfaces[hide].pack_forget()
 

@@ -4,7 +4,7 @@ from tkinter import *
 
 class HomeInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interface
+    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
@@ -52,16 +52,16 @@ class HomeInterface(tk.Frame):
         self.updateModelList()
         self.lstModels.bind("<<ListboxSelect>>",
                             lambda x: [self.updateActiveModel(controller, 1)])
-        # Button: opens control page with the current active model
+        # Button: opens control page with the current active models
         btn_Configure = tk.Button(frame_right, width=17, text="Configure Model",
                                   command=lambda: [controller.display("HomeInterface", self.controlInterfaceShow)])
-        # Button: opens inspect page with the current active model
+        # Button: opens inspect page with the current active models
         btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Model",
                                   command=lambda: [controller.display("HomeInterface", self.inspectInterfaceShow)])
-        # Button: Deletes selected model from model list
+        # Button: Deletes selected models from models list
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Model",
                                command=lambda: self.deleteSelectedModel(controller, 1))
-        # Button: creates new default SIS model
+        # Button: creates new default SIS models
         btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model",
                                 command=lambda:[controller.addDefaultSISModel(), self.updateModelList(),
                                                 self.updateCompareModelList()])
@@ -79,7 +79,7 @@ class HomeInterface(tk.Frame):
         self.updateCompareModelList()
         self.lstCompareModels.bind("<<ListboxSelect>>",
                             lambda x: [self.updateCompareModel(controller, 1)])
-        # Button: Deletes selected model from model list
+        # Button: Deletes selected models from models list
         self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Model", state="disabled",
                                 command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
 
@@ -111,7 +111,7 @@ class HomeInterface(tk.Frame):
         for M in self.controller.models:
             self.lstModels.insert(END, M)
 
-    # Method: This method populates the compare box with models of the same virus model type
+    # Method: This method populates the compare box with models of the same virus models type
     def updateCompareModelList(self):
         self.lstCompareModels.delete(0, END)
 
@@ -125,10 +125,10 @@ class HomeInterface(tk.Frame):
         for M in self.newCompareModelList:
             self.lstCompareModels.insert(END, M)
 
-    # Method: Deletes the currently selected model from the controllers list, replaces the active model with another
+    # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
     def deleteSelectedModel(self, controller, stub):
         if len(controller.models) == 1:
-            self.controller.popup("Invalid Delete", "There is only one model left!")
+            self.controller.popup("Invalid Delete", "There is only one models left!")
         else:
             if self.lstModels.curselection() != ():
 
@@ -138,7 +138,7 @@ class HomeInterface(tk.Frame):
                 self.updateCompareModelList()
                 self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
 
-    # Method: checks to see what type of virus model is currently selected, used in a range of other GUI updates
+    # Method: checks to see what type of virus models is currently selected, used in a range of other GUI updates
     def checkModelType(self, model):
         if self.lstModels.curselection() != ():
             modelPrefix = model.Name.partition(":")
@@ -151,8 +151,8 @@ class HomeInterface(tk.Frame):
                 return "SIRD"
 
     # Method: called everytime a different entry in the listbox is selected, updating the controllers
-    # (base windows) current active model and an index variable that is used when saving the models
-    # also calls other methods that update the GUI and validate the model type
+    # (base windows) current active models and an index variable that is used when saving the models
+    # also calls other methods that update the GUI and validate the models type
     def updateActiveModel(self, controller, stub):
         if self.lstModels.curselection() != ():
             # Long prefixes to take the listbox index and obtain a single integer to be used to
@@ -178,7 +178,7 @@ class HomeInterface(tk.Frame):
                     self.controlInterfaceShow = "SIRDControlInterface"
                     self.inspectInterfaceShow = "SIRDInspectInterface"
 
-    # Method: Called to update the compare model selection
+    # Method: Called to update the compare models selection
     def updateCompareModel(self, controller, stub):
         if self.lstCompareModels.curselection() == ():
             self.btn_Compare.config(state="disabled")
@@ -186,10 +186,10 @@ class HomeInterface(tk.Frame):
             self.btn_Compare.config(state="active")
             controller.setCompareModel(self.newCompareModelList[int(''.join(map(str, self.lstCompareModels.curselection())))])
 
-    # Method: Called whenever a model is selected to display the correct model information box
+    # Method: Called whenever a models is selected to display the correct models information box
     def setModelInfoBox(self):
         if self.checkModelType(self.controller.activeModel) == "SIS":
-            # This outputs the SIS model Information
+            # This outputs the SIS models Information
             # Instantiating the information labels
             lbl_Title = tk.Label(self.column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"),
                                  bg="#654e78")
@@ -346,7 +346,7 @@ class HomeInterface(tk.Frame):
             lbl_T_Desc.grid(row=26, column=1, sticky="w", pady=3)
 
         if self.checkModelType(self.controller.activeModel) == "SIR":
-            # This outputs the SIR model information
+            # This outputs the SIR models information
             # Instantiating the information labels
             lbl_Title = tk.Label(self.column_left_frame, text="SIR Model Starting Condition Variables :", font=("Arial", 14),
                                  bg="#654e78")
@@ -357,7 +357,7 @@ class HomeInterface(tk.Frame):
             lbl_Title.pack(pady=7)
 
         if self.checkModelType(self.controller.activeModel) == "SIRD":
-            # This outputs the SIRD model information
+            # This outputs the SIRD models information
             # Instantiating the information labels
             lbl_Title = tk.Label(self.column_left_frame, text="SIRD Model Starting Condition Variables :",
                                  font=("Arial", 14),

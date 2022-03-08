@@ -4,12 +4,12 @@ from tkinter import *
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
-from model import sis
+from models import sis
 
 
 class SISControlInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interface
+    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
@@ -17,25 +17,25 @@ class SISControlInterface(tk.Frame):
 
         ####################################### Instantiating ALL elements ############################################
 
-        # Upper area for displaying and model option buttons
+        # Upper area for displaying and models option buttons
         frameTop = tk.Frame(self, bg="#453354")
-        # Button: Resets model config and refreshes graphs
+        # Button: Resets models config and refreshes graphs
         btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Model", font=("Arial", 7),
                              relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
-        # Button: overwrites the current model "saving" it
+        # Button: overwrites the current models "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
                             relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: [self.updateModel(1),
                                               controller.overwriteModel(self.activeModelIndex, self.activeModel),
                                               controller.setActiveModel(self.activeModelIndex)])
-        # Button: add this model configuration to the list
+        # Button: add this models configuration to the list
         btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e",
                                relief="ridge", fg="white",
                                command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
                                                 controller.setActiveModel(len(controller.models)-1)])
-        # Button: opens the inspect model page with the currently selected model
-        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect model", font=("Arial", 7),
+        # Button: opens the inspect models page with the currently selected models
+        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect models", font=("Arial", 7),
                                relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: self.checkModelSaved(controller, 1))
         # Button: takes the user to the home page
@@ -115,11 +115,11 @@ class SISControlInterface(tk.Frame):
 
         ## Frame Top Half
         frameTop.place(relheight=0.70, relwidth=1)
-        btnReset.place(x=10, y=13)
-        btnSave.place(x=10, y=64)
-        btnSaveNew.place(x=10, y=115)
-        btnInspect.place(x=10, y=509)
-        btnReturn.place(x=10, y=560)
+        btnReturn.place(x=10, y=13)
+        btnInspect.place(x=10, y=64)
+        btnReset.place(x=10, y=458)
+        btnSave.place(x=10, y=509)
+        btnSaveNew.place(x=10, y=560)
         canvasFrame.place(relheight=1, relwidth=0.73, x=58)
         lblLegendTitle.place(x=1229, y=194)
         lblLegend1.place(x=1243, y=227)
@@ -204,7 +204,7 @@ class SISControlInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(rect=[0.01, 0.03, 1, 0.95], h_pad=3)
 
-    # Method to update the onscreen graphs to whatever the current model configuration is
+    # Method to update the onscreen graphs to whatever the current models configuration is
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -234,9 +234,9 @@ class SISControlInterface(tk.Frame):
     # Method: called when a value option is changed, to automatically update the active models parameters
     def updateModel(self, Stub):
         if len(self.entryName.get()) == 0:
-            self.controller.popup("Invalid Save", "Please enter a name for the model!")
+            self.controller.popup("Invalid Save", "Please enter a name for the models!")
         if len(self.entryName.get()) > 24:
-            self.controller.popup("Invalid Save", "Please enter a shorter name for the model!")
+            self.controller.popup("Invalid Save", "Please enter a shorter name for the models!")
         else:
             Name = str("SIS: " + self.entryName.get())
             N = int(self.cmbN.get())
@@ -276,7 +276,7 @@ class SISControlInterface(tk.Frame):
             self.activeModel = newActiveModel
             self.updateGraphs()
 
-    # Method: called once when this interface is created + everytime this interface is opened to ensure all variables
+    # Method: called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct
     def updateVariables(self, controller):
         self.activeModel = controller.activeModel
@@ -302,11 +302,11 @@ class SISControlInterface(tk.Frame):
         self.sclRR.set(self.activeModel.recoveryRate)
         self.sclT.set(self.activeModel.Timesteps)
 
-    # Method: Checks whether the model is saved or not before the user proceeds to the inspect screen and looses
+    # Method: Checks whether the models is saved or not before the user proceeds to the inspect screen and looses
     # the current configuration
     def checkModelSaved(self, controller, stub):
         if self.activeModel != controller.activeModel:
-            self.controller.popup("Warning", "Current model configuration not saved")
+            self.controller.popup("Warning", "Current models configuration not saved")
         else:
             controller.display("SISControlInterface", "SISInspectInterface")
 

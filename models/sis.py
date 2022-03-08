@@ -27,7 +27,7 @@ class SIS:
 
         self.calculateVariables()
 
-    # Method to obtain the name from each model allowing the list to access an attribute for identification
+    # Method to obtain the name from each models allowing the list to access an attribute for identification
     def __str__(self):
         return self.Name
 
@@ -101,7 +101,7 @@ class SIS:
 
         return self.S1, self.Ir1, self.Il1, self.Ip1
 
-    # Method to calculate the score of the model used in the inspection page
+    # Method to calculate the score of the models used in the inspection page
     def calculateScores(self):
         # The scores are broken down into their categories with an overall score as well as individual scores
         S1, Ir1, Il1, Ip1 = self.runModel()
@@ -150,24 +150,24 @@ class SIS:
         slocNeighbourScore = 0
         snhbNeighbourScore = 0
 
-        if self.SLoc == 1 / 1:
+        if self.SLoc == self.S * (1 / 1):
             slocNeighbourScore = 300
-        if self.SLoc == 1 / 5:
+        if self.SLoc == self.S * (1 / 5):
             slocNeighbourScore = 250
-        if self.SLoc == 1 / 10:
+        if self.SLoc == self.S * (1 / 10):
             slocNeighbourScore = 200
-        if self.SLoc == 1 / 20:
+        if self.SLoc == self.S * (1 / 20):
             slocNeighbourScore = 150
-        if self.SLoc == 1 / 50:
+        if self.SLoc == self.S * (1 / 50):
             slocNeighbourScore = 100
 
-        if self.SNhb == self.N / 150:
+        if self.SNhb == self.S * (1 / 150):
             snhbNeighbourScore = 250
-        if self.SNhb == self.N / 100:
+        if self.SNhb == self.S * (1 / 100):
             snhbNeighbourScore = 200
-        if self.SNhb == self.N / 50:
+        if self.SNhb == self.S * (1 / 50):
             snhbNeighbourScore = 150
-        if self.SNhb == self.N / 25:
+        if self.SNhb == self.S * (1 / 25):
             snhbNeighbourScore = 100
 
         ovrNeighbourScore = slocNeighbourScore + snhbNeighbourScore

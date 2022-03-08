@@ -6,7 +6,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 class SISInspectInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interface
+    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
@@ -140,7 +140,7 @@ class SISInspectInterface(tk.Frame):
 
         self.canvas.draw()
 
-    # Method: Called each time the page is set to display the assessment of the current model
+    # Method: Called each time the page is set to display the assessment of the current models
     # also provides the functionality to switch between the frames
     def switchInfoFrame(self, index, stub):
         if index == 0:
@@ -227,14 +227,14 @@ class SISInspectInterface(tk.Frame):
         if modelScore < 1:
             lblScoreAc2.config(text="Low", fg="#2d802f")
             lblScoreDes.config(
-                text="This model has a configuration that results in a generally slower and less potent propagation.")
+                text="This models has a configuration that results in a generally slower and less potent propagation.")
         if 1 <= modelScore < 3:
             lblScoreAc2.config(text="Medium", fg="#b35827")
-            lblScoreDes.config(text="This model has a configuration that results in an average propagation of a virus.")
+            lblScoreDes.config(text="This models has a configuration that results in an average propagation of a virus.")
         if modelScore >= 3:
             lblScoreAc2.config(text="High", fg="#b81d28")
             lblScoreDes.config(
-                text="This model has a configuration that results in a fast and potent virus propagation.")
+                text="This models has a configuration that results in a fast and potent virus propagation.")
 
         lblExplain = tk.Label(self.frames[0],
                               text="The score is broken down into different categories and combine to produce the overall score.",

@@ -7,7 +7,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 class SISCompareInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interface
+    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
@@ -20,12 +20,12 @@ class SISCompareInterface(tk.Frame):
                               command=lambda: controller.display("SISCompareInterface", "HomeInterface"))
         nameFrameLeft = tk.Frame(self, bg="#6e6e6e")
         self.lblLeftName = tk.Label(nameFrameLeft, bg="#6e6e6e", font=("Arial", 14), fg="white")
-        self.lblLeftScore = tk.Label(nameFrameLeft, bg="#6e6e6e", font=("Arial", 14))
+        self.lblLeftScore = tk.Label(nameFrameLeft, bg="#6e6e6e", font=("Arial", 16))
         btnConfigureLeft = tk.Button(nameFrameLeft, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                      command=lambda: controller.display("SISCompareInterface", "SISControlInterface"))
         nameFrameRight = tk.Frame(self, bg="#6e6e6e")
         self.lblRightName = tk.Label(nameFrameRight, bg="#6e6e6e", font=("Arial", 14), fg="white")
-        self.lblRightScore = tk.Label(nameFrameRight, bg="#6e6e6e", font=("Arial", 14))
+        self.lblRightScore = tk.Label(nameFrameRight, bg="#6e6e6e", font=("Arial", 16))
         btnConfigureRight = tk.Button(nameFrameRight, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                      command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SISCompareInterface", "SISControlInterface")])
         leftFrame = tk.Frame(self, bg="#453354")
@@ -69,10 +69,12 @@ class SISCompareInterface(tk.Frame):
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
         self.informationFrame.place(relwidth=0.334, relheight=0.93, y=120, x=511)
 
+    # Method: Called upon page opening to set the correct models
     def setModels(self, controller):
         self.activeModel = controller.activeModel
         self.compareModel = controller.compareModel
 
+    # Method: Called when opting to configure the Right, CompareModel to ensure compatibility
     def setNewActivePlusIndex(self, controller):
         index = 0
         for M in controller.models:
@@ -81,23 +83,7 @@ class SISCompareInterface(tk.Frame):
                 controller.setActiveModelIndex(index)
             index = index + 1
 
-    def updateColumnInfo(self):
-        self.lblLeftName.config(text="{}   -".format(self.activeModel.Name))
-        self.lblRightName.config(text="-   {}".format(self.compareModel.Name))
-
-        activeScore = self.activeModel.calculateScores()[8]
-        compareScore = self.compareModel.calculateScores()[8]
-
-        if activeScore < compareScore:
-            self.lblLeftScore.config(text="{}".format(activeScore), fg="#2d802f")
-            self.lblRightScore.config(text="{}".format(compareScore), fg="#b81d28")
-        if activeScore > compareScore:
-            self.lblLeftScore.config(text="{}".format(activeScore), fg="#b81d28")
-            self.lblRightScore.config(text="{}".format(compareScore), fg="#2d802f")
-        if activeScore == compareScore:
-            self.lblLeftScore.config(text="{}".format(activeScore), fg="#e68f39")
-            self.lblRightScore.config(text="{}".format(compareScore), fg="#e68f39")
-
+    # Method: Called on page opening to update the Left, ActiveModel graph information
     def updateLeftGraph(self):
         S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -131,6 +117,7 @@ class SISCompareInterface(tk.Frame):
 
         self.canvasLeft.draw()
 
+    # Method: Called on page opening to update the Right, CompareModel graph information
     def updateRightGraph(self):
         S1, Ir1, Il1, Ip1 = self.compareModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -163,3 +150,37 @@ class SISCompareInterface(tk.Frame):
         self.axRight[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.compareModel.Timesteps))
 
         self.canvasRight.draw()
+
+    # Method: Called on page opening to set the correct information
+    def updateColumnInfo(self):
+        self.lblLeftName.config(text="{}    |".format(self.activeModel.Name))
+        self.lblRightName.config(text="|    {}".format(self.compareModel.Name))
+
+        activeScore = self.activeModel.calculateScores()[8]
+        compareScore = self.compareModel.calculateScores()[8]
+
+        if activeScore < compareScore:
+            self.lblLeftScore.config(text="{}".format(activeScore), fg="#2d802f")
+            self.lblRightScore.config(text="{}".format(compareScore), fg="#b81d28")
+        if activeScore > compareScore:
+            self.lblLeftScore.config(text="{}".format(activeScore), fg="#b81d28")
+            self.lblRightScore.config(text="{}".format(compareScore), fg="#2d802f")
+        if activeScore == compareScore:
+            self.lblLeftScore.config(text="{}".format(activeScore), fg="#e68f39")
+            self.lblRightScore.config(text="{}".format(compareScore), fg="#e68f39")
+
+        legendFrame = tk.Frame(self.informationFrame, bg="#e0e0e0")
+        lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#e0e0e0", font=("Arial", 9, "bold"))
+        lblGEx = tk.Label(legendFrame, text=" Indicates a better score", bg="#e0e0e0")
+        lblO = tk.Label(legendFrame, text="Orange", fg="#e68f39", bg="#e0e0e0", font=("Arial", 9, "bold"))
+        lblOEx = tk.Label(legendFrame, text="Indicates an identical score", bg="#e0e0e0")
+        lblR = tk.Label(legendFrame, text="Red", fg="#b81d28", bg="#e0e0e0", font=("Arial", 9, "bold"))
+        lblREx = tk.Label(legendFrame, text="Indicates a worse score", bg="#e0e0e0")
+
+        legendFrame.place(relwidth=1, relheight=0.1, y=5)
+        lblG.grid(row=0, column=0, padx=(140, 0))
+        lblGEx.grid(row=0, column=1)
+        lblO.grid(row=1, column=0, padx=(140, 0))
+        lblOEx.grid(row=1, column=1)
+        lblR.grid(row=2, column=0, padx=(140, 0))
+        lblREx.grid(row=2, column=1)
