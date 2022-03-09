@@ -335,10 +335,9 @@ class SISCompareInterface(tk.Frame):
             lblMiscScoreRight.config(text="{}".format(compMiscScore), fg="#e68f39")
             lblMiscDesc.config(text="The Models have an Equal Score for the Miscellaneous Category")
 
-
-        leftScores.place(x=3, y=3, relheight=0.98, relwidth=0.28)
-        rightScores.place(x=367, y=3, relheight=0.98, relwidth=0.28)
-        centreFrame.place(x=150, y=3, relheight=0.98, relwidth=0.42)
+        leftScores.place(x=3, y=12, relheight=0.98, relwidth=0.28)
+        rightScores.place(x=367, y=12, relheight=0.98, relwidth=0.28)
+        centreFrame.place(x=150, y=12, relheight=0.98, relwidth=0.42)
 
         lblPopLeft.pack()
         lblPopScoreLeft.pack()
