@@ -128,7 +128,7 @@ class HomeInterface(tk.Frame):
     # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
     def deleteSelectedModel(self, controller, stub):
         if len(controller.models) == 1:
-            self.controller.popup("Invalid Delete", "There is only one models left!")
+            self.controller.popup("Invalid Delete", "There is Only One Model Left!")
         else:
             if self.lstModels.curselection() != ():
 
