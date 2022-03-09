@@ -35,7 +35,7 @@ class SISControlInterface(tk.Frame):
                                command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
                                                 controller.setActiveModel(len(controller.models)-1)])
         # Button: opens the inspect models page with the currently selected models
-        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect models", font=("Arial", 7),
+        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Model", font=("Arial", 7),
                                relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: self.checkModelSaved(controller, 1))
         # Button: takes the user to the home page

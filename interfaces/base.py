@@ -27,7 +27,11 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and a default models
         self.models = []
-        self.addDefaultSISModel()
+        self.models.append(SIS("SIS: Example Model A",
+                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50))
+        self.models.append(SIS("SIS: Example Model B",
+                               10000, 0.999, 0.001, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
+                               0.75, 50))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
 

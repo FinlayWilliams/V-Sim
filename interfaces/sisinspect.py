@@ -15,7 +15,7 @@ class SISInspectInterface(tk.Frame):
         #################################### Instantiating Information Frame ########################################
 
         # These are the basic controls of this page alling the user to navigate
-        mainFrame = tk.Frame(self, bg="#6e6e6e")
+        mainFrame = tk.Frame(self, bg="#574b59")
         controlBar = tk.Frame(mainFrame, bg="#453354")
         btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
@@ -338,11 +338,11 @@ class SISInspectInterface(tk.Frame):
 
         lblExplain3 = tk.Label(self.frames[0], text="The overall score ranges from a minimum of ___ to ___ and to a maximum of ___",
                                font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain4 = tk.Label(self.frames[0], text="Below ___ is a Low Score", font=("Arial", 10, "italic"), bg="#e0e0e0",
+        lblExplain4 = tk.Label(self.frames[0], text="Below ___ is a Low Score - an Ideal Model Score for Minimal Virus Propagation, ", font=("Arial", 10, "italic"), bg="#e0e0e0",
                                fg="#2d802f")
-        lblExplain5 = tk.Label(self.frames[0], text="Between ___ and ___ is Medium Score", font=("Arial", 10, "italic"),
+        lblExplain5 = tk.Label(self.frames[0], text="Between ___ and ___ is Medium Score - a Sub-Optimal Score but Relatively Safe,", font=("Arial", 10, "italic"),
                                bg="#e0e0e0", fg="#e68f39")
-        lblExplain6 = tk.Label(self.frames[0], text="Above ___ is High Score", font=("Arial", 10, "italic"), bg="#e0e0e0",
+        lblExplain6 = tk.Label(self.frames[0], text="Above ___ is Higher Score - a Dangerous Score Indicating Optimal Conditions for Virus Propagation", font=("Arial", 10, "italic"), bg="#e0e0e0",
                                fg="#b81d28")
         lblExplain7 = tk.Label(self.frames[0],
                                text="Press the labelled buttons above to inspect the correspoinding categories' score breakdown.",

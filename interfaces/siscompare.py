@@ -18,16 +18,22 @@ class SISCompareInterface(tk.Frame):
         btnReturn = tk.Button(titleFrame, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: controller.display("SISCompareInterface", "HomeInterface"))
-        nameFrameLeft = tk.Frame(self, bg="#6e6e6e")
-        self.lblLeftName = tk.Label(nameFrameLeft, bg="#6e6e6e", font=("Arial", 14), fg="white")
-        self.lblLeftScore = tk.Label(nameFrameLeft, bg="#6e6e6e", font=("Arial", 16))
-        btnConfigureLeft = tk.Button(nameFrameLeft, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+        nameFrame = tk.Frame(self, bg="#574b59")
+        self.lblLeftName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
+        self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
+        btnConfigureLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                      command=lambda: controller.display("SISCompareInterface", "SISControlInterface"))
-        nameFrameRight = tk.Frame(self, bg="#6e6e6e")
-        self.lblRightName = tk.Label(nameFrameRight, bg="#6e6e6e", font=("Arial", 14), fg="white")
-        self.lblRightScore = tk.Label(nameFrameRight, bg="#6e6e6e", font=("Arial", 16))
-        btnConfigureRight = tk.Button(nameFrameRight, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+        self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
+        self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
+        btnConfigureRight = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                      command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SISCompareInterface", "SISControlInterface")])
+        legendFrame = tk.Frame(nameFrame, bg="#574b59")
+        lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#574b59", font=("Arial", 9, "bold"))
+        lblGEx = tk.Label(legendFrame, text=" Indicates a Lower & Better Score", bg="#574b59", fg="white", font=("Arial", 8))
+        lblO = tk.Label(legendFrame, text="Orange", fg="#e68f39", bg="#574b59", font=("Arial", 9, "bold"))
+        lblOEx = tk.Label(legendFrame, text="Indicates an Identical Score", bg="#574b59", fg="white", font=("Arial", 8))
+        lblR = tk.Label(legendFrame, text="Red", fg="#d12c3f", bg="#574b59", font=("Arial", 9, "bold"))
+        lblREx = tk.Label(legendFrame, text="Indicates a Higher & Worse Score", bg="#574b59", fg="white", font=("Arial", 8))
         leftFrame = tk.Frame(self, bg="#453354")
         leftGraphFrame = tk.Frame(leftFrame, bg="#654e78")
         rightFrame = tk.Frame(self, bg="#453354")
@@ -54,20 +60,26 @@ class SISCompareInterface(tk.Frame):
 
         titleFrame.place(relwidth=1, relheight=0.07)
         lblTitle.pack(pady=15)
+        nameFrame.place(relwidth=1, relheight=0.08, y=60)
         btnReturn.place(x=14, y=14)
-        nameFrameLeft.place(relwidth=0.5, relheight=0.07, y=60)
         btnConfigureLeft.pack(side="left", padx=14)
         self.lblLeftName.pack(side="left", padx=10)
-        self.lblLeftScore.pack(side="left", padx=10)
-        nameFrameRight.place(relwidth=0.5, relheight=0.07, y=60, x=768)
+        self.lblLeftScore.pack(side="left")
         btnConfigureRight.pack(side="right", padx=14)
         self.lblRightName.pack(side="right", padx=10)
-        self.lblRightScore.pack(side="right", padx=10)
-        leftFrame.place(relwidth=0.333, relheight=0.93, y=120, x=0)
+        self.lblRightScore.pack(side="right")
+        legendFrame.place(x=657, y=3)
+        lblG.grid(row=0, column=0)
+        lblGEx.grid(row=0, column=1)
+        lblO.grid(row=1, column=0)
+        lblOEx.grid(row=1, column=1)
+        lblR.grid(row=2, column=0)
+        lblREx.grid(row=2, column=1)
+        leftFrame.place(relwidth=0.333, relheight=0.93, y=126, x=0)
         leftGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-        rightFrame.place(relwidth=0.333, relheight=0.93, y=120, x=1025)
+        rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1025)
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-        self.informationFrame.place(relwidth=0.334, relheight=0.93, y=120, x=511)
+        self.informationFrame.place(relwidth=0.334, relheight=0.93, y=130, x=511)
 
     # Method: Called upon page opening to set the correct models
     def setModels(self, controller):
@@ -153,34 +165,55 @@ class SISCompareInterface(tk.Frame):
 
     # Method: Called on page opening to set the correct information
     def updateColumnInfo(self):
-        self.lblLeftName.config(text="{}    |".format(self.activeModel.Name))
-        self.lblRightName.config(text="|    {}".format(self.compareModel.Name))
-
         activeScore = self.activeModel.calculateScores()[8]
+        actPopScore = self.activeModel.calculateScores()[1]
+        actSizeScore = self.activeModel.calculateScores()[4]
         compareScore = self.compareModel.calculateScores()[8]
+        compPopScore = self.compareModel.calculateScores()[1]
+        compSizeScore = self.compareModel.calculateScores()[4]
+
+        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeModel.Name))
+        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareModel.Name))
 
         if activeScore < compareScore:
             self.lblLeftScore.config(text="{}".format(activeScore), fg="#2d802f")
-            self.lblRightScore.config(text="{}".format(compareScore), fg="#b81d28")
+            self.lblRightScore.config(text="{}".format(compareScore), fg="#d12c3f")
         if activeScore > compareScore:
-            self.lblLeftScore.config(text="{}".format(activeScore), fg="#b81d28")
+            self.lblLeftScore.config(text="{}".format(activeScore), fg="#d12c3f")
             self.lblRightScore.config(text="{}".format(compareScore), fg="#2d802f")
         if activeScore == compareScore:
             self.lblLeftScore.config(text="{}".format(activeScore), fg="#e68f39")
             self.lblRightScore.config(text="{}".format(compareScore), fg="#e68f39")
 
-        legendFrame = tk.Frame(self.informationFrame, bg="#e0e0e0")
-        lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#e0e0e0", font=("Arial", 9, "bold"))
-        lblGEx = tk.Label(legendFrame, text=" Indicates a better score", bg="#e0e0e0")
-        lblO = tk.Label(legendFrame, text="Orange", fg="#e68f39", bg="#e0e0e0", font=("Arial", 9, "bold"))
-        lblOEx = tk.Label(legendFrame, text="Indicates an identical score", bg="#e0e0e0")
-        lblR = tk.Label(legendFrame, text="Red", fg="#b81d28", bg="#e0e0e0", font=("Arial", 9, "bold"))
-        lblREx = tk.Label(legendFrame, text="Indicates a worse score", bg="#e0e0e0")
+        leftScores = tk.Frame(self.informationFrame, bg="#e0e0e0")
+        rightScores = tk.Frame(self.informationFrame, bg="#e0e0e0")
+        lblPopLeft = tk.Label(leftScores, text="Population Score:", bg="#e0e0e0")
+        lblPopScoreLeft = tk.Label(leftScores, bg="#e0e0e0")
+        lblPopRight = tk.Label(rightScores, text="Population Score:", bg="#e0e0e0")
+        lblPopScoreRight = tk.Label(rightScores, bg="#e0e0e0")
 
-        legendFrame.place(relwidth=1, relheight=0.1, y=5)
-        lblG.grid(row=0, column=0, padx=(140, 0))
-        lblGEx.grid(row=0, column=1)
-        lblO.grid(row=1, column=0, padx=(140, 0))
-        lblOEx.grid(row=1, column=1)
-        lblR.grid(row=2, column=0, padx=(140, 0))
-        lblREx.grid(row=2, column=1)
+        if actPopScore < compPopScore:
+            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#2d802f")
+            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#d12c3f")
+        if actPopScore > compPopScore:
+            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#d12c3f")
+            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#2d802f")
+        if actPopScore == compPopScore:
+            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#e68f39")
+            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#e68f39")
+
+        centreFrame = tk.Frame(self.informationFrame, bg="#e0e0e0")
+
+
+
+
+        leftScores.place(x=3, y=3, relheight=0.98, relwidth=0.28)
+        lblPopLeft.grid(row=0, column=0, sticky="w")
+        lblPopScoreLeft.grid(row=1, column=0, sticky="w")
+        lblPopRight.grid(row=0, column=0, sticky="e")
+        lblPopScoreRight.grid(row=1, column=0, sticky="e")
+
+        centreFrame.place(x=150, y=3, relheight=0.98, relwidth=0.42)
+
+
+        rightScores.place(x=367, y=3, relheight=0.98, relwidth=0.28)
