@@ -19,10 +19,10 @@ class SIR:
     def calculateVariables(self):
         self.S = self.N * self.percentS
         self.I = self.N * self.percentI
+        self.R = 0
 
     def SIRModel(self, y, t, B, G, N):
-        S, Ir, Il, Ip = y
-        I = Ir + Il + Ip
+        S, I, R = y
 
         dSdt = -B * S * I / N
 
