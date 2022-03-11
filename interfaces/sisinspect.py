@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
+
 class SISInspectInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
     # it also creates and places all widgets for this interfaces

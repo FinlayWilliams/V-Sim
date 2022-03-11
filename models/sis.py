@@ -27,10 +27,6 @@ class SIS:
 
         self.calculateVariables()
 
-    # Method to obtain the name from each models allowing the list to access an attribute for identification
-    def __str__(self):
-        return self.Name
-
     # Method to create all remaining variables and calculate their values based off of the input values
     def calculateVariables(self):
         # SI Population
@@ -225,3 +221,7 @@ class SIS:
         ovrScore = ovrPopulationScore + ovrSizeScore + ovrNeighbourScore + ovrInfectionRateScore + ovrDeathRateScore + ovrMiscScore
 
         return ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore, ovrScore
+
+    # Method to obtain the name from each models allowing the list to access an attribute for identification
+    def __str__(self):
+        return self.Name

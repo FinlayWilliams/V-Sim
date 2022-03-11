@@ -71,10 +71,10 @@ class SISControlInterface(tk.Frame):
         lblN = tk.Label(frameBot, text="Initial Node Population Size (N):")
         NOptions = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
         self.cmbN = ttk.Combobox(frameBot, values=NOptions, state="readonly")
-        lblS = tk.Label(frameBot, text="Initial S Size (%):")
-        self.sclS = tk.Scale(frameBot, from_=0, to=1, resolution=0.0001, orient="horizontal")
-        lblI = tk.Label(frameBot, text="Initial I Size (%):")
-        self.lblIMatch = tk.Label(frameBot, text="{}".format(1 - self.sclS.get()), bg="white", bd=3)
+        lblS = tk.Label(frameBot, text="Initial S Size (% of N):")
+        self.sclS = tk.Scale(frameBot, from_=0, to=100, resolution=1, orient="horizontal")
+        lblI = tk.Label(frameBot, text="Initial I Size (% of N):")
+        self.lblIMatch = tk.Label(frameBot, bg="white", bd=3)
         lblWSN = tk.Label(frameBot, text="Wireless Sensor Network Count:")
         WSNOptions = ["1", "5", "10", "20", "50"]
         self.cmbWSN = ttk.Combobox(frameBot, values=WSNOptions, state="readonly")
@@ -240,8 +240,8 @@ class SISControlInterface(tk.Frame):
         else:
             Name = str("SIS: " + self.entryName.get())
             N = int(self.cmbN.get())
-            S = float(self.sclS.get())
-            I = float(1 - self.sclS.get())
+            S = float(self.sclS.get() / 100)
+            I = float((100 - self.sclS.get()) / 100)
             WSN = int(self.cmbWSN.get())
             DEP = int(self.cmbDEP.get())
             TRNS = int(self.cmbTRNS.get())
@@ -260,7 +260,7 @@ class SISControlInterface(tk.Frame):
             newActiveModel = sis.SIS(Name, N, S, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
 
-            self.lblIMatch.config(text="{:.6f}".format(I))
+            self.lblIMatch.config(text="{:.0f}".format(I))
 
             # if not self.checkValid(newActiveModel):
             #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
@@ -283,8 +283,8 @@ class SISControlInterface(tk.Frame):
         self.activeModelIndex = controller.activeModelIndex
 
         self.cmbN.set(self.activeModel.N)
-        self.sclS.set(self.activeModel.percentS)
-        self.lblIMatch.config(text="{}".format(self.activeModel.percentI))
+        self.sclS.set(self.activeModel.percentS * 100)
+        self.lblIMatch.config(text="{}".format(self.activeModel.percentI * 100))
         self.cmbWSN.set(self.activeModel.WSNnumber)
         self.cmbDEP.set(self.activeModel.deploymentArea)
         self.cmbTRNS.set(self.activeModel.transmissionRange)

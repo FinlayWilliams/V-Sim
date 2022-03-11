@@ -5,6 +5,7 @@ from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
 from .sisinspect import SISInspectInterface
 from models.sis import SIS
+from models.sir import SIR
 
 
 class BaseApp(tk.Tk):
@@ -28,15 +29,15 @@ class BaseApp(tk.Tk):
         # Initialising a models list and a default models
         self.models = []
         self.models.append(SIS("SIS: Example Model A",
-                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50))
+                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
         self.models.append(SIS("SIS: Example Model B",
-                               10000, 0.999, 0.001, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
-                               0.75, 50))
+                               10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
+                               0.75, 14))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
 
         self.compareModel = SIS("SIS: Comparison Model",
-                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50)
+                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
 
         # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
@@ -113,7 +114,7 @@ class BaseApp(tk.Tk):
         #                        10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75,
         #                        10))
         self.models.append(SIS("SIS: Default Model",
-                            10000, 0.999, 0.001, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 50))
+                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
 
     def removeModel(self, index): self.models.remove(self.models[index])
 
