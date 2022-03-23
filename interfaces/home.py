@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+from PIL import ImageTk, Image
 
 
 class HomeInterface(tk.Frame):
@@ -14,12 +15,16 @@ class HomeInterface(tk.Frame):
         self.inspectInterfaceShow = "SISInspectInterface"
 
         ##################################### Instantiating LEFT-side elements #########################################
-        # Left side of the screen frame
+        # Left side frame
         frame_left = tk.Frame(self, bg="#453354")
         column_left_border = tk.Frame(frame_left, bg="white")
         self.column_left_frame = tk.Frame(frame_left, bg="#654e78")
         self.lblModelTypeTitle = tk.Label(self.column_left_frame)
-        # Page title gui
+        # Page Icon GUI
+        picCanvas = tk.Canvas(frame_left, width=200, height=200)
+        virusIcon = PhotoImage(file="assets/virus_icon.png")
+        picCanvas.create_image(20, 20, image=virusIcon)
+        # Page title GUI
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#654e78")
         lblTitle = tk.Label(titleBgInner, text="V-Sim:", bg="#654e78",font=("Courier", 30, "underline"),
@@ -32,6 +37,7 @@ class HomeInterface(tk.Frame):
         column_left_border.place(relheight=0.87, relwidth=1, x=0, y=118)
         self.column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
         self.lblModelTypeTitle.place(x=7, y=7)
+        picCanvas.place(x=0, y=0)
         lblTitle.place(x=5, y=2)
         lblTitle2.place(x=5, y=50)
         titleBgBorder.place(x=82, y=23, height="100", width="635")
