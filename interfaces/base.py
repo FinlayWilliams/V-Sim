@@ -184,6 +184,12 @@ class BaseApp(tk.Tk):
         self.models.append(SIS("SIS: Default Model",
                             10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
 
+    def addDefaultSIRModel(self):
+        self.models.append(SIR("SIR: Default Model", 10000, 0.99, 0.01, 0.3, 0.03, 365))
+
+    def addDefaultSEIRModel(self):
+        self.models.append(SEIR("SEIR: Default Model", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
+
     def removeModel(self, index): self.models.remove(self.models[index])
 
     def overwriteModel(self, index, model): self.models[index] = model
