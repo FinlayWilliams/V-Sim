@@ -4,6 +4,22 @@ from interfaces.base import BaseApp
 theApplication = BaseApp()
 theApplication.mainloop()
 
+# from models.seir import SEIR
+# import numpy as np
+# from matplotlib import pyplot as plt
+#
+# model = SEIR("Jeff", 10000, 0.99, 0.01, 0.8, 0.01, 0.03, 0.03, 300)
+#
+# s1, e1, i1, r1 = model.runModel()
+# t1 = np.linspace(0, model.Timesteps, 101)
+#
+# plt.plot(t1, s1, "#2ca02c", label="Susceptible")
+# plt.plot(t1, e1, "#2ca02c", label="Susceptible")
+# plt.plot(t1, i1, "#9467bd", label="Infected")
+# plt.plot(t1, r1, "#1f77b4", label="Recovered")
+#
+# plt.show()
+
 # from models.sis import SIS
 # import numpy as np
 # from matplotlib import pyplot as plt

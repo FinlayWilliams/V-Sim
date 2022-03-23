@@ -4,8 +4,15 @@ from .home import HomeInterface
 from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
 from .sisinspect import SISInspectInterface
+from .sircompare import SIRCompareInterface
+from .sircontrol import SIRControlInterface
+from .sirinspect import SIRInspectInterface
+from .seircompare import SEIRCompareInterface
+from .seircontrol import SEIRControlInterface
+from .seirinspect import SEIRInspectInterface
 from models.sis import SIS
 from models.sir import SIR
+from models.seir import SEIR
 
 
 class BaseApp(tk.Tk):
@@ -33,6 +40,10 @@ class BaseApp(tk.Tk):
         self.models.append(SIS("SIS: Example Model B",
                                10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
                                0.75, 14))
+        self.models.append(SIR("SIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 365))
+        self.models.append(SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 365))
+        self.models.append(SEIR("SEIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
+        self.models.append(SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 0.03, 0.03,  365))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
 
@@ -43,12 +54,39 @@ class BaseApp(tk.Tk):
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
+
         sisInspectInterface = SISInspectInterface(master=base, controller=self)
         self.interfaces[SISInspectInterface.__name__] = sisInspectInterface
         sisControlInterface = SISControlInterface(master=base, controller=self)
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
         sisCompareInterface = SISCompareInterface(master=base, controller=self)
         self.interfaces[SISCompareInterface.__name__] = sisCompareInterface
+
+        # Model needs to be updated before each page is loaded or else errors
+        self.activeModelIndex = 2
+        self.activeModel = self.models[self.activeModelIndex]
+
+        sirInspectInterface = SIRInspectInterface(master=base, controller=self)
+        self.interfaces[SIRInspectInterface.__name__] = sirInspectInterface
+        sirControlInterface = SIRControlInterface(master=base, controller=self)
+        self.interfaces[SIRControlInterface.__name__] = sirControlInterface
+        sirCompareInterface = SIRCompareInterface(master=base, controller=self)
+        self.interfaces[SIRCompareInterface.__name__] = sirCompareInterface
+
+        # Model needs to be updated before each page is loaded or else errors
+        self.activeModelIndex = 4
+        self.activeModel = self.models[self.activeModelIndex]
+
+        seirInspectInterface = SEIRInspectInterface(master=base, controller=self)
+        self.interfaces[SEIRInspectInterface.__name__] = seirInspectInterface
+        seirControlInterface = SEIRControlInterface(master=base, controller=self)
+        self.interfaces[SEIRControlInterface.__name__] = seirControlInterface
+        seirCompareInterface = SEIRCompareInterface(master=base, controller=self)
+        self.interfaces[SEIRCompareInterface.__name__] = seirCompareInterface
+
+        # Model needs to be updated before each page is loaded or else errors
+        self.activeModelIndex = 0
+        self.activeModel = self.models[self.activeModelIndex]
 
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 

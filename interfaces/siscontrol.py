@@ -260,7 +260,7 @@ class SISControlInterface(tk.Frame):
             newActiveModel = sis.SIS(Name, N, S, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu,
                                        MSG, PWR, BTRY, RR, T)
 
-            self.lblIMatch.config(text="{:.0f}".format(I))
+            self.lblIMatch.config(text="{:.0f}".format(I*100))
 
             # if not self.checkValid(newActiveModel):
             #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
@@ -271,6 +271,15 @@ class SISControlInterface(tk.Frame):
             # delete what is below this and uncomment what is above
             print("Ir Death Rate: {}".format(newActiveModel.dthR))
             print("Ir Contact Rate: {}".format(newActiveModel.IrContactRate))
+            print("")
+            print("Il Death Rate: {}".format(newActiveModel.dthL))
+            print("Il Contact Rate: {}".format(newActiveModel.IlContactRate))
+            print("")
+            print("Ip Death Rate: {}".format(newActiveModel.dthP))
+            print("Ip Contact Rate: {}".format(newActiveModel.IpContactRate))
+            print("")
+            print("S Death Rate: {}".format(newActiveModel.dthB))
+            print("S Contact Rate: {}".format(newActiveModel.contactRate))
             print("")
 
             self.activeModel = newActiveModel
@@ -284,7 +293,7 @@ class SISControlInterface(tk.Frame):
 
         self.cmbN.set(self.activeModel.N)
         self.sclS.set(self.activeModel.percentS * 100)
-        self.lblIMatch.config(text="{}".format(self.activeModel.percentI * 100))
+        self.lblIMatch.config(text="{:.0f}".format(self.activeModel.percentI * 100))
         self.cmbWSN.set(self.activeModel.WSNnumber)
         self.cmbDEP.set(self.activeModel.deploymentArea)
         self.cmbTRNS.set(self.activeModel.transmissionRange)

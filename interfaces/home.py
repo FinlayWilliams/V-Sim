@@ -147,8 +147,8 @@ class HomeInterface(tk.Frame):
                 return "SIS"
             if modelPrefix[0] == "SIR":
                 return "SIR"
-            if modelPrefix[0] == "SIRD":
-                return "SIRD"
+            if modelPrefix[0] == "SEIR":
+                return "SEIR"
 
     # Method: called everytime a different entry in the listbox is selected, updating the controllers
     # (base windows) current active models and an index variable that is used when saving the models
@@ -171,12 +171,15 @@ class HomeInterface(tk.Frame):
                 if self.checkModelType(self.controller.activeModel) == "SIS":
                     self.controlInterfaceShow = "SISControlInterface"
                     self.inspectInterfaceShow = "SISInspectInterface"
+                    self.compareInterfaceShow = "SISCompareInterface"
                 if self.checkModelType(self.controller.activeModel) == "SIR":
                     self.controlInterfaceShow = "SIRControlInterface"
                     self.inspectInterfaceShow = "SIRInspectInterface"
-                if self.checkModelType(self.controller.activeModel) == "SIRD":
-                    self.controlInterfaceShow = "SIRDControlInterface"
-                    self.inspectInterfaceShow = "SIRDInspectInterface"
+                    self.compareInterfaceShow = "SIRCompareInterface"
+                if self.checkModelType(self.controller.activeModel) == "SEIR":
+                    self.controlInterfaceShow = "SEIRControlInterface"
+                    self.inspectInterfaceShow = "SEIRInspectInterface"
+                    self.compareInterfaceShow = "SEIRCompareInterface"
 
     # Method: Called to update the compare models selection
     def updateCompareModel(self, controller, stub):
@@ -351,17 +354,57 @@ class HomeInterface(tk.Frame):
             lbl_Title = tk.Label(self.column_left_frame, text="SIR Model Starting Condition Variables :", font=("Arial", 14),
                                  bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
+            lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_N_Desc = tk.Label(infoFrame, text=" The starting population count", font=("Arial", 10),
+                                  bg="#654e78")
+            lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
+                                                  "a percentage of N (default is 99%).",
+                                  font=("Arial", 10), bg="#654e78")
+            lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
+                                                  "configured by changing the", font=("Arial", 10), bg="#654e78")
+            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.",
+                                   font=("Arial", 10),
+                                   bg="#654e78")
+            lbl_Beta_Title = tk.Label(infoFrame, text="Beta", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_Beta_Desc = tk.Label(infoFrame, text=" I do not know ", font=("Arial", 10), bg="#654e78")
+            lbl_Beta_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
+            lbl_Gamma_Title = tk.Label(infoFrame, text="Gamma", font=("Arial", 10, "bold"), bg="#654e78",
+                                     fg="white")
+            lbl_Gamma_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
+            lbl_Gamma_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
+            lbl_Timesteps_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+            lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ", font=("Arial", 10), bg="#654e78")
 
             # Placing all information labels
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_Title.pack(pady=7)
+            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
+            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
 
-        if self.checkModelType(self.controller.activeModel) == "SIRD":
-            # This outputs the SIRD models information
+            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
+            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
+
+            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
+            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
+            lbl_I_Desc2.grid(row=3, column=1, sticky="w")
+
+            lbl_Beta_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
+            lbl_Beta_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
+            lbl_Beta_Desc2.grid(row=6, column=1, sticky="w")
+
+            lbl_Gamma_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
+            lbl_Gamma_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
+            lbl_Gamma_Desc2.grid(row=8, column=1, sticky="w")
+
+            lbl_Timesteps_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
+            lbl_Timesteps_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
+
+        if self.checkModelType(self.controller.activeModel) == "SEIR":
+            # This outputs the SEIR models information
             # Instantiating the information labels
-            lbl_Title = tk.Label(self.column_left_frame, text="SIRD Model Starting Condition Variables :",
-                                 font=("Arial", 14),
-                                 bg="#654e78")
+            lbl_Title = tk.Label(self.column_left_frame, text="SEIR Model Starting Condition Variables :", font=("Arial", 14), bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
 
             # Placing all information labels
