@@ -132,12 +132,12 @@ class SEIRCompareInterface(tk.Frame):
 
         # Plotting the first graph
         self.axLeft[0].plot(T1, S1, "#2ca02c", label="Susceptible")
-        self.axLeft[0].plot(T1, S1, "#2ca02c", label="Exposed")
+        self.axLeft[0].plot(T1, E1, "#2ca02c", label="Exposed")
         self.axLeft[0].plot(T1, I1, "#d62728", label="Infected")
         self.axLeft[0].plot(T1, R1, "#1f77b4", label="Recovered")
         self.axLeft[0].set_xlabel("Timesteps (Days)")
         self.axLeft[0].set_ylabel("Population Count")
-        self.axLeft[0].set_title("Population Sizes Over Time - S, I, R")
+        self.axLeft[0].set_title("Population Sizes Over Time - S, E, I, R")
         # Plotting the second graph
         pop = [S1[len(S1) - 1], E1[len(I1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
         explode = (0.1, 0, 0, 0)
@@ -159,12 +159,12 @@ class SEIRCompareInterface(tk.Frame):
 
         # Plotting the first graph
         self.axRight[0].plot(T1, S1, "#2ca02c", label="Susceptible")
-        self.axRight[0].plot(T1, S1, "#2ca02c", label="Exposed")
+        self.axRight[0].plot(T1, E1, "#2ca02c", label="Exposed")
         self.axRight[0].plot(T1, I1, "#d62728", label="Infected")
         self.axRight[0].plot(T1, R1, "#1f77b4", label="Recovered")
         self.axRight[0].set_xlabel("Timesteps (Days)")
         self.axRight[0].set_ylabel("Population Count")
-        self.axRight[0].set_title("Population Sizes Over Time - S, I, R")
+        self.axRight[0].set_title("Population Sizes Over Time - S, E, I, R")
         # Plotting the second graph
         pop = [S1[len(S1) - 1], E1[len(I1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
         explode = (0.1, 0, 0, 0)
@@ -179,4 +179,5 @@ class SEIRCompareInterface(tk.Frame):
 
     # Called on page opening to set the correct information
     def updateColumnInfo(self):
-        pass
+        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeModel.Name[5:]))
+        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareModel.Name[5:]))

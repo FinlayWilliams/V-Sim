@@ -21,9 +21,9 @@ class HomeInterface(tk.Frame):
         self.column_left_frame = tk.Frame(frame_left, bg="#654e78")
         self.lblModelTypeTitle = tk.Label(self.column_left_frame)
         # Page Icon GUI
-        picCanvas = tk.Canvas(frame_left, width=200, height=200)
-        virusIcon = PhotoImage(file="assets/virus_icon.png")
-        picCanvas.create_image(20, 20, image=virusIcon)
+        picCanvas = tk.Canvas(frame_left, width=65, height=65)
+        self.virusIcon = ImageTk.PhotoImage(Image.open("assets/virus_icon.png"))
+        picCanvas.create_image(34, 34, image=self.virusIcon)
         # Page title GUI
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#654e78")
@@ -37,7 +37,7 @@ class HomeInterface(tk.Frame):
         column_left_border.place(relheight=0.87, relwidth=1, x=0, y=118)
         self.column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
         self.lblModelTypeTitle.place(x=7, y=7)
-        picCanvas.place(x=0, y=0)
+        picCanvas.place(x=6, y=33)
         lblTitle.place(x=5, y=2)
         lblTitle2.place(x=5, y=50)
         titleBgBorder.place(x=82, y=23, height="100", width="635")
@@ -83,7 +83,7 @@ class HomeInterface(tk.Frame):
                                           bg="#a8a8a8", font=("Arial", 12))
         self.lstCompareModels = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
-        self.updateCompareModelList()
+        self.updateCompareModelList(controller)
         self.lstCompareModels.bind("<<ListboxSelect>>", lambda x: [self.updateCompareModel(controller, 1)])
         self.lstCompareModels.config()
 
@@ -118,16 +118,17 @@ class HomeInterface(tk.Frame):
             self.lstModels.insert(END, M)
 
     # Method: This method populates the compare box with models of the same virus models type
-    def updateCompareModelList(self):
+    def updateCompareModelList(self, controller):
         self.lstCompareModels.delete(0, END)
         self.newCompareModelList = []
 
-        for M in self.controller.models:
-            if self.checkModelType(self.controller.activeModel) == self.checkModelType(M):
-                if self.controller.activeModel != M:
+        for M in controller.models:
+            if controller.activeModel != M:
+                if self.checkModelType(controller.activeModel) == self.checkModelType(M):
                     self.newCompareModelList.append(M)
         for M in self.newCompareModelList:
             self.lstCompareModels.insert(END, M)
+
 
     # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
     def deleteSelectedModel(self, controller, stub):
@@ -138,19 +139,28 @@ class HomeInterface(tk.Frame):
                 controller.setActiveModel(0)
                 controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
                 self.updateModelList()
-                self.updateCompareModelList()
+                self.updateCompareModelList(controller)
                 self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
 
     # Method: checks to see what type of virus models is currently selected, used in a range of other GUI updates
     def checkModelType(self, model):
-        if self.lstModels.curselection() != ():
-            modelPrefix = model.Name.partition(":")
-            if modelPrefix[0] == "SIS":
-                return "SIS"
-            if modelPrefix[0] == "SIR":
-                return "SIR"
-            if modelPrefix[0] == "SEIR":
-                return "SEIR"
+        # Delete this if nothing breaks
+        # if self.lstModels.curselection() != ():
+        #     modelPrefix = model.Name.partition(":")
+        #     if modelPrefix[0] == "SIS":
+        #         return "SIS"
+        #     if modelPrefix[0] == "SIR":
+        #         return "SIR"
+        #     if modelPrefix[0] == "SEIR":
+        #         return "SEIR"
+
+        modelPrefix = model.Name.partition(":")
+        if modelPrefix[0] == "SIS":
+            return "SIS"
+        if modelPrefix[0] == "SIR":
+            return "SIR"
+        if modelPrefix[0] == "SEIR":
+            return "SEIR"
 
     # Called everytime listbox is updated & other GUI updates, updates a range of variables and indexes
     def updateActiveModel(self, controller, stub):
@@ -161,7 +171,7 @@ class HomeInterface(tk.Frame):
             controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
             self.controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
 
-            self.updateCompareModelList()
+            self.updateCompareModelList(controller)
             self.updateCompareModel(controller, 1)
 
             # Updates the buttons for switching pages based on selected model type

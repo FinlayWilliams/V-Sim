@@ -105,7 +105,8 @@ class BaseApp(tk.Tk):
         if show == "HomeInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateModelList()
-            self.interfaces[show].updateCompareModelList()
+            self.interfaces[show].updateCompareModelList(self)
+            print(self.activeModel)
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
