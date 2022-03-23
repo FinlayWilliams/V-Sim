@@ -92,7 +92,6 @@ class HomeInterface(tk.Frame):
                                 command=lambda: [controller.display("HomeInterface", self.compareInterfaceShow)])
 
         ####################################### Placing RIGHT-side elements ############################################
-
         frame_right.place(x=717, y=0, height="864", width="819")
         column_right_frame.place(relheight=1, relwidth=0.7, x=135)
         lbl_model_list.place(x=218, y=40)
@@ -128,7 +127,6 @@ class HomeInterface(tk.Frame):
                     self.newCompareModelList.append(M)
         for M in self.newCompareModelList:
             self.lstCompareModels.insert(END, M)
-
 
     # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
     def deleteSelectedModel(self, controller, stub):
