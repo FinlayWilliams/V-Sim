@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from .home import HomeInterface
 from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
@@ -16,8 +15,7 @@ from models.seir import SEIR
 
 
 class BaseApp(tk.Tk):
-    # Initialising the base tk.Tk class and overarching container
-    # (setting default sizes, default models, all interfaces)
+    # Initialising base tk.Tk class and overarching container (setting default sizes, default models, all interfaces)
     def __init__(self):
         super().__init__()
         self.title("V-Sim")
@@ -33,69 +31,59 @@ class BaseApp(tk.Tk):
         base = tk.Frame(self, background="#453354")
         base.pack(side="top", fill="both", expand=True)
 
-        # Initialising a models list and a default models
+        # Initialising a models list and all default models
         self.models = []
-        self.models.append(SIS("SIS: Example Model A",
-                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIS("SIS: Example Model B",
-                               10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
-                               0.75, 14))
+        self.models.append(SIS("SIS: Example Model A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+                               0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.models.append(SIS("SIS: Example Model B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006,
+                               0.00009, 50, 0.75, 864000, 0.75, 14))
         self.models.append(SIR("SIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 365))
         self.models.append(SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 365))
         self.models.append(SEIR("SEIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
         self.models.append(SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 0.03, 0.03,  365))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
-
-        self.compareModel = SIS("SIS: Comparison Model",
-                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
+        self.compareModel = SIS("SIS: Comparison Model", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+                                0.00009, 50, 0.75, 864000, 0.75, 14)
 
         # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
         homeInterface = HomeInterface(master=base, controller=self)
         self.interfaces[HomeInterface.__name__] = homeInterface
-
         sisInspectInterface = SISInspectInterface(master=base, controller=self)
         self.interfaces[SISInspectInterface.__name__] = sisInspectInterface
         sisControlInterface = SISControlInterface(master=base, controller=self)
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
         sisCompareInterface = SISCompareInterface(master=base, controller=self)
         self.interfaces[SISCompareInterface.__name__] = sisCompareInterface
-
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 2
         self.activeModel = self.models[self.activeModelIndex]
         self.compareModel = SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.5, 0.02, 365)
-
         sirInspectInterface = SIRInspectInterface(master=base, controller=self)
         self.interfaces[SIRInspectInterface.__name__] = sirInspectInterface
         sirControlInterface = SIRControlInterface(master=base, controller=self)
         self.interfaces[SIRControlInterface.__name__] = sirControlInterface
         sirCompareInterface = SIRCompareInterface(master=base, controller=self)
         self.interfaces[SIRCompareInterface.__name__] = sirCompareInterface
-
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 4
         self.activeModel = self.models[self.activeModelIndex]
         self.compareModel = SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.4, 0.01, 0.04, 0.04, 365)
-
         seirInspectInterface = SEIRInspectInterface(master=base, controller=self)
         self.interfaces[SEIRInspectInterface.__name__] = seirInspectInterface
         seirControlInterface = SEIRControlInterface(master=base, controller=self)
         self.interfaces[SEIRControlInterface.__name__] = seirControlInterface
         seirCompareInterface = SEIRCompareInterface(master=base, controller=self)
         self.interfaces[SEIRCompareInterface.__name__] = seirCompareInterface
-
         # Model needs to be reset before each page is loaded or else errors
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIS("SIS: Comparison Model",
-                                10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
-                                0.75, 14)
-
+        self.compareModel = SIS("SIS: Comparison Model", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+                                0.00009, 50, 0.75, 864000, 0.75, 14)
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
-    # A method to call from any interfaces to display a custom popup message box for any cause
+    # Callable from any interface to display a custom popup message box for any cause
     def popup(self, title, message):
         popup = tk.Tk()
         popup.wm_title(title)
@@ -111,15 +99,13 @@ class BaseApp(tk.Tk):
         popup.iconbitmap("assets/virus_icon.ico")
         popup.mainloop()
 
-    # A method created to display all interfaces from any interfaces
+    # Callable from any interface to switch to another, also calls other methods to set up the page
     def display(self, hide, show):
         self.interfaces[hide].pack_forget()
-
         if show == "HomeInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateModelList()
             self.interfaces[show].updateCompareModelList()
-
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
@@ -135,7 +121,6 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateLeftGraph()
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
-
         if show == "SIRInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
@@ -151,7 +136,6 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateLeftGraph()
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
-
         if show == "SEIRInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
@@ -168,13 +152,17 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
 
-    def setActiveModelIndex(self, index): self.activeModelIndex = index
-
     def setActiveModel(self, index): self.activeModel = self.models[index]
 
-    def setCompareModel(self, model): self.compareModel = model
+    def setActiveModelIndex(self, index): self.activeModelIndex = index
 
     def addModel(self, newModel): self.models.append(newModel)
+
+    def removeModel(self, index): self.models.remove(self.models[index])
+
+    def overwriteModel(self, index, model): self.models[index] = model
+
+    def setCompareModel(self, model): self.compareModel = model
 
     def addDefaultSISModel(self):
         # This is the original one you were using - if you go back to it, also consider changing the Sloc and Snhb back to fractions
@@ -189,7 +177,3 @@ class BaseApp(tk.Tk):
 
     def addDefaultSEIRModel(self):
         self.models.append(SEIR("SEIR: Default Model", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
-
-    def removeModel(self, index): self.models.remove(self.models[index])
-
-    def overwriteModel(self, index, model): self.models[index] = model

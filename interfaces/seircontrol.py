@@ -8,15 +8,12 @@ from models import seir
 
 
 class SEIRControlInterface(tk.Frame):
-    # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
         self.activeModel = controller.activeModel
 
         ####################################### Instantiating ALL elements ############################################
-
         # Upper area for displaying and models option buttons
         frameTop = tk.Frame(self, bg="#453354")
         # Button: Resets models config and refreshes graphs
@@ -85,7 +82,6 @@ class SEIRControlInterface(tk.Frame):
         self.sclT = tk.Scale(frameBot, from_=1, to=365, resolution=1, orient="horizontal")
 
         ####################################### Placing ALL elements ############################################
-
         ## Frame Top Half
         frameTop.place(relheight=0.70, relwidth=1)
         btnReturn.place(x=10, y=13)
@@ -99,11 +95,9 @@ class SEIRControlInterface(tk.Frame):
         lblLegend2.place(x=1243, y=260)
         lblLegend3.place(x=1243, y=293)
         lblLegend3.place(x=1243, y=326)
-
         ## Frame Mid
         frameMid.place(y=605, relheight=0.05, relwidth=1)
         lblOptions.pack()
-
         ## Frame Bottom Half
         frameBot.place(y=628, relheight=0.30, relwidth=1)
         # 1st Block
@@ -137,7 +131,7 @@ class SEIRControlInterface(tk.Frame):
         self.sclT.grid(row=4, column=8, padx=5, sticky="ew")
         self.sclT.bind("<ButtonRelease-1>", self.updateModel)
 
-        # Calling the method to allign the variables and populate all fields
+        # Calling the method to align the variables and populate all fields
         self.updateVariables(controller)
 
         # Setting up the canvas area for the graphs in frameTop
@@ -168,7 +162,7 @@ class SEIRControlInterface(tk.Frame):
 
         self.canvas.draw()
 
-    # Method: called when a value option is changed, to automatically update the active models parameters
+    # Called when a value option is changed, to automatically update the active models parameters
     def updateModel(self, Stub):
         if len(self.entryName.get()) == 0:
             self.controller.popup("Invalid Save", "Please enter a name for the models!")
@@ -192,7 +186,7 @@ class SEIRControlInterface(tk.Frame):
             self.activeModel = newActiveModel
             self.updateGraphs()
 
-    # Method: called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
+    # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct
     def updateVariables(self, controller):
         self.activeModel = controller.activeModel
@@ -209,7 +203,7 @@ class SEIRControlInterface(tk.Frame):
         self.entryName.insert(END, self.activeModel.Name[5:])
         self.sclT.set(self.activeModel.Timesteps)
 
-    # Method: Checks whether the models is saved or not before the user proceeds to the inspect screen and looses
+    # Checks whether the models is saved or not before the user proceeds to the inspect screen and looses
     # the current configuration
     def checkModelSaved(self, controller, stub):
         if self.activeModel != controller.activeModel:
@@ -217,7 +211,7 @@ class SEIRControlInterface(tk.Frame):
         else:
             controller.display("SEIRControlInterface", "SEIRInspectInterface")
 
-    # Method: checks if the current configuration is valid by checking no population size dips below zero
+    # Checks if the current configuration is valid by checking no population size dips below zero
     def checkValid(self, newActiveModel):
         S1, E1, I1, R1 = newActiveModel.runModel()
         populations = [S1, I1, R1]

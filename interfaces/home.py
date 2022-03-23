@@ -4,19 +4,16 @@ from tkinter import *
 
 class HomeInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interfaces
+    # it also creates and places all widgets for this interfaces. This is the same for each interface class
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-
         self.newCompareModelList = []
-
         # Variables used to switch interfaces set to a default option
         self.controlInterfaceShow = "SISControlInterface"
         self.inspectInterfaceShow = "SISInspectInterface"
 
         ##################################### Instantiating LEFT-side elements #########################################
-
         # Left side of the screen frame
         frame_left = tk.Frame(self, bg="#453354")
         column_left_border = tk.Frame(frame_left, bg="white")
@@ -31,7 +28,6 @@ class HomeInterface(tk.Frame):
                              font=("Courier", 20), fg="white")
 
         ####################################### Placing LEFT-side elements #############################################
-
         frame_left.place(x=0, y=0, height="864", width="718")
         column_left_border.place(relheight=0.87, relwidth=1, x=0, y=118)
         self.column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
@@ -42,18 +38,16 @@ class HomeInterface(tk.Frame):
         titleBgInner.place(x=87, y=28, height="90", width="625")
 
         ##################################### Instantiating RIGHT-side elements ########################################
-
         frame_right = tk.Frame(self, bg="#453354")
         column_right_frame = tk.Frame(frame_right, bg="#a8a8a8")
 
+        # Creating the listbox where the list of all saved models will appear
         lbl_model_list = tk.Label(frame_right, text="Select an Active Model to Begin ... ",
                                   bg="#a8a8a8", font=("Arial", 12))
-        # Creating the listbox where the list of all saved models will appear
         self.lstModels = tk.Listbox(frame_right, height=12, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
         self.updateModelList()
-        self.lstModels.bind("<<ListboxSelect>>",
-                            lambda x: [self.updateActiveModel(controller, 1)])
+        self.lstModels.bind("<<ListboxSelect>>", lambda x: [self.updateActiveModel(controller, 1)])
 
         # Button: opens control page with the current active models
         btn_Configure = tk.Button(frame_right, width=17, text="Configure Model",
@@ -77,15 +71,14 @@ class HomeInterface(tk.Frame):
                                 command=lambda:[controller.addDefaultSEIRModel(), self.updateModelList(),
                                                 self.updateCompareModelList()])
 
+        # Creating a second listbox of all models to for comparison
         lbl_compare_model_list = tk.Label(frame_right,
                                           text="Select a Model to Compare Against the Active Model ... ",
                                           bg="#a8a8a8", font=("Arial", 12))
-        # Creating a second listbox of all models to for comparison
         self.lstCompareModels = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
         self.updateCompareModelList()
-        self.lstCompareModels.bind("<<ListboxSelect>>",
-                            lambda x: [self.updateCompareModel(controller, 1)])
+        self.lstCompareModels.bind("<<ListboxSelect>>", lambda x: [self.updateCompareModel(controller, 1)])
         self.lstCompareModels.config()
 
         # Button: Deletes selected models from models list
@@ -96,18 +89,15 @@ class HomeInterface(tk.Frame):
 
         frame_right.place(x=717, y=0, height="864", width="819")
         column_right_frame.place(relheight=1, relwidth=0.7, x=135)
-
         lbl_model_list.place(x=218, y=40)
         self.lstModels.place(x=220, y=70)
         self.lstModels.select_set(0)
-
         btn_Inspect.place(x=220, y=382)
         btn_Configure.place(x=358, y=382)
         btn_Delete.place(x=496, y=382)
         btn_New_SIS.place(x=220, y=416)
         btn_New_SIR.place(x=358, y=416)
         btn_New_SEIR.place(x=496, y=416)
-
         lbl_compare_model_list.place(x=218, y=470)
         self.lstCompareModels.place(x=220, y=500)
         self.btn_Compare.place(x=220, y=760)
@@ -124,14 +114,12 @@ class HomeInterface(tk.Frame):
     # Method: This method populates the compare box with models of the same virus models type
     def updateCompareModelList(self):
         self.lstCompareModels.delete(0, END)
-
         self.newCompareModelList = []
 
         for M in self.controller.models:
             if self.checkModelType(self.controller.activeModel) == self.checkModelType(M):
                 if self.controller.activeModel != M:
                     self.newCompareModelList.append(M)
-
         for M in self.newCompareModelList:
             self.lstCompareModels.insert(END, M)
 
@@ -141,7 +129,6 @@ class HomeInterface(tk.Frame):
             self.controller.popup("Invalid Delete", "There is Only One Model Left!")
         else:
             if self.lstModels.curselection() != ():
-
                 controller.setActiveModel(0)
                 controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
                 self.updateModelList()
@@ -152,7 +139,6 @@ class HomeInterface(tk.Frame):
     def checkModelType(self, model):
         if self.lstModels.curselection() != ():
             modelPrefix = model.Name.partition(":")
-
             if modelPrefix[0] == "SIS":
                 return "SIS"
             if modelPrefix[0] == "SIR":
@@ -160,13 +146,10 @@ class HomeInterface(tk.Frame):
             if modelPrefix[0] == "SEIR":
                 return "SEIR"
 
-    # Method: called everytime a different entry in the listbox is selected, updating the controllers
-    # (base windows) current active models and an index variable that is used when saving the models
-    # also calls other methods that update the GUI and validate the models type
+    # Called everytime listbox is updated & other GUI updates, updates a range of variables and indexes
     def updateActiveModel(self, controller, stub):
         if self.lstModels.curselection() != ():
-            # Long prefixes to take the listbox index and obtain a single integer to be used to
-            # index with the controller
+            # Long prefixes = obtaining listbox idx and reformatting
             oldActive = controller.activeModel
             controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
             controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
@@ -175,9 +158,9 @@ class HomeInterface(tk.Frame):
             self.updateCompareModelList()
             self.updateCompareModel(controller, 1)
 
+            # Updates the buttons for switching pages based on selected model type
             if self.checkModelType(controller.activeModel) != self.checkModelType(oldActive):
                 self.setModelInfoBox()
-
                 if self.checkModelType(self.controller.activeModel) == "SIS":
                     self.controlInterfaceShow = "SISControlInterface"
                     self.inspectInterfaceShow = "SISInspectInterface"
@@ -191,7 +174,7 @@ class HomeInterface(tk.Frame):
                     self.inspectInterfaceShow = "SEIRInspectInterface"
                     self.compareInterfaceShow = "SEIRCompareInterface"
 
-    # Method: Called to update the compare models selection
+    # Called to update the compare models selection
     def updateCompareModel(self, controller, stub):
         if self.lstCompareModels.curselection() == ():
             self.btn_Compare.config(state="disabled")
@@ -199,16 +182,15 @@ class HomeInterface(tk.Frame):
             self.btn_Compare.config(state="active")
             controller.setCompareModel(self.newCompareModelList[int(''.join(map(str, self.lstCompareModels.curselection())))])
 
-    # Method: Called whenever a models is selected to display the correct models information box
+    # Called whenever a models is selected to display the correct models information box
     def setModelInfoBox(self):
         if self.checkModelType(self.controller.activeModel) == "SIS":
-            # This outputs the SIS models Information
-            # Instantiating the information labels
             self.lblModelTypeTitle.config(text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"),
                                           bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
             lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10), bg="#654e78")
+            lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10),
+                                  bg="#654e78")
             lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
                                                   "a percentage of N (default is 99%).",
@@ -216,8 +198,8 @@ class HomeInterface(tk.Frame):
             lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
                                                   "configured by changing the", font=("Arial", 10), bg="#654e78")
-            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial", 10),
-                                   bg="#654e78")
+            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial",
+                                                                                                    10),bg="#654e78")
             lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
             lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
                                                     "hypothetical ", font=("Arial", 10), bg="#654e78")
@@ -294,72 +276,53 @@ class HomeInterface(tk.Frame):
             lbl_T_Desc = tk.Label(infoFrame, text=" The number of days to observe the simulation.", font=("Arial", 10),
                                   bg="#654e78")
 
-            # Placing all information labels
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
             lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-
             lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
             lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-
             lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3,0))
             lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3,0))
             lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-
             lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3,0))
             lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3,0))
             lbl_WSN_Desc2.grid(row=6, column=1, sticky="w")
-
             lbl_DEP_Title.grid(row=7, column=0, sticky="e", pady=(3,0))
             lbl_DEP_Desc.grid(row=7, column=1, sticky="w", pady=(3,0))
             lbl_DEP_Desc2.grid(row=8, column=1, sticky="w")
-
             lbl_TRNS_Title.grid(row=9, column=0, sticky="e", pady=(3,0))
             lbl_TRNS_Desc.grid(row=9, column=1, sticky="w", pady=(3,0))
             lbl_TRNS_Desc2.grid(row=10, column=1, sticky="w")
-
             lbl_CNTCT_Title.grid(row=11, column=0, sticky="e", pady=(3,0))
             lbl_CNTCT_Desc.grid(row=11, column=1, sticky="w", pady=(3,0))
             lbl_CNTCT_Desc2.grid(row=12, column=1, sticky="w")
-
             lbl_SCAN_Title.grid(row=13, column=0, sticky="e", pady=(3,0))
             lbl_SCAN_Desc.grid(row=13, column=1, sticky="w", pady=(3,0))
             lbl_SCAN_Desc2.grid(row=14, column=1, sticky="w")
-
             lbl_PTrns_Title.grid(row=14, column=0, sticky="e", pady=3)
             lbl_PTrns_Desc.grid(row=14, column=1, sticky="w", pady=3)
-
             lbl_IrPsu_Title.grid(row=15, column=0, sticky="e", pady=3)
             lbl_IrPsu_Desc.grid(row=15, column=1, sticky="w", pady=3)
-
             lbl_IlPsu_Title.grid(row=16, column=0, sticky="e", pady=3)
             lbl_IlPsu_Desc.grid(row=16, column=1, sticky="w", pady=3)
-
             lbl_IpPsu_Title.grid(row=17, column=0, sticky="e", pady=3)
             lbl_IpPsu_Desc.grid(row=17, column=1, sticky="w", pady=3)
-
             lbl_MSG_Title.grid(row=18, column=0, sticky="e", pady=(3,0))
             lbl_MSG_Desc.grid(row=18, column=1, sticky="w", pady=(3,0))
             lbl_MSG_Desc2.grid(row=19, column=1, sticky="w")
-
             lbl_PWR_Title.grid(row=20, column=0, sticky="e", pady=(3,0))
             lbl_PWR_Desc.grid(row=20, column=1, sticky="w", pady=(3,0))
             lbl_PWR_Desc2.grid(row=21, column=1, sticky="w")
-
             lbl_BTRY_Title.grid(row=22, column=0, sticky="e", pady=(3,0))
             lbl_BTRY_Desc.grid(row=22, column=1, sticky="w", pady=(3,0))
             lbl_BTRY_Desc2.grid(row=23, column=1, sticky="w")
-
             lbl_RR_Title.grid(row=24, column=0, sticky="e", pady=(3,0))
             lbl_RR_Desc.grid(row=24, column=1, sticky="w", pady=(3,0))
             lbl_RR_Desc2.grid(row=25, column=1, sticky="w")
-
             lbl_T_Title.grid(row=26, column=0, sticky="e", pady=3)
             lbl_T_Desc.grid(row=26, column=1, sticky="w", pady=3)
 
         if self.checkModelType(self.controller.activeModel) == "SIR":
-            # This outputs the SIR models information
-            # Instantiating the information labels
             self.lblModelTypeTitle.config(text="SIR Model Starting Condition Variables :", font=("Arial", 14, "italic"),
                                           bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
@@ -383,35 +346,29 @@ class HomeInterface(tk.Frame):
                                      fg="white")
             lbl_Gamma_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
             lbl_Gamma_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Timesteps_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ", font=("Arial", 10), bg="#654e78")
+            lbl_Timesteps_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78",
+                                           fg="white")
+            lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ",
+                                          font=("Arial", 10), bg="#654e78")
 
-            # Placing all information labels
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
             lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-
             lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
             lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-
             lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
             lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
             lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-
             lbl_Beta_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
             lbl_Beta_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
             lbl_Beta_Desc2.grid(row=6, column=1, sticky="w")
-
             lbl_Gamma_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
             lbl_Gamma_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
             lbl_Gamma_Desc2.grid(row=8, column=1, sticky="w")
-
             lbl_Timesteps_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
             lbl_Timesteps_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
 
         if self.checkModelType(self.controller.activeModel) == "SEIR":
-            # This outputs the SEIR models information
-            # Instantiating the information labels
             self.lblModelTypeTitle.config(text="SEIR Model Starting Condition Variables :", font=("Arial", 14, "italic"),
                                           bg="#654e78")
             infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
@@ -448,33 +405,25 @@ class HomeInterface(tk.Frame):
             lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ",
                                           font=("Arial", 10), bg="#654e78")
 
-            # Placing all information labels
             infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
             lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
             lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-
             lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
             lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-
             lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
             lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
             lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-
             lbl_Beta_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
             lbl_Beta_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
             lbl_Beta_Desc2.grid(row=6, column=1, sticky="w")
-
             lbl_Gamma_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
             lbl_Gamma_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
             lbl_Gamma_Desc2.grid(row=8, column=1, sticky="w")
-
             lbl_Mu_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
             lbl_Mu_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
             lbl_Mu_Desc2.grid(row=10, column=1, sticky="w")
-
             lbl_Alpha_Title.grid(row=11, column=0, sticky="e", pady=(3, 0))
             lbl_Alpha_Desc.grid(row=11, column=1, sticky="w", pady=(3, 0))
             lbl_Alpha_Desc2.grid(row=12, column=1, sticky="w")
-
             lbl_Timesteps_Title.grid(row=13, column=0, sticky="e", pady=(3, 0))
             lbl_Timesteps_Desc.grid(row=13, column=1, sticky="w", pady=(3, 0))

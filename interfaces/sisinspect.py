@@ -6,15 +6,12 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 class SISInspectInterface(tk.Frame):
-    # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
         self.index = 0
 
         #################################### Instantiating Information Frame ########################################
-
         # These are the basic controls of this page alling the user to navigate
         mainFrame = tk.Frame(self, bg="#574b59")
         controlBar = tk.Frame(mainFrame, bg="#453354")
@@ -58,7 +55,6 @@ class SISInspectInterface(tk.Frame):
                               text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
 
         ####################################### Placing Information Frame ###########################################
-
         mainFrame.place(relheight=1, relwidth=0.6)
         controlBar.place(relheight=0.087, relwidth=1)
         btnReturn.place(x=21, y=21)
@@ -70,9 +66,7 @@ class SISInspectInterface(tk.Frame):
         btnInfectionRates.place(x=511, y=87)
         btnDeathRates.place(x=626, y=87)
         btnMiscellaneous.place(x=741, y=87)
-
         self.informationFrame.place(x=14, y=124, relheight=0.83, relwidth=0.97)
-
         lblLegend1.place(x=0, y=837)
         lblLegend2.place(x=172, y=837)
         lblLegend3.place(x=353, y=837)
@@ -80,7 +74,6 @@ class SISInspectInterface(tk.Frame):
         lblLegend5.place(x=731, y=837)
 
         ########################################## Instantiating Graphs #############################################
-
         graphFrame = tk.Frame(self, bg="#453354")
         self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="Assessment Overview", font=("Arial", 14, "italic"), fg="white")
         btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
@@ -97,14 +90,13 @@ class SISInspectInterface(tk.Frame):
         figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
 
         ############################################# Placing Graphs ################################################
-
         graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
         self.lblGraphTitle.pack(ipady=21)
         btnConfigure.place(x=541, y=21)
         graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
         self.updateGraphs()
 
-    # Method: Updates the on-screen graphs
+    # Updates the on-screen graphs
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -141,53 +133,46 @@ class SISInspectInterface(tk.Frame):
 
         self.canvas.draw()
 
-    # Method: Called each time the page is set to display the assessment of the current models
+    # Called each time the page is set to display the assessment of the current models
     # also provides the functionality to switch between the frames
     def switchInfoFrame(self, index, stub):
         if index == 0:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 0
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Assessment Overview")
         if index == 1:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 1
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Population")
         if index == 2:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 2
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Physical Size")
         if index == 3:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 3
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Neighbour Sets")
         if index == 4:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 4
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Infection Rates")
         if index == 5:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 5
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Death Rates")
         if index == 6:
-            #self.frames[index].destroy()
             self.frames[self.index].pack_forget()
             self.index = 6
             self.frames[index].pack(fill="both", expand=1)
             self.lblControl.config(text="Miscellaneous")
 
-    # Method: Populates all of the information frames, ready to be deployed, the bulk of content on this page
+    # Populates all of the information frames, ready to be deployed, the bulk of content on this page
     def populateFrames(self):
         # This loop ensures the frames are destroyed and reconstructed with correct information when the frame is opened
         if self.frames:

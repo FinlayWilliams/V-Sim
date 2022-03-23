@@ -6,45 +6,42 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 class SISCompareInterface(tk.Frame):
-    # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
-    # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
         self.setModels(controller)
 
+        ###################################### Instantiating MIDDLE elements ###########################################
         titleFrame = tk.Frame(self, bg="#453354")
-        lblTitle = tk.Label(titleFrame, bg="#453354", text="SIS Virus Model Comparison", font=("Arial", 15, "italic"), fg="white")
+        lblTitle = tk.Label(titleFrame, bg="#453354", text="SIS Virus Model Comparison", font=("Arial", 15, "italic"),
+                            fg="white")
         btnReturn = tk.Button(titleFrame, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: controller.display("SISCompareInterface", "HomeInterface"))
         nameFrame = tk.Frame(self, bg="#574b59")
+
+        legendFrame = tk.Frame(nameFrame, bg="#574b59")
+        lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#574b59", font=("Arial", 9, "bold"))
+        lblGEx = tk.Label(legendFrame, text=" Indicates a Lower & Better Score", bg="#574b59", fg="white",
+                          font=("Arial", 8))
+        lblO = tk.Label(legendFrame, text="Orange", fg="#e68f39", bg="#574b59", font=("Arial", 9, "bold"))
+        lblOEx = tk.Label(legendFrame, text="Indicates an Identical Score", bg="#574b59", fg="white", font=("Arial", 8))
+        lblR = tk.Label(legendFrame, text="Red", fg="#d12c3f", bg="#574b59", font=("Arial", 9, "bold"))
+        lblREx = tk.Label(legendFrame, text="Indicates a Higher & Worse Score", bg="#574b59", fg="white",
+                          font=("Arial", 8))
+
+        self.informationFrame = tk.Frame(self, bg="#e0e0e0")
+
+        ##################################### Instantiating LEFT-side elements #########################################
         self.lblLeftName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
         self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
         btnConfigureLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
                                      command=lambda: controller.display("SISCompareInterface", "SISControlInterface"))
         btnInspectLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
-                                     command=lambda: controller.display("SISCompareInterface", "SISInspectInterface"))
-        self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
-        self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
-        btnConfigureRight = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
-                                     command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SISCompareInterface", "SISControlInterface")])
-        btnInspectRight = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
-                                      command=lambda: [self.setNewActivePlusIndex(controller),
-                                                       controller.display("SISCompareInterface",
-                                                                          "SISInspectInterface")])
-        legendFrame = tk.Frame(nameFrame, bg="#574b59")
-        lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#574b59", font=("Arial", 9, "bold"))
-        lblGEx = tk.Label(legendFrame, text=" Indicates a Lower & Better Score", bg="#574b59", fg="white", font=("Arial", 8))
-        lblO = tk.Label(legendFrame, text="Orange", fg="#e68f39", bg="#574b59", font=("Arial", 9, "bold"))
-        lblOEx = tk.Label(legendFrame, text="Indicates an Identical Score", bg="#574b59", fg="white", font=("Arial", 8))
-        lblR = tk.Label(legendFrame, text="Red", fg="#d12c3f", bg="#574b59", font=("Arial", 9, "bold"))
-        lblREx = tk.Label(legendFrame, text="Indicates a Higher & Worse Score", bg="#574b59", fg="white", font=("Arial", 8))
+                                   command=lambda: controller.display("SISCompareInterface", "SISInspectInterface"))
+
         leftFrame = tk.Frame(self, bg="#453354")
         leftGraphFrame = tk.Frame(leftFrame, bg="#654e78")
-        rightFrame = tk.Frame(self, bg="#453354")
-        rightGraphFrame = tk.Frame(rightFrame, bg="#654e78")
-        self.informationFrame = tk.Frame(self, bg="#e0e0e0")
 
         figureLeft = plt.figure(facecolor="#654e78")
         self.canvasLeft = FigureCanvasTkAgg(figureLeft, leftGraphFrame)
@@ -55,6 +52,21 @@ class SISCompareInterface(tk.Frame):
         figureLeft.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
         self.updateLeftGraph()
 
+        ##################################### Instantiating RIGHT-side elements ########################################
+        self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
+        self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
+        btnConfigureRight = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+                                      command=lambda: [self.setNewActivePlusIndex(controller),
+                                                       controller.display("SISCompareInterface",
+                                                                          "SISControlInterface")])
+        btnInspectRight = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
+                                    command=lambda: [self.setNewActivePlusIndex(controller),
+                                                     controller.display("SISCompareInterface",
+                                                                        "SISInspectInterface")])
+
+        rightFrame = tk.Frame(self, bg="#453354")
+        rightGraphFrame = tk.Frame(rightFrame, bg="#654e78")
+
         figureRight = plt.figure(facecolor="#654e78")
         self.canvasRight = FigureCanvasTkAgg(figureRight, rightGraphFrame)
         self.canvasRight.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
@@ -64,18 +76,11 @@ class SISCompareInterface(tk.Frame):
         figureRight.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
         self.updateRightGraph()
 
+        ######################################### Placing MIDDLE elements ##############################################
         titleFrame.place(relwidth=1, relheight=0.07)
         lblTitle.pack(pady=15)
         nameFrame.place(relwidth=1, relheight=0.08, y=60)
         btnReturn.place(x=14, y=14)
-        btnInspectLeft.pack(side="left", padx=14)
-        btnConfigureLeft.pack(side="left", padx=7)
-        self.lblLeftName.pack(side="left", padx=10)
-        self.lblLeftScore.pack(side="left")
-        btnInspectRight.pack(side="right", padx=14)
-        btnConfigureRight.pack(side="right", padx=7)
-        self.lblRightName.pack(side="right", padx=10)
-        self.lblRightScore.pack(side="right")
         legendFrame.place(x=657, y=3)
         lblG.grid(row=0, column=0)
         lblGEx.grid(row=0, column=1)
@@ -83,18 +88,30 @@ class SISCompareInterface(tk.Frame):
         lblOEx.grid(row=1, column=1)
         lblR.grid(row=2, column=0)
         lblREx.grid(row=2, column=1)
-        leftFrame.place(relwidth=0.333, relheight=0.93, y=126, x=0)
-        leftGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-        rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1025)
-        rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
         self.informationFrame.place(relwidth=0.334, relheight=0.93, y=130, x=511)
 
-    # Method: Called upon page opening to set the correct models
+        ####################################### Placing LEFT-side elements #############################################
+        btnInspectLeft.pack(side="left", padx=14)
+        btnConfigureLeft.pack(side="left", padx=7)
+        self.lblLeftName.pack(side="left", padx=10)
+        self.lblLeftScore.pack(side="left")
+        leftFrame.place(relwidth=0.333, relheight=0.93, y=126, x=0)
+        leftGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
+
+        ####################################### Placing RIGHT-side elements ############################################
+        btnInspectRight.pack(side="right", padx=14)
+        btnConfigureRight.pack(side="right", padx=7)
+        self.lblRightName.pack(side="right", padx=10)
+        self.lblRightScore.pack(side="right")
+        rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1025)
+        rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
+
+    # Called upon page opening to set the correct models
     def setModels(self, controller):
         self.activeModel = controller.activeModel
         self.compareModel = controller.compareModel
 
-    # Method: Called when opting to configure the Right, CompareModel to ensure compatibility
+    # Called when opting to configure the Right, CompareModel to ensure compatibility
     def setNewActivePlusIndex(self, controller):
         index = 0
         for M in controller.models:
@@ -103,7 +120,7 @@ class SISCompareInterface(tk.Frame):
                 controller.setActiveModelIndex(index)
             index = index + 1
 
-    # Method: Called on page opening to update the Left, ActiveModel graph information
+    # Called on page opening to update the Left, ActiveModel graph information
     def updateLeftGraph(self):
         S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -137,7 +154,7 @@ class SISCompareInterface(tk.Frame):
 
         self.canvasLeft.draw()
 
-    # Method: Called on page opening to update the Right, CompareModel graph information
+    # Called on page opening to update the Right, CompareModel graph information
     def updateRightGraph(self):
         S1, Ir1, Il1, Ip1 = self.compareModel.runModel()
         I1 = Ir1 + Il1 + Ip1
@@ -171,7 +188,7 @@ class SISCompareInterface(tk.Frame):
 
         self.canvasRight.draw()
 
-    # Method: Called on page opening to set the correct information
+    # Called on page opening to set the correct information
     def updateColumnInfo(self):
         activeScore = self.activeModel.calculateScores()[8]
         actPopScore = self.activeModel.calculateScores()[0]
