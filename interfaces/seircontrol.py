@@ -4,10 +4,10 @@ from tkinter import *
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import numpy as np
-from models import sir
+from models import seir
 
 
-class SIRControlInterface(tk.Frame):
+class SEIRControlInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
     # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
@@ -41,7 +41,7 @@ class SIRControlInterface(tk.Frame):
         # Button: takes the user to the home page
         btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
-                             command=lambda: controller.display("SIRControlInterface", "HomeInterface"))
+                             command=lambda: controller.display("SEIRControlInterface", "HomeInterface"))
 
         # This frame holds the graphs
         canvasFrame = tk.Frame(frameTop, bg="#654e78")
@@ -50,10 +50,12 @@ class SIRControlInterface(tk.Frame):
                                     font=("Calibri", 14, "bold"), fg="white")
         lblLegend1 = tk.Label(frameTop, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
                                font=("Arial", 12), fg="white")
-        lblLegend2 = tk.Label(frameTop, bg="#d62728", width=25, pady=4, text="(I) Infected",
+        lblLegend2 = tk.Label(frameTop, bg="#d62728", width=25, pady=4, text="(E) Exposed",
                                font=("Arial", 12), fg="white")
-        lblLegend3 = tk.Label(frameTop, bg="#1f77b4", width=25, pady=4, text="(R) Recovered",
+        lblLegend3 = tk.Label(frameTop, bg="#1f77b4", width=25, pady=4, text="(I) Infected",
                                font=("Arial", 12), fg="white")
+        lblLegend4 = tk.Label(frameTop, bg="#1f77b4", width=25, pady=4, text="(R) Recovered",
+                              font=("Arial", 12), fg="white")
 
         # Separates graphs from the controls
         frameMid = tk.Frame(self, bg="#6e6e6e")
@@ -75,6 +77,10 @@ class SIRControlInterface(tk.Frame):
         self.sclBeta = tk.Scale(frameBot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
         lblGamma = tk.Label(frameBot, text="Gamma:")
         self.sclGamma = tk.Scale(frameBot, from_=0.001, to=1, resolution=0.001, orient="horizontal")
+        lblMu = tk.Label(frameBot, text="Mu:")
+        self.sclMu = tk.Scale(frameBot, from_=0.001, to=1, resolution=0.001, orient="horizontal")
+        lblAlpha = tk.Label(frameBot, text="Alpha:")
+        self.sclAlpha = tk.Scale(frameBot, from_=0.001, to=1, resolution=0.001, orient="horizontal")
         lblT = tk.Label(frameBot, text="Days to Observe:")
         self.sclT = tk.Scale(frameBot, from_=1, to=365, resolution=1, orient="horizontal")
 
@@ -92,6 +98,7 @@ class SIRControlInterface(tk.Frame):
         lblLegend1.place(x=1243, y=227)
         lblLegend2.place(x=1243, y=260)
         lblLegend3.place(x=1243, y=293)
+        lblLegend3.place(x=1243, y=326)
 
         ## Frame Mid
         frameMid.place(y=605, relheight=0.05, relwidth=1)
@@ -118,6 +125,14 @@ class SIRControlInterface(tk.Frame):
         lblGamma.grid(row=1, column=5, padx=5, pady=5, sticky="e")
         self.sclGamma.grid(row=1, column=6, padx=5, sticky="ew")
         self.sclGamma.bind("<ButtonRelease-1>", self.updateModel)
+        #4th
+        lblMu.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e")
+        self.sclMu.grid(row=0, column=6, padx=5, pady=(7, 0), sticky="e")
+        self.sclMu.bind("<ButtonRelease-1>", self.updateModel)
+        lblAlpha.grid(row=1, column=6, padx=5, pady=(7, 0), sticky="e")
+        self.sclAlpha.grid(row=1, column=6, padx=5, pady=(7, 0), sticky="e")
+        self.sclAlpha.bind("<ButtonRelease-1>", self.updateModel)
+        #5th
         lblT.grid(row=4, column=7, padx=5, pady=5, sticky="e")
         self.sclT.grid(row=4, column=8, padx=5, sticky="ew")
         self.sclT.bind("<ButtonRelease-1>", self.updateModel)
@@ -136,7 +151,7 @@ class SIRControlInterface(tk.Frame):
 
     # Method to update the onscreen graphs to whatever the current models configuration is
     def updateGraphs(self):
-        S1, I1, R1 = self.activeModel.runModel()
+        S1, E1, I1, R1 = self.activeModel.runModel()
         T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
@@ -144,11 +159,12 @@ class SIRControlInterface(tk.Frame):
 
         # Plotting the first graph
         self.ax[0].plot(T1, S1, "#2ca02c", label="Susceptible")
+        self.ax[0].plot(T1, E1, "#d62728", label="Infected")
         self.ax[0].plot(T1, I1, "#d62728", label="Infected")
         self.ax[0].plot(T1, R1, "#1f77b4", label="Recovered")
         self.ax[0].set_xlabel("Timesteps (Days)")
         self.ax[0].set_ylabel("Population Count")
-        self.ax[0].set_title("Population Sizes Over Time - S, I, R")
+        self.ax[0].set_title("Population Sizes Over Time - S, E, I, R")
 
         self.canvas.draw()
 
@@ -159,15 +175,17 @@ class SIRControlInterface(tk.Frame):
         if len(self.entryName.get()) > 24:
             self.controller.popup("Invalid Save", "Please enter a shorter name for the models!")
         else:
-            Name = str("SIR: " + self.entryName.get())
+            Name = str("SEIR: " + self.entryName.get())
             N = int(self.cmbN.get())
             S = float(self.sclS.get() / 100)
             I = float((100 - self.sclS.get()) / 100)
             Beta = float(self.sclBeta.get())
             Gamma = float(self.sclGamma.get())
+            Mu = float(self.sclMu.get())
+            Alpha = float(self.sclAlpha.get())
             T = int(self.sclT.get())
 
-            newActiveModel = sir.SIR(Name, N, S, I, Beta, Gamma, T)
+            newActiveModel = seir.SEIR(Name, N, S, I, Beta, Gamma,Mu, Alpha, T)
 
             self.lblIMatch.config(text="{:.0f}".format(I*100))
 
@@ -185,6 +203,8 @@ class SIRControlInterface(tk.Frame):
         self.lblIMatch.config(text="{:.0f}".format(self.activeModel.percentI * 100))
         self.sclBeta.set(self.activeModel.Beta)
         self.sclGamma.set(self.activeModel.Gamma)
+        self.sclMu.set(self.activeModel.Mu)
+        self.sclAlpha.set(self.activeModel.Alpha)
         self.entryName.delete(0, 'end')
         self.entryName.insert(END, self.activeModel.Name[5:])
         self.sclT.set(self.activeModel.Timesteps)
@@ -195,11 +215,11 @@ class SIRControlInterface(tk.Frame):
         if self.activeModel != controller.activeModel:
             self.controller.popup("Warning", "Current models configuration not saved")
         else:
-            controller.display("SIRControlInterface", "SIRInspectInterface")
+            controller.display("SEIRControlInterface", "SEIRInspectInterface")
 
     # Method: checks if the current configuration is valid by checking no population size dips below zero
     def checkValid(self, newActiveModel):
-        S1, I1, R1 = newActiveModel.runModel()
+        S1, E1, I1, R1 = newActiveModel.runModel()
         populations = [S1, I1, R1]
         for P in populations:
             for value in P:

@@ -120,7 +120,7 @@ class SIRCompareInterface(tk.Frame):
         self.axLeft[0].set_title("Population Sizes Over Time - S, I, R")
         # Plotting the second graph
         pop = [S1[len(S1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
-        explode = (0.1, 0, 0, 0)
+        explode = (0.1, 0, 0)
         labels = ["Susceptible: {:.0f}".format(pop[0]), "Infected: {:.0f}".format(pop[1]),
                   "Recovered: {:.0f}".format(pop[2])]
         colours = ["#2ca02c", "#d62728", "#1f77b4"]
@@ -146,7 +146,7 @@ class SIRCompareInterface(tk.Frame):
         self.axRight[0].set_title("Population Sizes Over Time - S, I, R")
         # Plotting the second graph
         pop = [S1[len(S1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
-        explode = (0.1, 0, 0, 0)
+        explode = (0.1, 0, 0)
         labels = ["Susceptible: {:.0f}".format(pop[0]), "Infected: {:.0f}".format(pop[1]),
                   "Recovered: {:.0f}".format(pop[2])]
         colours = ["#2ca02c", "#d62728", "#1f77b4"]

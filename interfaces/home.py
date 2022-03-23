@@ -81,7 +81,7 @@ class HomeInterface(tk.Frame):
                             lambda x: [self.updateCompareModel(controller, 1)])
         # Button: Deletes selected models from models list
         self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Model", state="disabled",
-                                command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
+                                command=lambda: [controller.display("HomeInterface", self.compareInterfaceShow)])
 
         ####################################### Placing RIGHT-side elements ############################################
 

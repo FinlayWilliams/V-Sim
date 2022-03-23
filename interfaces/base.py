@@ -65,6 +65,7 @@ class BaseApp(tk.Tk):
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 2
         self.activeModel = self.models[self.activeModelIndex]
+        self.compareModel = SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.5, 0.02, 365)
 
         sirInspectInterface = SIRInspectInterface(master=base, controller=self)
         self.interfaces[SIRInspectInterface.__name__] = sirInspectInterface
@@ -76,6 +77,7 @@ class BaseApp(tk.Tk):
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 4
         self.activeModel = self.models[self.activeModelIndex]
+        self.compareModel = SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.4, 0.01, 0.04, 0.04, 365)
 
         seirInspectInterface = SEIRInspectInterface(master=base, controller=self)
         self.interfaces[SEIRInspectInterface.__name__] = seirInspectInterface
@@ -84,9 +86,12 @@ class BaseApp(tk.Tk):
         seirCompareInterface = SEIRCompareInterface(master=base, controller=self)
         self.interfaces[SEIRCompareInterface.__name__] = seirCompareInterface
 
-        # Model needs to be updated before each page is loaded or else errors
+        # Model needs to be reset before each page is loaded or else errors
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
+        self.compareModel = SIS("SIS: Comparison Model",
+                                10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000,
+                                0.75, 14)
 
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
@@ -114,6 +119,7 @@ class BaseApp(tk.Tk):
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateModelList()
             self.interfaces[show].updateCompareModelList()
+
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
@@ -129,14 +135,38 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateLeftGraph()
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
+
+        if show == "SIRInspectInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateGraphs()
+            self.interfaces[show].populateFrames()
+            self.interfaces[show].switchInfoFrame(0, 1)
         if show == "SIRControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            # self.interfaces[show].updateVariables(self)
-            # self.interfaces[show].updateGraphs()
-        if show == "SIRDControlInterface":
+            self.interfaces[show].updateVariables(self)
+            self.interfaces[show].updateGraphs()
+        if show == "SIRCompareInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            # self.interfaces[show].updateVariables(self)
-            # self.interfaces[show].updateGraphs()
+            self.interfaces[show].setModels(self)
+            self.interfaces[show].updateLeftGraph()
+            self.interfaces[show].updateRightGraph()
+            self.interfaces[show].updateColumnInfo()
+
+        if show == "SEIRInspectInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateGraphs()
+            self.interfaces[show].populateFrames()
+            self.interfaces[show].switchInfoFrame(0, 1)
+        if show == "SEIRControlInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].updateVariables(self)
+            self.interfaces[show].updateGraphs()
+        if show == "SEIRCompareInterface":
+            self.interfaces[show].pack(side="top", fill="both", expand=True)
+            self.interfaces[show].setModels(self)
+            self.interfaces[show].updateLeftGraph()
+            self.interfaces[show].updateRightGraph()
+            self.interfaces[show].updateColumnInfo()
 
     def setActiveModelIndex(self, index): self.activeModelIndex = index
 

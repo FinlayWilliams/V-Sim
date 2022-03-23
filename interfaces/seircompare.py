@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
-class SIRCompareInterface(tk.Frame):
+class SEIRCompareInterface(tk.Frame):
     # Default constructor passing in the master object (base frame) and the controller (the BaseApp class)
     # it also creates and places all widgets for this interfaces
     def __init__(self, master, controller):
@@ -14,25 +14,25 @@ class SIRCompareInterface(tk.Frame):
         self.setModels(controller)
 
         titleFrame = tk.Frame(self, bg="#453354")
-        lblTitle = tk.Label(titleFrame, bg="#453354", text="SIR Virus Model Comparison", font=("Arial", 15, "italic"), fg="white")
+        lblTitle = tk.Label(titleFrame, bg="#453354", text="SEIR Virus Model Comparison", font=("Arial", 15, "italic"), fg="white")
         btnReturn = tk.Button(titleFrame, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
-                              command=lambda: controller.display("SIRCompareInterface", "HomeInterface"))
+                              command=lambda: controller.display("SEIRCompareInterface", "HomeInterface"))
         nameFrame = tk.Frame(self, bg="#574b59")
         self.lblLeftName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
         self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
         btnConfigureLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
-                                     command=lambda: controller.display("SIRCompareInterface", "SIRControlInterface"))
+                                     command=lambda: controller.display("SEIRCompareInterface", "SEIRControlInterface"))
         btnInspectLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
-                                     command=lambda: controller.display("SIRCompareInterface", "SIRInspectInterface"))
+                                     command=lambda: controller.display("SEIRCompareInterface", "SEIRInspectInterface"))
         self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
         self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
         btnConfigureRight = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
-                                     command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SIRCompareInterface", "SIRControlInterface")])
+                                     command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SEIRCompareInterface", "SEIRControlInterface")])
         btnInspectRight = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
                                       command=lambda: [self.setNewActivePlusIndex(controller),
-                                                       controller.display("SIRCompareInterface",
-                                                                          "SIRInspectInterface")])
+                                                       controller.display("SEIRCompareInterface",
+                                                                          "SEIRInspectInterface")])
         legendFrame = tk.Frame(nameFrame, bg="#574b59")
         lblG = tk.Label(legendFrame, text="Green", fg="#2d802f", bg="#574b59", font=("Arial", 9, "bold"))
         lblGEx = tk.Label(legendFrame, text=" Indicates a Lower & Better Score", bg="#574b59", fg="white", font=("Arial", 8))
@@ -105,7 +105,7 @@ class SIRCompareInterface(tk.Frame):
 
     # Method: Called on page opening to update the Left, ActiveModel graph information
     def updateLeftGraph(self):
-        S1, I1, R1 = self.activeModel.runModel()
+        S1, E1, I1, R1 = self.activeModel.runModel()
         T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
@@ -113,16 +113,17 @@ class SIRCompareInterface(tk.Frame):
 
         # Plotting the first graph
         self.axLeft[0].plot(T1, S1, "#2ca02c", label="Susceptible")
+        self.axLeft[0].plot(T1, S1, "#2ca02c", label="Exposed")
         self.axLeft[0].plot(T1, I1, "#d62728", label="Infected")
         self.axLeft[0].plot(T1, R1, "#1f77b4", label="Recovered")
         self.axLeft[0].set_xlabel("Timesteps (Days)")
         self.axLeft[0].set_ylabel("Population Count")
         self.axLeft[0].set_title("Population Sizes Over Time - S, I, R")
         # Plotting the second graph
-        pop = [S1[len(S1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
+        pop = [S1[len(S1) - 1], E1[len(I1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
         explode = (0.1, 0, 0, 0)
-        labels = ["Susceptible: {:.0f}".format(pop[0]), "Infected: {:.0f}".format(pop[1]),
-                  "Recovered: {:.0f}".format(pop[2])]
+        labels = ["Susceptible: {:.0f}".format(pop[0]), "Exposed: {:.0f}".format(pop[1]),
+                  "Infected: {:.0f}".format(pop[2]), "Recovered: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#d62728", "#1f77b4"]
         self.axLeft[1].pie(pop, explode=explode, labels=labels, colors=colours)
         self.axLeft[1].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeModel.Timesteps))
@@ -131,7 +132,7 @@ class SIRCompareInterface(tk.Frame):
 
     # Method: Called on page opening to update the Right, CompareModel graph information
     def updateRightGraph(self):
-        S1, I1, R1 = self.compareModel.runModel()
+        S1, E1, I1, R1 = self.compareModel.runModel()
         T1 = np.linspace(0, self.compareModel.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
@@ -139,22 +140,23 @@ class SIRCompareInterface(tk.Frame):
 
         # Plotting the first graph
         self.axRight[0].plot(T1, S1, "#2ca02c", label="Susceptible")
+        self.axRight[0].plot(T1, S1, "#2ca02c", label="Exposed")
         self.axRight[0].plot(T1, I1, "#d62728", label="Infected")
         self.axRight[0].plot(T1, R1, "#1f77b4", label="Recovered")
         self.axRight[0].set_xlabel("Timesteps (Days)")
         self.axRight[0].set_ylabel("Population Count")
         self.axRight[0].set_title("Population Sizes Over Time - S, I, R")
         # Plotting the second graph
-        pop = [S1[len(S1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
+        pop = [S1[len(S1) - 1], E1[len(I1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
         explode = (0.1, 0, 0, 0)
-        labels = ["Susceptible: {:.0f}".format(pop[0]), "Infected: {:.0f}".format(pop[1]),
-                  "Recovered: {:.0f}".format(pop[2])]
+        labels = ["Susceptible: {:.0f}".format(pop[0]), "Exposed: {:.0f}".format(pop[1]),
+                  "Infected: {:.0f}".format(pop[2]), "Recovered: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#d62728", "#1f77b4"]
         self.axRight[1].pie(pop, explode=explode, labels=labels, colors=colours)
         self.axRight[1].set_title(
-            "Population Sizes on Final Recorded Day #{}".format(self.controller.compareModel.Timesteps))
+            "Population Sizes on Final Recorded Day #{}".format(self.controller.activeModel.Timesteps))
 
-        self.canvasLeft.draw()
+        self.canvasRight.draw()
 
     # Method: Called on page opening to set the correct information
     def updateColumnInfo(self):

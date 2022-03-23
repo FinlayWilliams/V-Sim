@@ -111,7 +111,7 @@ class SIRInspectInterface(tk.Frame):
         self.ax[0].set_title("Node Population Sizes Over Time - S, I, R")
         # Plotting the second graph
         pop = [S1[len(S1) - 1], I1[len(I1) - 1], R1[len(R1) - 1]]
-        explode = (0.1, 0, 0, 0)
+        explode = (0.1, 0, 0)
         labels = ["Susceptible: {:.0f}".format(pop[0]), "Infected: {:.0f}".format(pop[1]),
                   "Recovered: {:.0f}".format(pop[2])]
         colours = ["#2ca02c", "#d62728", "#1f77b4"]
@@ -167,214 +167,22 @@ class SIRInspectInterface(tk.Frame):
 
         model = self.controller.activeModel
 
-        ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore, ovrScore = model.calculateScores()
-
         # This section populates each of the frames with updated information conforming to the active models simulation
         # By calling the methods that add the page widgets
         # There are many if statements indicating thresholds that change the displayed information
 
-        # self.populateOverview(model, ovrPopulationScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore)
-        # self.populatePopulationFrame(model, ovrPopulationScore, startPopScore, endPopScore)
-        # self.populateSizeFrame(model, ovrSizeScore)
-        # self.populateNeighbourFrame(model, ovrNeighbourScore)
-        # self.populateMiscFrame(model, ovrMiscScore)
-
     # The following 7 methods are the assessment frame contents
-    def populateOverview(self, model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore):
-        modelScore = populationScore + sizeScore + neighbourScore + infectionRateScore + deathRateScore + miscScore
-
-        lbl1 = tk.Label(self.frames[0], text="{} Score Overview".format(model.Name), font=("Arial", 12), bg="#e0e0e0")
-
-        lblScoreAc = tk.Label(self.frames[0], text="{}  | ".format(modelScore), font=("Arial", 11, "bold"),
-                              bg="#e0e0e0")
-        lblScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblScore = tk.Label(self.frames[0], text="> Overall Model Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if modelScore < 1:
-            lblScoreAc2.config(text="Low", fg="#2d802f")
-            lblScoreDes.config(
-                text="This models has a configuration that results in a generally slower and less potent propagation.")
-        if 1 <= modelScore < 3:
-            lblScoreAc2.config(text="Medium", fg="#b35827")
-            lblScoreDes.config(text="This models has a configuration that results in an average propagation of a virus.")
-        if modelScore >= 3:
-            lblScoreAc2.config(text="High", fg="#b81d28")
-            lblScoreDes.config(
-                text="This models has a configuration that results in a fast and potent virus propagation.")
-
-        lblExplain = tk.Label(self.frames[0],
-                              text="The score is broken down into different categories and combine to produce the overall score.",
-                              font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain2 = tk.Label(self.frames[0], text="The scores for those categories are as follow:",
-                               font=("Arial", 10, "italic"), bg="#e0e0e0")
-
-        lblPopScoreAc = tk.Label(self.frames[0], text="{}  | ".format(populationScore), font=("Arial", 11, "bold"),
-                                 bg="#e0e0e0")
-        lblPopScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblPopScore = tk.Label(self.frames[0], text="> Population Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblPopScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if populationScore < 1:
-            lblPopScoreAc2.config(text="Low", fg="#2d802f")
-            lblPopScoreDes.config(text="The pre and post population sizes are weighted towards the Susceptible")
-        if 1 <= populationScore < 3:
-            lblPopScoreAc2.config(text="Medium", fg="#e68f39")
-            lblPopScoreDes.config(text="The pre and post population sizes are equally weighted.")
-        if populationScore >= 3:
-            lblPopScoreAc2.config(text="High", fg="#b81d28")
-            lblPopScoreDes.config(text="The pre and post population sizes are weighted heavily towards the Infected.")
-
-        lblSizeScoreAc = tk.Label(self.frames[0], text="{}  | ".format(sizeScore), font=("Arial", 11, "bold"),
-                                  bg="#e0e0e0")
-        lblSizeScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblSizeScore = tk.Label(self.frames[0], text="> Physical Size Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblSizeScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if sizeScore < 1:
-            lblSizeScoreAc2.config(text="Low", fg="#2d802f")
-            lblSizeScoreDes.config(text="The Physical Size of the network makes life difficult for the Infected.")
-        if 1 <= sizeScore < 3:
-            lblSizeScoreAc2.config(text="Medium", fg="#e68f39")
-            lblSizeScoreDes.config(
-                text="The Physical Size of the network makes life evenly uneasy for both the Infected and Susceptible")
-        if sizeScore >= 3:
-            lblSizeScoreAc2.config(text="High", fg="#b81d28")
-            lblSizeScoreDes.config(text="The Physical Size of the network makes life difficult for the Susceptible.")
-
-        lblNeighbourScoreAc = tk.Label(self.frames[0], text="{}  | ".format(neighbourScore), font=("Arial", 11, "bold"),
-                                       bg="#e0e0e0")
-        lblNeighbourScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblNeighbourScore = tk.Label(self.frames[0], text="> Neighbour Set Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblNeighbourScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if neighbourScore < 1:
-            lblNeighbourScoreAc2.config(text="Low", fg="#2d802f")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make virus propagation difficult.")
-        if 1 <= neighbourScore < 3:
-            lblNeighbourScoreAc2.config(text="Medium", fg="#e68f39")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make virus propagation slightly easier.")
-        if neighbourScore >= 3:
-            lblNeighbourScoreAc2.config(text="High", fg="#b81d28")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make virus propagation easy.")
-
-        lblInfRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(infectionRateScore),
-                                     font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblInfRateScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblInfRateScore = tk.Label(self.frames[0], text="> Infection Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblInfRateScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if infectionRateScore < 1:
-            lblInfRateScoreAc2.config(text="Low", fg="#2d802f")
-            lblInfRateScoreDes.config(text="The infection rates are very low.")
-        if 1 <= infectionRateScore < 3:
-            lblInfRateScoreAc2.config(text="Medium", fg="#e68f39")
-            lblInfRateScoreDes.config(text="The infection rates are creeping up.")
-        if infectionRateScore >= 3:
-            lblInfRateScoreAc2.config(text="High", fg="#b81d28")
-            lblInfRateScoreDes.config(text="The infection rates are very high.")
-
-        lblDeathRateScoreAc = tk.Label(self.frames[0], text="{}  | ".format(deathRateScore), font=("Arial", 11, "bold"),
-                                       bg="#e0e0e0")
-        lblDeathRateScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblDeathRateScore = tk.Label(self.frames[0], text="> Death Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblDeathRateScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if deathRateScore < 1:
-            lblDeathRateScoreAc2.config(text="Low", fg="#2d802f")
-            lblDeathRateScoreDes.config(
-                text="The death rates are very high for the Infected Nodes; Mass virus propagation is difficult.")
-        if 1 <= deathRateScore < 3:
-            lblDeathRateScoreAc2.config(text="Medium", fg="#e68f39")
-            lblDeathRateScoreDes.config(
-                text="The death rates are mild for the Infected Nodes; Viruses are propagating.")
-        if deathRateScore >= 3:
-            lblDeathRateScoreAc2.config(text="High", fg="#b81d28")
-            lblDeathRateScoreDes.config(
-                text="The death rates are very low for the Infected Nodes; The Infected have plenty of time to propagate viruses!")
-
-        lblMiscScoreAc = tk.Label(self.frames[0], text="{}  | ".format(miscScore), font=("Arial", 11, "bold"),
-                                  bg="#e0e0e0")
-        lblMiscScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblMiscScore = tk.Label(self.frames[0], text="> Miscellaneous Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblMiscScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
-        if miscScore < 1:
-            lblMiscScoreAc2.config(text="Low", fg="#2d802f")
-            lblMiscScoreDes.config(text="This score indicates not a whole lot without context.")
-        if 1 <= miscScore < 3:
-            lblMiscScoreAc2.config(text="Medium", fg="#e68f39")
-            lblMiscScoreDes.config(text="This score indicates not a whole lot without context.")
-        if miscScore >= 3:
-            lblMiscScoreAc2.config(text="High", fg="#b81d28")
-            lblMiscScoreDes.config(text="This score indicates not a whole lot without context.")
-
-        lblExplain3 = tk.Label(self.frames[0], text="The overall score ranges from a minimum of ___ to ___ and to a maximum of ___",
-                               font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain4 = tk.Label(self.frames[0], text="Below ___ is a Low Score - an Ideal Model Score for Minimal Virus Propagation, ", font=("Arial", 10, "italic"), bg="#e0e0e0",
-                               fg="#2d802f")
-        lblExplain5 = tk.Label(self.frames[0], text="Between ___ and ___ is Medium Score - a Sub-Optimal Score but Relatively Safe,", font=("Arial", 10, "italic"),
-                               bg="#e0e0e0", fg="#e68f39")
-        lblExplain6 = tk.Label(self.frames[0], text="Above ___ is Higher Score - a Dangerous Score Indicating Optimal Conditions for Virus Propagation", font=("Arial", 10, "italic"), bg="#e0e0e0",
-                               fg="#b81d28")
-        lblExplain7 = tk.Label(self.frames[0],
-                               text="Press the labelled buttons above to inspect the correspoinding categories' score breakdown.",
-                               font=("Arial", 10, "italic"), bg="#e0e0e0")
-
-        lbl1.grid(row=0, column=2, sticky="w", pady=(7, 15), padx=(7, 0))
-
-        lblScoreAc.grid(row=1, column=0, sticky="w", padx=(7, 0))
-        lblScoreAc2.grid(row=1, column=1, sticky="w")
-        lblScore.grid(row=1, column=2, sticky="w")
-        lblScoreDes.grid(row=2, column=2, sticky="w", padx=(7, 0))
-
-        lblExplain.grid(row=3, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
-        lblExplain2.grid(row=4, column=2, sticky="w", pady=(0, 10), padx=(7, 0))
-
-        lblPopScoreAc.grid(row=5, column=0, sticky="w", padx=(7, 0))
-        lblPopScoreAc2.grid(row=5, column=1, sticky="w")
-        lblPopScore.grid(row=5, column=2, sticky="w")
-        lblPopScoreDes.grid(row=6, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblSizeScoreAc.grid(row=7, column=0, sticky="w", padx=(7, 0))
-        lblSizeScoreAc2.grid(row=7, column=1, sticky="w")
-        lblSizeScore.grid(row=7, column=2, sticky="w")
-        lblSizeScoreDes.grid(row=8, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblNeighbourScoreAc.grid(row=9, column=0, sticky="w", padx=(7, 0))
-        lblNeighbourScoreAc2.grid(row=9, column=1, sticky="w")
-        lblNeighbourScore.grid(row=9, column=2, sticky="w")
-        lblNeighbourScoreDes.grid(row=10, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblInfRateScoreAc.grid(row=11, column=0, sticky="w", padx=(7, 0))
-        lblInfRateScoreAc2.grid(row=11, column=1, sticky="w")
-        lblInfRateScore.grid(row=11, column=2, sticky="w")
-        lblInfRateScoreDes.grid(row=12, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblDeathRateScoreAc.grid(row=13, column=0, sticky="w", padx=(7, 0))
-        lblDeathRateScoreAc2.grid(row=13, column=1, sticky="w")
-        lblDeathRateScore.grid(row=13, column=2, sticky="w")
-        lblDeathRateScoreDes.grid(row=14, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblMiscScoreAc.grid(row=15, column=0, sticky="w", padx=(7, 0))
-        lblMiscScoreAc2.grid(row=15, column=1, sticky="w")
-        lblMiscScore.grid(row=15, column=2, sticky="w")
-        lblMiscScoreDes.grid(row=16, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
-
-        lblExplain3.grid(row=17, column=2, sticky="w", pady=(15, 0), padx=(7, 0))
-        lblExplain4.grid(row=18, column=2, sticky="w", padx=(7, 0))
-        lblExplain5.grid(row=19, column=2, sticky="w", padx=(7, 0))
-        lblExplain6.grid(row=20, column=2, sticky="w", padx=(7, 0))
-
-        lblExplain7.grid(row=21, column=2, stick="w", pady=(15, 0), padx=(7, 0))
-
-    def populatePopulationFrame(self, model, populationScore, startPopScore, endPopScore):
+    def populateOverview(self, model):
         pass
 
-    def populateSizeFrame(self, model, sizeScore):
+    def populatePopulationFrame(self, model):
         pass
 
-    def populateNeighbourFrame(self, model, neighbourScore):
+    def populateBetaFrame(self, model):
         pass
 
-    def populateInfectionFrame(self, model, infectionScore):
+    def populateGammaFrame(self, model):
         pass
 
-    def populateDeathFrame(self, model, deathScore):
-        pass
-
-    def populateMiscFrame(self, model, miscScore):
+    def populateMiscFrame(self, model):
         pass
