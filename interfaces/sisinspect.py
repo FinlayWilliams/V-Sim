@@ -25,7 +25,7 @@ class SISInspectInterface(tk.Frame):
         btnPopulation = tk.Button(mainFrame, text="Population", font=("Arial", 9), width=13,
                                   command=lambda : self.switchInfoFrame(1, 1))
         btnPhysicalSize = tk.Button(mainFrame, text="Physical Size", font=("Arial", 9), width=13,
-                                    command=self.controller.activeModel.calculateScores())
+                                    command=lambda : self.switchInfoFrame(2, 1))
         btnNeighbourSets = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=13,
                                      command=lambda : self.switchInfoFrame(3, 1))
         btnInfectionRates = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=13,
@@ -203,29 +203,29 @@ class SISInspectInterface(tk.Frame):
     def populateOverview(self, model, populationScore, sizeScore, neighbourScore, infectionRateScore, deathRateScore, miscScore):
         modelScore = populationScore + sizeScore + neighbourScore + infectionRateScore + deathRateScore + miscScore
 
-        lbl1 = tk.Label(self.frames[0], text="{} Score Overview".format(model.Name), font=("Arial", 12), bg="#e0e0e0")
+        lbl1 = tk.Label(self.frames[0], text="{} - Assessment Overview and Simulation Scores".format(model.Name), font=("Arial", 12), bg="#e0e0e0")
 
         lblScoreAc = tk.Label(self.frames[0], text="{}  | ".format(modelScore), font=("Arial", 11, "bold"),
                               bg="#e0e0e0")
         lblScoreAc2 = tk.Label(self.frames[0], font=("Arial", 11, "bold"), bg="#e0e0e0")
-        lblScore = tk.Label(self.frames[0], text="> Overall Model Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblScore = tk.Label(self.frames[0], text="> Overall Simulation Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
         lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
         if modelScore < 1:
             lblScoreAc2.config(text="Low", fg="#2d802f")
             lblScoreDes.config(
-                text="This models has a configuration that results in a generally slower and less potent propagation.")
+                text="This model has a configuration that results in a generally slower and less potent propagation.")
         if 1 <= modelScore < 3:
             lblScoreAc2.config(text="Medium", fg="#b35827")
-            lblScoreDes.config(text="This models has a configuration that results in an average propagation of a virus.")
+            lblScoreDes.config(text="This model has a configuration that results in an average propagation of a virus.")
         if modelScore >= 3:
             lblScoreAc2.config(text="High", fg="#b81d28")
             lblScoreDes.config(
-                text="This models has a configuration that results in a fast and potent virus propagation.")
+                text="This model has a configuration that results in a fast and potent virus propagation.")
 
         lblExplain = tk.Label(self.frames[0],
-                              text="The score is broken down into different categories and combine to produce the overall score.",
+                              text="The assessment is broken down into different categories and combine to produce an overall score and explanatory breakdown",
                               font=("Arial", 10, "italic"), bg="#e0e0e0")
-        lblExplain2 = tk.Label(self.frames[0], text="The scores for those categories are as follow:",
+        lblExplain2 = tk.Label(self.frames[0], text="for how potent the virus propagation is or is not. The scores for those categories are as follow:",
                                font=("Arial", 10, "italic"), bg="#e0e0e0")
 
         lblPopScoreAc = tk.Label(self.frames[0], text="{}  | ".format(populationScore), font=("Arial", 11, "bold"),
