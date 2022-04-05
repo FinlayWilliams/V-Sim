@@ -21,25 +21,25 @@ class HomeInterface(tk.Frame):
         self.column_left_frame = tk.Frame(frame_left, bg="#654e78")
         self.lblModelTypeTitle = tk.Label(self.column_left_frame)
         # Page Icon GUI
-        picCanvas = tk.Canvas(frame_left, width=65, height=65)
         self.virusIcon = ImageTk.PhotoImage(Image.open("assets/virus_icon.png"))
-        picCanvas.create_image(34, 34, image=self.virusIcon)
+        placeableLogo = tk.Label(frame_left, image=self.virusIcon, compound="center", padx=0, pady=0, borderwidth=0,
+                                 highlightthickness=0, bg="#453354")
         # Page title GUI
         titleBgBorder = tk.Frame(frame_left, bg="white")
         titleBgInner = tk.Frame(frame_left, bg="#654e78")
         lblTitle = tk.Label(titleBgInner, text="V-Sim:", bg="#654e78",font=("Courier", 30, "underline"),
                             fg="white")
-        lblTitle2 = tk.Label(titleBgInner, text="A Virus Model Simulation Tool", bg="#654e78",
-                             font=("Courier", 20), fg="white")
+        lblSubTitle = tk.Label(titleBgInner, text="A Virus Spread Simulation Tool for Botnet Propagation in IoT Devices"
+                               , bg="#654e78", font=("Courier", 11), fg="white")
 
         ####################################### Placing LEFT-side elements #############################################
         frame_left.place(x=0, y=0, height="864", width="718")
         column_left_border.place(relheight=0.87, relwidth=1, x=0, y=118)
         self.column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
         self.lblModelTypeTitle.place(x=7, y=7)
-        picCanvas.place(x=6, y=33)
-        lblTitle.place(x=5, y=2)
-        lblTitle2.place(x=5, y=50)
+        placeableLogo.place(x=6, y=33)
+        lblTitle.place(x=5, y=3)
+        lblSubTitle.place(x=5, y=56)
         titleBgBorder.place(x=82, y=23, height="100", width="635")
         titleBgInner.place(x=87, y=28, height="90", width="625")
 

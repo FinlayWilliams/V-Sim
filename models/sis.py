@@ -41,7 +41,10 @@ class SIS:
         self.SLoc = self.S * (1 / self.WSNnumber)
 
         # S Neighbour Set Range
-        self.density = self.N / (self.deploymentArea * self.deploymentArea)
+        #self.density = self.N / (self.deploymentArea * self.deploymentArea)
+        #self.density = self.N / self.deploymentArea
+        self.density = (self.N / self.WSNnumber) / (self.deploymentArea / self.WSNnumber)
+
         #self.SNhb = 1 / (self.density * self.transmissionRange)
         self.SNhb = self.S * (1 / (self.density * self.transmissionRange))
 
@@ -50,13 +53,20 @@ class SIS:
         self.IlContactRate = self.botScanningRate * self.IlPsuccess
         self.IpContactRate = self.botScanningRate * self.IpPsuccess
 
+        # self.IrContactRate = 10
+        # self.IlContactRate = 10
+        # self.IpContactRate = 10
+
         # Infection Rates
         self.bR = self.IrContactRate * self.botPtransmission
         self.bL = self.IlContactRate * self.botPtransmission
         self.bP = self.IpContactRate * self.botPtransmission
 
         # Death Rates
-        self.distance = (self.deploymentArea * self.deploymentArea) / self.N
+        #self.distance = (self.deploymentArea * self.deploymentArea) / self.N
+        #self.distance = self.deploymentArea / self.N
+        self.distance = (self.deploymentArea / self.WSNnumber) / (self.N / self.WSNnumber)
+
         self.powerMessage = self.meanPower * self.meanMessageSize * self.distance
 
         self.regularPowerTime = self.powerMessage * self.contactRate
@@ -77,6 +87,10 @@ class SIS:
     def SISModel(self, y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
+
+        Sloc = S * (1 / self.WSNnumber)
+
+        Snhb = S * (1 / (self.density * self.transmissionRange))
 
         dSdt = -bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I
 
