@@ -48,7 +48,7 @@ class HomeInterface(tk.Frame):
         column_right_frame = tk.Frame(frame_right, bg="#a8a8a8")
 
         # Creating the listbox where the list of all saved models will appear
-        lbl_model_list = tk.Label(frame_right, text="Select an Active Model to Begin ... ",
+        lbl_model_list = tk.Label(frame_right, text="Select an Active Configuration to Begin",
                                   bg="#a8a8a8", font=("Arial", 12))
         self.lstModels = tk.Listbox(frame_right, height=12, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
@@ -56,13 +56,13 @@ class HomeInterface(tk.Frame):
         self.lstModels.bind("<<ListboxSelect>>", lambda x: [self.updateActiveModel(controller, 1)])
 
         # Button: opens control page with the current active models
-        btn_Configure = tk.Button(frame_right, width=17, text="Configure Model",
+        btn_Configure = tk.Button(frame_right, width=17, text="Configuration Controls",
                                   command=lambda: [controller.display("HomeInterface", self.controlInterfaceShow)])
         # Button: opens inspect page with the current active models
-        btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Model",
+        btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Configuration",
                                   command=lambda: [controller.display("HomeInterface", self.inspectInterfaceShow)])
         # Button: Deletes selected models from models list
-        btn_Delete = tk.Button(frame_right, width=17, text="Delete Model",
+        btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration",
                                command=lambda: self.deleteSelectedModel(controller, 1))
         # Button: creates new default SIS models
         btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model",
@@ -79,7 +79,7 @@ class HomeInterface(tk.Frame):
 
         # Creating a second listbox of all models to for comparison
         lbl_compare_model_list = tk.Label(frame_right,
-                                          text="Select a Model to Compare Against the Active Model ... ",
+                                          text="Select a Configuration to Compare Against the Active Configuration",
                                           bg="#a8a8a8", font=("Arial", 12))
         self.lstCompareModels = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white",
                                     selectbackground="#453354", font=("Calibri", 15))
@@ -88,7 +88,7 @@ class HomeInterface(tk.Frame):
         self.lstCompareModels.config()
 
         # Button: Deletes selected models from models list
-        self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Model", state="disabled",
+        self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Configuration", state="disabled",
                                 command=lambda: [controller.display("HomeInterface", self.compareInterfaceShow)])
 
         ####################################### Placing RIGHT-side elements ############################################

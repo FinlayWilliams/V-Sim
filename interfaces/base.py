@@ -33,17 +33,17 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default models
         self.models = []
-        self.models.append(SIS("SIS: Example Model A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+        self.models.append(SIS("SIS: Example Configuration A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
                                0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIS("SIS: Example Model B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006,
+        self.models.append(SIS("SIS: Example Configuration B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006,
                                0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIR("SIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 365))
-        self.models.append(SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 365))
-        self.models.append(SEIR("SEIR: Example Model A", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
-        self.models.append(SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.7, 0.01, 0.03, 0.03,  365))
+        self.models.append(SIR("SIR: Example Configuration A", 10000, 0.99, 0.01, 0.3, 0.03, 365))
+        self.models.append(SIR("SIR: Example Configuration B", 10000, 0.99, 0.01, 0.7, 0.01, 365))
+        self.models.append(SEIR("SEIR: Example Configuration A", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
+        self.models.append(SEIR("SEIR: Example Configuration B", 10000, 0.99, 0.01, 0.7, 0.01, 0.03, 0.03,  365))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIS("SIS: Comparison Model", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+        self.compareModel = SIS("SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
                                 0.00009, 50, 0.75, 864000, 0.75, 14)
 
         # Manually initialising all interfaces and displaying the Home interfaces
@@ -59,7 +59,7 @@ class BaseApp(tk.Tk):
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 2
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIR("SIR: Example Model B", 10000, 0.99, 0.01, 0.5, 0.02, 365)
+        self.compareModel = SIR("SIR: Example Configuration B", 10000, 0.99, 0.01, 0.5, 0.02, 365)
         sirInspectInterface = SIRInspectInterface(master=base, controller=self)
         self.interfaces[SIRInspectInterface.__name__] = sirInspectInterface
         sirControlInterface = SIRControlInterface(master=base, controller=self)
@@ -69,7 +69,7 @@ class BaseApp(tk.Tk):
         # Model needs to be updated before each page is loaded or else errors
         self.activeModelIndex = 4
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SEIR("SEIR: Example Model B", 10000, 0.99, 0.01, 0.4, 0.01, 0.04, 0.04, 365)
+        self.compareModel = SEIR("SEIR: Example Configuration B", 10000, 0.99, 0.01, 0.4, 0.01, 0.04, 0.04, 365)
         seirInspectInterface = SEIRInspectInterface(master=base, controller=self)
         self.interfaces[SEIRInspectInterface.__name__] = seirInspectInterface
         seirControlInterface = SEIRControlInterface(master=base, controller=self)
@@ -79,7 +79,7 @@ class BaseApp(tk.Tk):
         # Model needs to be reset before each page is loaded or else errors
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIS("SIS: Comparison Model", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
+        self.compareModel = SIS("SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
                                 0.00009, 50, 0.75, 864000, 0.75, 14)
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
@@ -170,11 +170,11 @@ class BaseApp(tk.Tk):
         # self.models.append(SIS("SIS: Default Model",
         #                        10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75,
         #                        10))
-        self.models.append(SIS("SIS: Default Model",
+        self.models.append(SIS("SIS: Default Configuration",
                             10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
 
     def addDefaultSIRModel(self):
-        self.models.append(SIR("SIR: Default Model", 10000, 0.99, 0.01, 0.3, 0.03, 365))
+        self.models.append(SIR("SIR: Default Configuration", 10000, 0.99, 0.01, 0.3, 0.03, 365))
 
     def addDefaultSEIRModel(self):
-        self.models.append(SEIR("SEIR: Default Model", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
+        self.models.append(SEIR("SEIR: Default Configuration", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))

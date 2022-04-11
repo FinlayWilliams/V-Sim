@@ -57,12 +57,12 @@ class SISControlInterface(tk.Frame):
 
         # Separates graphs from the controls
         frameMid = tk.Frame(self, bg="#6e6e6e")
-        lblOptions = tk.Label(frameMid, text="Model Variables", bg="#6e6e6e", font=("Arial", 10), fg="white")
+        lblOptions = tk.Label(frameMid, text="Model Variable Controls", bg="#6e6e6e", font=("Arial", 10), fg="white")
 
         # Lower area for the controls
         frameBot = tk.Frame(self, bg="#a8a8a8")
         # All labels and widgets for inputting variables
-        lblModelName = tk.Label(frameBot, text="Model Name:", bg="#a8a8a8", font=("Arial", 10))
+        lblModelName = tk.Label(frameBot, text="Configuration Name:", bg="#a8a8a8", font=("Arial", 10))
         self.entryName = tk.Entry(frameBot)
         lblN = tk.Label(frameBot, text="Initial Node Population Size (N):")
         NOptions = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
