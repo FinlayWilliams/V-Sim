@@ -231,7 +231,7 @@ class SISControlInterface(tk.Frame):
         if len(self.entryName.get()) > 24:
             self.controller.popup("Invalid Save", "Please enter a shorter name for the models!")
         else:
-            Name = str("SIS: " + self.entryName.get())
+            Name = str("IoT-SIS: " + self.entryName.get())
             N = int(self.cmbN.get())
             S = float(self.sclS.get() / 100)
             I = float((100 - self.sclS.get()) / 100)
@@ -297,7 +297,7 @@ class SISControlInterface(tk.Frame):
         self.sclIlPsu.set(self.activeModel.IlPsuccess)
         self.sclIpPsu.set(self.activeModel.IpPsuccess)
         self.entryName.delete(0, 'end')
-        self.entryName.insert(END, self.activeModel.Name[5:])
+        self.entryName.insert(END, self.activeModel.Name[9:])
         self.cmbMSG.set(self.activeModel.meanMessageSize)
         self.cmbPWR.set(self.activeModel.meanPower)
         self.cmbBTRY.set(self.activeModel.totalBattery)

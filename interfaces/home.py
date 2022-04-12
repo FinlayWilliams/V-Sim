@@ -82,16 +82,16 @@ class HomeInterface(tk.Frame):
         ####################################### Placing RIGHT-side elements ############################################
         frame_right.place(x=717, y=0, height="864", width="819")
         column_right_frame.place(relheight=1, relwidth=0.7, x=135)
-        lbl_model_list.place(x=218, y=40)
+        lbl_model_list.place(x=270, y=40)
         self.lstModels.place(x=220, y=70)
         self.lstModels.select_set(0)
         btn_Inspect.place(x=220, y=382)
         btn_Configure.place(x=358, y=382)
         btn_Delete.place(x=496, y=382)
-        btn_New_SIS.place(x=220, y=416)
-        lbl_compare_model_list.place(x=218, y=470)
+        btn_New_SIS.place(x=358, y=416)
+        lbl_compare_model_list.place(x=186, y=470)
         self.lstCompareModels.place(x=220, y=500)
-        self.btn_Compare.place(x=220, y=760)
+        self.btn_Compare.place(x=358, y=760)
 
         # This method must be called after the listbox is placed
         self.setModelInfoBox()
