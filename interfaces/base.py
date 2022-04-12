@@ -3,15 +3,7 @@ from .home import HomeInterface
 from .siscompare import SISCompareInterface
 from .siscontrol import SISControlInterface
 from .sisinspect import SISInspectInterface
-from .sircompare import SIRCompareInterface
-from .sircontrol import SIRControlInterface
-from .sirinspect import SIRInspectInterface
-from .seircompare import SEIRCompareInterface
-from .seircontrol import SEIRControlInterface
-from .seirinspect import SEIRInspectInterface
 from models.sis import SIS
-from models.sir import SIR
-from models.seir import SEIR
 
 
 class BaseApp(tk.Tk):
@@ -37,10 +29,6 @@ class BaseApp(tk.Tk):
                                0.00009, 50, 0.75, 864000, 0.75, 14))
         self.models.append(SIS("SIS: Example Configuration B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006,
                                0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIR("SIR: Example Configuration A", 10000, 0.99, 0.01, 0.3, 0.03, 365))
-        self.models.append(SIR("SIR: Example Configuration B", 10000, 0.99, 0.01, 0.7, 0.01, 365))
-        self.models.append(SEIR("SEIR: Example Configuration A", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))
-        self.models.append(SEIR("SEIR: Example Configuration B", 10000, 0.99, 0.01, 0.7, 0.01, 0.03, 0.03,  365))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
         self.compareModel = SIS("SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
@@ -56,29 +44,7 @@ class BaseApp(tk.Tk):
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
         sisCompareInterface = SISCompareInterface(master=base, controller=self)
         self.interfaces[SISCompareInterface.__name__] = sisCompareInterface
-        # Model needs to be updated before each page is loaded or else errors
-        self.activeModelIndex = 2
-        self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIR("SIR: Example Configuration B", 10000, 0.99, 0.01, 0.5, 0.02, 365)
-        sirInspectInterface = SIRInspectInterface(master=base, controller=self)
-        self.interfaces[SIRInspectInterface.__name__] = sirInspectInterface
-        sirControlInterface = SIRControlInterface(master=base, controller=self)
-        self.interfaces[SIRControlInterface.__name__] = sirControlInterface
-        sirCompareInterface = SIRCompareInterface(master=base, controller=self)
-        self.interfaces[SIRCompareInterface.__name__] = sirCompareInterface
-        # Model needs to be updated before each page is loaded or else errors
-        self.activeModelIndex = 4
-        self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SEIR("SEIR: Example Configuration B", 10000, 0.99, 0.01, 0.4, 0.01, 0.04, 0.04, 365)
-        seirInspectInterface = SEIRInspectInterface(master=base, controller=self)
-        self.interfaces[SEIRInspectInterface.__name__] = seirInspectInterface
-        seirControlInterface = SEIRControlInterface(master=base, controller=self)
-        self.interfaces[SEIRControlInterface.__name__] = seirControlInterface
-        seirCompareInterface = SEIRCompareInterface(master=base, controller=self)
-        self.interfaces[SEIRCompareInterface.__name__] = seirCompareInterface
-        # Model needs to be reset before each page is loaded or else errors
-        self.activeModelIndex = 0
-        self.activeModel = self.models[self.activeModelIndex]
+
         self.compareModel = SIS("SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
                                 0.00009, 50, 0.75, 864000, 0.75, 14)
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
@@ -122,36 +88,6 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateLeftGraph()
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
-        if show == "SIRInspectInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateGraphs()
-            self.interfaces[show].populateFrames()
-            self.interfaces[show].switchInfoFrame(0, 1)
-        if show == "SIRControlInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateVariables(self)
-            self.interfaces[show].updateGraphs()
-        if show == "SIRCompareInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].setModels(self)
-            self.interfaces[show].updateLeftGraph()
-            self.interfaces[show].updateRightGraph()
-            self.interfaces[show].updateColumnInfo()
-        if show == "SEIRInspectInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateGraphs()
-            self.interfaces[show].populateFrames()
-            self.interfaces[show].switchInfoFrame(0, 1)
-        if show == "SEIRControlInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateVariables(self)
-            self.interfaces[show].updateGraphs()
-        if show == "SEIRCompareInterface":
-            self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].setModels(self)
-            self.interfaces[show].updateLeftGraph()
-            self.interfaces[show].updateRightGraph()
-            self.interfaces[show].updateColumnInfo()
 
     def setActiveModel(self, index): self.activeModel = self.models[index]
 
@@ -172,9 +108,3 @@ class BaseApp(tk.Tk):
         #                        10))
         self.models.append(SIS("SIS: Default Configuration",
                             10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
-
-    def addDefaultSIRModel(self):
-        self.models.append(SIR("SIR: Default Configuration", 10000, 0.99, 0.01, 0.3, 0.03, 365))
-
-    def addDefaultSEIRModel(self):
-        self.models.append(SEIR("SEIR: Default Configuration", 10000, 0.99, 0.01, 0.3, 0.03, 0.03, 0.03, 365))

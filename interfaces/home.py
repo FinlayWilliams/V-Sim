@@ -10,9 +10,6 @@ class HomeInterface(tk.Frame):
         super().__init__(master)
         self.controller = controller
         self.newCompareModelList = []
-        # Variables used to switch interfaces set to a default option
-        self.controlInterfaceShow = "SISControlInterface"
-        self.inspectInterfaceShow = "SISInspectInterface"
 
         ##################################### Instantiating LEFT-side elements #########################################
         # Left side frame
@@ -56,11 +53,11 @@ class HomeInterface(tk.Frame):
         self.lstModels.bind("<<ListboxSelect>>", lambda x: [self.updateActiveModel(controller, 1)])
 
         # Button: opens control page with the current active models
-        btn_Configure = tk.Button(frame_right, width=17, text="Configuration Controls",
-                                  command=lambda: [controller.display("HomeInterface", self.controlInterfaceShow)])
+        btn_Configure = tk.Button(frame_right, width=17, text="Control Configuration",
+                                  command=lambda: [controller.display("HomeInterface", "SISControlInterface")])
         # Button: opens inspect page with the current active models
         btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Configuration",
-                                  command=lambda: [controller.display("HomeInterface", self.inspectInterfaceShow)])
+                                  command=lambda: [controller.display("HomeInterface", "SISInspectInterface")])
         # Button: Deletes selected models from models list
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration",
                                command=lambda: self.deleteSelectedModel(controller, 1))
@@ -68,15 +65,6 @@ class HomeInterface(tk.Frame):
         btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model",
                                 command=lambda:[controller.addDefaultSISModel(), self.updateModelList(),
                                                 self.updateCompareModelList()])
-        # Button: creates new default SIR models
-        btn_New_SIR = tk.Button(frame_right, width=17, text="Default SIR Model",
-                                command=lambda:[controller.addDefaultSIRModel(), self.updateModelList(),
-                                                self.updateCompareModelList()])
-        # Button: creates new default SEIR models
-        btn_New_SEIR = tk.Button(frame_right, width=17, text="Default SEIR Model",
-                                command=lambda:[controller.addDefaultSEIRModel(), self.updateModelList(),
-                                                self.updateCompareModelList()])
-
         # Creating a second listbox of all models to for comparison
         lbl_compare_model_list = tk.Label(frame_right,
                                           text="Select a Configuration to Compare Against the Active Configuration",
@@ -89,7 +77,7 @@ class HomeInterface(tk.Frame):
 
         # Button: Deletes selected models from models list
         self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Configuration", state="disabled",
-                                command=lambda: [controller.display("HomeInterface", self.compareInterfaceShow)])
+                                command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
 
         ####################################### Placing RIGHT-side elements ############################################
         frame_right.place(x=717, y=0, height="864", width="819")
@@ -101,8 +89,6 @@ class HomeInterface(tk.Frame):
         btn_Configure.place(x=358, y=382)
         btn_Delete.place(x=496, y=382)
         btn_New_SIS.place(x=220, y=416)
-        btn_New_SIR.place(x=358, y=416)
-        btn_New_SEIR.place(x=496, y=416)
         lbl_compare_model_list.place(x=218, y=470)
         self.lstCompareModels.place(x=220, y=500)
         self.btn_Compare.place(x=220, y=760)
@@ -123,8 +109,7 @@ class HomeInterface(tk.Frame):
 
         for M in controller.models:
             if controller.activeModel != M:
-                if self.checkModelType(controller.activeModel) == self.checkModelType(M):
-                    self.newCompareModelList.append(M)
+                self.newCompareModelList.append(M)
         for M in self.newCompareModelList:
             self.lstCompareModels.insert(END, M)
 
@@ -140,26 +125,6 @@ class HomeInterface(tk.Frame):
                 self.updateCompareModelList(controller)
                 self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
 
-    # Method: checks to see what type of virus models is currently selected, used in a range of other GUI updates
-    def checkModelType(self, model):
-        # Delete this if nothing breaks
-        # if self.lstModels.curselection() != ():
-        #     modelPrefix = model.Name.partition(":")
-        #     if modelPrefix[0] == "SIS":
-        #         return "SIS"
-        #     if modelPrefix[0] == "SIR":
-        #         return "SIR"
-        #     if modelPrefix[0] == "SEIR":
-        #         return "SEIR"
-
-        modelPrefix = model.Name.partition(":")
-        if modelPrefix[0] == "SIS":
-            return "SIS"
-        if modelPrefix[0] == "SIR":
-            return "SIR"
-        if modelPrefix[0] == "SEIR":
-            return "SEIR"
-
     # Called everytime listbox is updated & other GUI updates, updates a range of variables and indexes
     def updateActiveModel(self, controller, stub):
         if self.lstModels.curselection() != ():
@@ -172,22 +137,6 @@ class HomeInterface(tk.Frame):
             self.updateCompareModelList(controller)
             self.updateCompareModel(controller, 1)
 
-            # Updates the buttons for switching pages based on selected model type
-            if self.checkModelType(controller.activeModel) != self.checkModelType(oldActive):
-                self.setModelInfoBox()
-                if self.checkModelType(self.controller.activeModel) == "SIS":
-                    self.controlInterfaceShow = "SISControlInterface"
-                    self.inspectInterfaceShow = "SISInspectInterface"
-                    self.compareInterfaceShow = "SISCompareInterface"
-                if self.checkModelType(self.controller.activeModel) == "SIR":
-                    self.controlInterfaceShow = "SIRControlInterface"
-                    self.inspectInterfaceShow = "SIRInspectInterface"
-                    self.compareInterfaceShow = "SIRCompareInterface"
-                if self.checkModelType(self.controller.activeModel) == "SEIR":
-                    self.controlInterfaceShow = "SEIRControlInterface"
-                    self.inspectInterfaceShow = "SEIRInspectInterface"
-                    self.compareInterfaceShow = "SEIRCompareInterface"
-
     # Called to update the compare models selection
     def updateCompareModel(self, controller, stub):
         if self.lstCompareModels.curselection() == ():
@@ -198,246 +147,140 @@ class HomeInterface(tk.Frame):
 
     # Called whenever a models is selected to display the correct models information box
     def setModelInfoBox(self):
-        if self.checkModelType(self.controller.activeModel) == "SIS":
-            self.lblModelTypeTitle.config(text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"),
-                                          bg="#654e78")
-            infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
-            lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10),
-                                  bg="#654e78")
-            lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
-                                                  "a percentage of N (default is 99%).",
+        self.lblModelTypeTitle.config(text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"),
+                                      bg="#654e78")
+        infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
+        lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10),
+                              bg="#654e78")
+        lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
+                                              "a percentage of N (default is 99%).",
+                              font=("Arial", 10), bg="#654e78")
+        lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
+                                              "configured by changing the", font=("Arial", 10), bg="#654e78")
+        lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial",
+                                                                                                         10),
+                               bg="#654e78")
+        lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
+                                                "hypothetical ", font=("Arial", 10), bg="#654e78")
+        lbl_WSN_Desc2 = tk.Label(infoFrame, text=" network. This option determines how many Local groups the "
+                                                 "N population is split into.", font=("Arial", 10), bg="#654e78")
+        lbl_DEP_Title = tk.Label(infoFrame, text="Deployment Area", font=("Arial", 10, "bold"), bg="#654e78",
+                                 fg="white")
+        lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that the hypothetical network is deployed over, "
+                                                "in Meters Squared", font=("Arial", 10), bg="#654e78")
+        lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far messages must travel before "
+                                                 "reaching a node.", font=("Arial", 10), bg="#654e78")
+        lbl_TRNS_Title = tk.Label(infoFrame, text="Transmission Range", font=("Arial", 10, "bold"), bg="#654e78",
+                                  fg="white")
+        lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate, in Meters. "
+                                                 "This variable", font=("Arial", 10), bg="#654e78")
+        lbl_TRNS_Desc2 = tk.Label(infoFrame, text=" changes how far each node can send a message and propagate "
+                                                  "a payload ...", font=("Arial", 10), bg="#654e78")
+        lbl_CNTCT_Title = tk.Label(infoFrame, text="Contact Rate", font=("Arial", 10, "bold"), bg="#654e78",
+                                   fg="white")
+        lbl_CNTCT_Desc = tk.Label(infoFrame, text=" The contact rate for all Susceptible nodes, "
+                                                  "the rate at which they", font=("Arial", 10), bg="#654e78")
+        lbl_CNTCT_Desc2 = tk.Label(infoFrame, text=" communicate with any other nodes, "
+                                                   "per Second.", font=("Arial", 10), bg="#654e78")
+        lbl_SCAN_Title = tk.Label(infoFrame, text="Scanning Rate", font=("Arial", 10, "bold"), bg="#654e78",
+                                  fg="white")
+        lbl_SCAN_Desc = tk.Label(infoFrame, text=" The rate at which any infected node will scan for other nodes, "
+                                                 "per Second", font=("Arial", 10), bg="#654e78")
+        lbl_SCAN_Desc2 = tk.Label(infoFrame, text=" This will impact how well an infected node can spread the "
+                                                  "infection.", font=("Arial", 10), bg="#654e78")
+        lbl_PTrns_Title = tk.Label(infoFrame, text="PTransmission", font=("Arial", 10, "bold"), bg="#654e78",
+                                   fg="white")
+        lbl_PTrns_Desc = tk.Label(infoFrame, text=" The rate of a successful transmission of infection, "
+                                                  "per contact of Infected to Susceptible.",
                                   font=("Arial", 10), bg="#654e78")
-            lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
-                                                  "configured by changing the", font=("Arial", 10), bg="#654e78")
-            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial",
-                                                                                                    10),bg="#654e78")
-            lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
-                                                    "hypothetical ", font=("Arial", 10), bg="#654e78")
-            lbl_WSN_Desc2 = tk.Label(infoFrame, text=" network. This option determines how many Local groups the "
-                                                     "N population is split into.", font=("Arial", 10), bg="#654e78")
-            lbl_DEP_Title = tk.Label(infoFrame, text="Deployment Area", font=("Arial", 10, "bold"), bg="#654e78",
-                                     fg="white")
-            lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that the hypothetical network is deployed over, "
-                                                    "in Meters Squared", font=("Arial", 10), bg="#654e78")
-            lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far messages must travel before "
-                                                     "reaching a node.", font=("Arial", 10), bg="#654e78")
-            lbl_TRNS_Title = tk.Label(infoFrame, text="Transmission Range", font=("Arial", 10, "bold"), bg="#654e78",
-                                      fg="white")
-            lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate, in Meters. "
-                                                     "This variable", font=("Arial", 10), bg="#654e78")
-            lbl_TRNS_Desc2 = tk.Label(infoFrame, text=" changes how far each node can send a message and propagate "
-                                                      "a payload ...", font=("Arial", 10), bg="#654e78")
-            lbl_CNTCT_Title = tk.Label(infoFrame, text="Contact Rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_CNTCT_Desc = tk.Label(infoFrame, text=" The contact rate for all Susceptible nodes, "
-                                                      "the rate at which they", font=("Arial", 10), bg="#654e78")
-            lbl_CNTCT_Desc2 = tk.Label(infoFrame, text=" communicate with any other nodes, "
-                                                       "per Second.", font=("Arial", 10), bg="#654e78")
-            lbl_SCAN_Title = tk.Label(infoFrame, text="Scanning Rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                      fg="white")
-            lbl_SCAN_Desc = tk.Label(infoFrame, text=" The rate at which any infected node will scan for other nodes, "
-                                                     "per Second", font=("Arial", 10), bg="#654e78")
-            lbl_SCAN_Desc2 = tk.Label(infoFrame, text=" This will impact how well an infected node can spread the "
-                                                      "infection.", font=("Arial", 10), bg="#654e78")
-            lbl_PTrns_Title = tk.Label(infoFrame, text="PTransmission", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_PTrns_Desc = tk.Label(infoFrame, text=" The rate of a successful transmission of infection, "
-                                                      "per contact of Infected to Susceptible.",
-                                      font=("Arial", 10), bg="#654e78")
-            lbl_IrPsu_Title = tk.Label(infoFrame, text="IR PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_IrPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected "
-                                                      "node attacks with Random-Scanning (IR).",
-                                      font=("Arial", 10), bg="#654e78")
-            lbl_IlPsu_Title = tk.Label(infoFrame, text="IL PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_IlPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
-                                                      "attacks with Local-Scanning (IL).",
-                                      font=("Arial", 10), bg="#654e78")
-            lbl_IpPsu_Title = tk.Label(infoFrame, text="IP PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_IpPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
-                                                      "attacks with Peer-to-Peer (IP).",
-                                      font=("Arial", 10), bg="#654e78")
-            lbl_MSG_Title = tk.Label(infoFrame, text="Message Size", font=("Arial", 10, "bold"), bg="#654e78",
-                                     fg="white")
-            lbl_MSG_Desc = tk.Label(infoFrame, text=" The average size of a message sent between any nodes, in Bytes. "
-                                                    "Changing this", font=("Arial", 10), bg="#654e78")
-            lbl_MSG_Desc2 = tk.Label(infoFrame, text=" will impact how much effort it takes a node to send each "
-                                                     "message.", font=("Arial", 10), bg="#654e78")
-            lbl_PWR_Title = tk.Label(infoFrame, text="Power", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_PWR_Desc = tk.Label(infoFrame, text=" The average amount of power it takes to send a message between "
-                                                    "any nodes,", font=("Arial", 10), bg="#654e78")
-            lbl_PWR_Desc2 = tk.Label(infoFrame, text=" in Milliamps (mA). This also impact the effort (lifespan).",
-                                     font=("Arial", 10), bg="#654e78")
-            lbl_BTRY_Title = tk.Label(infoFrame, text="Battery Size", font=("Arial", 10, "bold"), bg="#654e78",
-                                      fg="white")
-            lbl_BTRY_Desc = tk.Label(infoFrame, text=" The total amount of battery life all nodes have, in Milliamps "
-                                                     "per Hour (mAh)", font=("Arial", 10), bg="#654e78")
-            lbl_BTRY_Desc2 = tk.Label(infoFrame, text=" This is how much energy a node has to work with before it "
-                                                      "dies.", font=("Arial", 10), bg="#654e78")
-            lbl_RR_Title = tk.Label(infoFrame, text="Recovery rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                    fg="white")
-            lbl_RR_Desc = tk.Label(infoFrame, text=" The rate that Infected nodes recover and return to being "
-                                                   "Susceptible nodes,", font=("Arial", 10), bg="#654e78")
-            lbl_RR_Desc2 = tk.Label(infoFrame, text=" per Day. A general measure of human intervention to a network "
-                                                    "attack.", font=("Arial", 10), bg="#654e78")
-            lbl_T_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_T_Desc = tk.Label(infoFrame, text=" The number of days to observe the simulation.", font=("Arial", 10),
-                                  bg="#654e78")
-
-            infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
-            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
-            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
-            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3,0))
-            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3,0))
-            lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-            lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3,0))
-            lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3,0))
-            lbl_WSN_Desc2.grid(row=6, column=1, sticky="w")
-            lbl_DEP_Title.grid(row=7, column=0, sticky="e", pady=(3,0))
-            lbl_DEP_Desc.grid(row=7, column=1, sticky="w", pady=(3,0))
-            lbl_DEP_Desc2.grid(row=8, column=1, sticky="w")
-            lbl_TRNS_Title.grid(row=9, column=0, sticky="e", pady=(3,0))
-            lbl_TRNS_Desc.grid(row=9, column=1, sticky="w", pady=(3,0))
-            lbl_TRNS_Desc2.grid(row=10, column=1, sticky="w")
-            lbl_CNTCT_Title.grid(row=11, column=0, sticky="e", pady=(3,0))
-            lbl_CNTCT_Desc.grid(row=11, column=1, sticky="w", pady=(3,0))
-            lbl_CNTCT_Desc2.grid(row=12, column=1, sticky="w")
-            lbl_SCAN_Title.grid(row=13, column=0, sticky="e", pady=(3,0))
-            lbl_SCAN_Desc.grid(row=13, column=1, sticky="w", pady=(3,0))
-            lbl_SCAN_Desc2.grid(row=14, column=1, sticky="w")
-            lbl_PTrns_Title.grid(row=14, column=0, sticky="e", pady=3)
-            lbl_PTrns_Desc.grid(row=14, column=1, sticky="w", pady=3)
-            lbl_IrPsu_Title.grid(row=15, column=0, sticky="e", pady=3)
-            lbl_IrPsu_Desc.grid(row=15, column=1, sticky="w", pady=3)
-            lbl_IlPsu_Title.grid(row=16, column=0, sticky="e", pady=3)
-            lbl_IlPsu_Desc.grid(row=16, column=1, sticky="w", pady=3)
-            lbl_IpPsu_Title.grid(row=17, column=0, sticky="e", pady=3)
-            lbl_IpPsu_Desc.grid(row=17, column=1, sticky="w", pady=3)
-            lbl_MSG_Title.grid(row=18, column=0, sticky="e", pady=(3,0))
-            lbl_MSG_Desc.grid(row=18, column=1, sticky="w", pady=(3,0))
-            lbl_MSG_Desc2.grid(row=19, column=1, sticky="w")
-            lbl_PWR_Title.grid(row=20, column=0, sticky="e", pady=(3,0))
-            lbl_PWR_Desc.grid(row=20, column=1, sticky="w", pady=(3,0))
-            lbl_PWR_Desc2.grid(row=21, column=1, sticky="w")
-            lbl_BTRY_Title.grid(row=22, column=0, sticky="e", pady=(3,0))
-            lbl_BTRY_Desc.grid(row=22, column=1, sticky="w", pady=(3,0))
-            lbl_BTRY_Desc2.grid(row=23, column=1, sticky="w")
-            lbl_RR_Title.grid(row=24, column=0, sticky="e", pady=(3,0))
-            lbl_RR_Desc.grid(row=24, column=1, sticky="w", pady=(3,0))
-            lbl_RR_Desc2.grid(row=25, column=1, sticky="w")
-            lbl_T_Title.grid(row=26, column=0, sticky="e", pady=3)
-            lbl_T_Desc.grid(row=26, column=1, sticky="w", pady=3)
-
-        if self.checkModelType(self.controller.activeModel) == "SIR":
-            self.lblModelTypeTitle.config(text="SIR Model Starting Condition Variables :", font=("Arial", 14, "italic"),
-                                          bg="#654e78")
-            infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
-            lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_N_Desc = tk.Label(infoFrame, text=" The starting population count", font=("Arial", 10),
-                                  bg="#654e78")
-            lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
-                                                  "a percentage of N (default is 99%).",
+        lbl_IrPsu_Title = tk.Label(infoFrame, text="IR PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
+                                   fg="white")
+        lbl_IrPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected "
+                                                  "node attacks with Random-Scanning (IR).",
                                   font=("Arial", 10), bg="#654e78")
-            lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
-                                                  "configured by changing the", font=("Arial", 10), bg="#654e78")
-            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.",
-                                   font=("Arial", 10),
-                                   bg="#654e78")
-            lbl_Beta_Title = tk.Label(infoFrame, text="Beta", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_Beta_Desc = tk.Label(infoFrame, text=" I do not know ", font=("Arial", 10), bg="#654e78")
-            lbl_Beta_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Gamma_Title = tk.Label(infoFrame, text="Gamma", font=("Arial", 10, "bold"), bg="#654e78",
-                                     fg="white")
-            lbl_Gamma_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
-            lbl_Gamma_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Timesteps_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78",
-                                           fg="white")
-            lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ",
-                                          font=("Arial", 10), bg="#654e78")
-
-            infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
-            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
-            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
-            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
-            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
-            lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-            lbl_Beta_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
-            lbl_Beta_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
-            lbl_Beta_Desc2.grid(row=6, column=1, sticky="w")
-            lbl_Gamma_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
-            lbl_Gamma_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
-            lbl_Gamma_Desc2.grid(row=8, column=1, sticky="w")
-            lbl_Timesteps_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
-            lbl_Timesteps_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
-
-        if self.checkModelType(self.controller.activeModel) == "SEIR":
-            self.lblModelTypeTitle.config(text="SEIR Model Starting Condition Variables :", font=("Arial", 14, "italic"),
-                                          bg="#654e78")
-            infoFrame = tk.Frame(self.column_left_frame, bg="#654e78")
-            lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_N_Desc = tk.Label(infoFrame, text=" The starting population count", font=("Arial", 10),
-                                  bg="#654e78")
-            lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
-                                                  "a percentage of N (default is 99%).",
+        lbl_IlPsu_Title = tk.Label(infoFrame, text="IL PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
+                                   fg="white")
+        lbl_IlPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
+                                                  "attacks with Local-Scanning (IL).",
                                   font=("Arial", 10), bg="#654e78")
-            lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
-                                                  "configured by changing the", font=("Arial", 10), bg="#654e78")
-            lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.",
-                                   font=("Arial", 10),
-                                   bg="#654e78")
-            lbl_Beta_Title = tk.Label(infoFrame, text="Beta", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-            lbl_Beta_Desc = tk.Label(infoFrame, text=" I do not know ", font=("Arial", 10), bg="#654e78")
-            lbl_Beta_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Gamma_Title = tk.Label(infoFrame, text="Gamma", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_Gamma_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
-            lbl_Gamma_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Mu_Title = tk.Label(infoFrame, text="Mu", font=("Arial", 10, "bold"), bg="#654e78",
-                                       fg="white")
-            lbl_Mu_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
-            lbl_Mu_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Alpha_Title = tk.Label(infoFrame, text="Alpha", font=("Arial", 10, "bold"), bg="#654e78",
-                                    fg="white")
-            lbl_Alpha_Desc = tk.Label(infoFrame, text=" I do not know", font=("Arial", 10), bg="#654e78")
-            lbl_Alpha_Desc2 = tk.Label(infoFrame, text=" not know what this is.", font=("Arial", 10), bg="#654e78")
-            lbl_Timesteps_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78",
-                                           fg="white")
-            lbl_Timesteps_Desc = tk.Label(infoFrame, text=" The number of days the simulation is to be observed. ",
-                                          font=("Arial", 10), bg="#654e78")
+        lbl_IpPsu_Title = tk.Label(infoFrame, text="IP PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
+                                   fg="white")
+        lbl_IpPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
+                                                  "attacks with Peer-to-Peer (IP).",
+                                  font=("Arial", 10), bg="#654e78")
+        lbl_MSG_Title = tk.Label(infoFrame, text="Message Size", font=("Arial", 10, "bold"), bg="#654e78",
+                                 fg="white")
+        lbl_MSG_Desc = tk.Label(infoFrame, text=" The average size of a message sent between any nodes, in Bytes. "
+                                                "Changing this", font=("Arial", 10), bg="#654e78")
+        lbl_MSG_Desc2 = tk.Label(infoFrame, text=" will impact how much effort it takes a node to send each "
+                                                 "message.", font=("Arial", 10), bg="#654e78")
+        lbl_PWR_Title = tk.Label(infoFrame, text="Power", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_PWR_Desc = tk.Label(infoFrame, text=" The average amount of power it takes to send a message between "
+                                                "any nodes,", font=("Arial", 10), bg="#654e78")
+        lbl_PWR_Desc2 = tk.Label(infoFrame, text=" in Milliamps (mA). This also impact the effort (lifespan).",
+                                 font=("Arial", 10), bg="#654e78")
+        lbl_BTRY_Title = tk.Label(infoFrame, text="Battery Size", font=("Arial", 10, "bold"), bg="#654e78",
+                                  fg="white")
+        lbl_BTRY_Desc = tk.Label(infoFrame, text=" The total amount of battery life all nodes have, in Milliamps "
+                                                 "per Hour (mAh)", font=("Arial", 10), bg="#654e78")
+        lbl_BTRY_Desc2 = tk.Label(infoFrame, text=" This is how much energy a node has to work with before it "
+                                                  "dies.", font=("Arial", 10), bg="#654e78")
+        lbl_RR_Title = tk.Label(infoFrame, text="Recovery rate", font=("Arial", 10, "bold"), bg="#654e78",
+                                fg="white")
+        lbl_RR_Desc = tk.Label(infoFrame, text=" The rate that Infected nodes recover and return to being "
+                                               "Susceptible nodes,", font=("Arial", 10), bg="#654e78")
+        lbl_RR_Desc2 = tk.Label(infoFrame, text=" per Day. A general measure of human intervention to a network "
+                                                "attack.", font=("Arial", 10), bg="#654e78")
+        lbl_T_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_T_Desc = tk.Label(infoFrame, text=" The number of days to observe the simulation.", font=("Arial", 10),
+                              bg="#654e78")
 
-            infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
-            lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
-            lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
-            lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
-            lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
-            lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
-            lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
-            lbl_I_Desc2.grid(row=3, column=1, sticky="w")
-            lbl_Beta_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
-            lbl_Beta_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
-            lbl_Beta_Desc2.grid(row=6, column=1, sticky="w")
-            lbl_Gamma_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
-            lbl_Gamma_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
-            lbl_Gamma_Desc2.grid(row=8, column=1, sticky="w")
-            lbl_Mu_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
-            lbl_Mu_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
-            lbl_Mu_Desc2.grid(row=10, column=1, sticky="w")
-            lbl_Alpha_Title.grid(row=11, column=0, sticky="e", pady=(3, 0))
-            lbl_Alpha_Desc.grid(row=11, column=1, sticky="w", pady=(3, 0))
-            lbl_Alpha_Desc2.grid(row=12, column=1, sticky="w")
-            lbl_Timesteps_Title.grid(row=13, column=0, sticky="e", pady=(3, 0))
-            lbl_Timesteps_Desc.grid(row=13, column=1, sticky="w", pady=(3, 0))
+        infoFrame.place(relwidth=0.98, relheight=1, x=7, y=40)
+        lbl_N_Title.grid(row=0, column=0, sticky="e", pady=3)
+        lbl_N_Desc.grid(row=0, column=1, sticky="w", pady=3)
+        lbl_S_Title.grid(row=1, column=0, sticky="e", pady=3)
+        lbl_S_Desc.grid(row=1, column=1, sticky="w", pady=3)
+        lbl_I_Title.grid(row=2, column=0, sticky="e", pady=(3, 0))
+        lbl_I_Desc.grid(row=2, column=1, sticky="w", pady=(3, 0))
+        lbl_I_Desc2.grid(row=3, column=1, sticky="w")
+        lbl_WSN_Title.grid(row=5, column=0, sticky="e", pady=(3, 0))
+        lbl_WSN_Desc.grid(row=5, column=1, sticky="w", pady=(3, 0))
+        lbl_WSN_Desc2.grid(row=6, column=1, sticky="w")
+        lbl_DEP_Title.grid(row=7, column=0, sticky="e", pady=(3, 0))
+        lbl_DEP_Desc.grid(row=7, column=1, sticky="w", pady=(3, 0))
+        lbl_DEP_Desc2.grid(row=8, column=1, sticky="w")
+        lbl_TRNS_Title.grid(row=9, column=0, sticky="e", pady=(3, 0))
+        lbl_TRNS_Desc.grid(row=9, column=1, sticky="w", pady=(3, 0))
+        lbl_TRNS_Desc2.grid(row=10, column=1, sticky="w")
+        lbl_CNTCT_Title.grid(row=11, column=0, sticky="e", pady=(3, 0))
+        lbl_CNTCT_Desc.grid(row=11, column=1, sticky="w", pady=(3, 0))
+        lbl_CNTCT_Desc2.grid(row=12, column=1, sticky="w")
+        lbl_SCAN_Title.grid(row=13, column=0, sticky="e", pady=(3, 0))
+        lbl_SCAN_Desc.grid(row=13, column=1, sticky="w", pady=(3, 0))
+        lbl_SCAN_Desc2.grid(row=14, column=1, sticky="w")
+        lbl_PTrns_Title.grid(row=14, column=0, sticky="e", pady=3)
+        lbl_PTrns_Desc.grid(row=14, column=1, sticky="w", pady=3)
+        lbl_IrPsu_Title.grid(row=15, column=0, sticky="e", pady=3)
+        lbl_IrPsu_Desc.grid(row=15, column=1, sticky="w", pady=3)
+        lbl_IlPsu_Title.grid(row=16, column=0, sticky="e", pady=3)
+        lbl_IlPsu_Desc.grid(row=16, column=1, sticky="w", pady=3)
+        lbl_IpPsu_Title.grid(row=17, column=0, sticky="e", pady=3)
+        lbl_IpPsu_Desc.grid(row=17, column=1, sticky="w", pady=3)
+        lbl_MSG_Title.grid(row=18, column=0, sticky="e", pady=(3, 0))
+        lbl_MSG_Desc.grid(row=18, column=1, sticky="w", pady=(3, 0))
+        lbl_MSG_Desc2.grid(row=19, column=1, sticky="w")
+        lbl_PWR_Title.grid(row=20, column=0, sticky="e", pady=(3, 0))
+        lbl_PWR_Desc.grid(row=20, column=1, sticky="w", pady=(3, 0))
+        lbl_PWR_Desc2.grid(row=21, column=1, sticky="w")
+        lbl_BTRY_Title.grid(row=22, column=0, sticky="e", pady=(3, 0))
+        lbl_BTRY_Desc.grid(row=22, column=1, sticky="w", pady=(3, 0))
+        lbl_BTRY_Desc2.grid(row=23, column=1, sticky="w")
+        lbl_RR_Title.grid(row=24, column=0, sticky="e", pady=(3, 0))
+        lbl_RR_Desc.grid(row=24, column=1, sticky="w", pady=(3, 0))
+        lbl_RR_Desc2.grid(row=25, column=1, sticky="w")
+        lbl_T_Title.grid(row=26, column=0, sticky="e", pady=3)
+        lbl_T_Desc.grid(row=26, column=1, sticky="w", pady=(3, 0))
