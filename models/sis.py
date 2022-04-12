@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.integrate import odeint
-from sklearn.linear_model import LinearRegression
+
 
 class SIS:
     # Preliminary Constructor to Initialise Variables and Allow for easy class creation
