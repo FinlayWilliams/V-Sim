@@ -19,93 +19,49 @@ class HomeInterface(tk.Frame):
         self.lblModelTypeTitle = tk.Label(column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"), bg="#654e78")
         infoFrame = tk.Frame(column_left_frame, bg="#654e78")
         lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10),
-                              bg="#654e78")
+        lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10), bg="#654e78")
         lbl_S_Title = tk.Label(infoFrame, text="S", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, "
-                                              "a percentage of N (default is 99%).",
-                              font=("Arial", 10), bg="#654e78")
+        lbl_S_Desc = tk.Label(infoFrame, text=" The starting Susceptible population, a percentage of N (default is 99%).", font=("Arial", 10), bg="#654e78")
         lbl_I_Title = tk.Label(infoFrame, text="I", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is "
-                                              "configured by changing the", font=("Arial", 10), bg="#654e78")
-        lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial",
-                                                                                                         10),
-                               bg="#654e78")
+        lbl_I_Desc = tk.Label(infoFrame, text=" The starting Infected population count. This variable is configured by changing the", font=("Arial", 10), bg="#654e78")
+        lbl_I_Desc2 = tk.Label(infoFrame, text=" S variable and is always set so that S + I = N.", font=("Arial", 10), bg="#654e78")
         lbl_WSN_Title = tk.Label(infoFrame, text="WSN", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the "
-                                                "hypothetical ", font=("Arial", 10), bg="#654e78")
-        lbl_WSN_Desc2 = tk.Label(infoFrame, text=" network. This option determines how many Local groups the "
-                                                 "N population is split into.", font=("Arial", 10), bg="#654e78")
-        lbl_DEP_Title = tk.Label(infoFrame, text="Deployment Area", font=("Arial", 10, "bold"), bg="#654e78",
-                                 fg="white")
-        lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that the hypothetical network is deployed over, "
-                                                "in Meters Squared", font=("Arial", 10), bg="#654e78")
-        lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far messages must travel before "
-                                                 "reaching a node.", font=("Arial", 10), bg="#654e78")
-        lbl_TRNS_Title = tk.Label(infoFrame, text="Transmission Range", font=("Arial", 10, "bold"), bg="#654e78",
-                                  fg="white")
-        lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate, in Meters. "
-                                                 "This variable", font=("Arial", 10), bg="#654e78")
-        lbl_TRNS_Desc2 = tk.Label(infoFrame, text=" changes how far each node can send a message and propagate "
-                                                  "a payload ...", font=("Arial", 10), bg="#654e78")
-        lbl_CNTCT_Title = tk.Label(infoFrame, text="Contact Rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                   fg="white")
-        lbl_CNTCT_Desc = tk.Label(infoFrame, text=" The contact rate for all Susceptible nodes, "
-                                                  "the rate at which they", font=("Arial", 10), bg="#654e78")
-        lbl_CNTCT_Desc2 = tk.Label(infoFrame, text=" communicate with any other nodes, "
-                                                   "per Second.", font=("Arial", 10), bg="#654e78")
-        lbl_SCAN_Title = tk.Label(infoFrame, text="Scanning Rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                  fg="white")
-        lbl_SCAN_Desc = tk.Label(infoFrame, text=" The rate at which any infected node will scan for other nodes, "
-                                                 "per Second", font=("Arial", 10), bg="#654e78")
-        lbl_SCAN_Desc2 = tk.Label(infoFrame, text=" This will impact how well an infected node can spread the "
-                                                  "infection.", font=("Arial", 10), bg="#654e78")
-        lbl_PTrns_Title = tk.Label(infoFrame, text="PTransmission", font=("Arial", 10, "bold"), bg="#654e78",
-                                   fg="white")
-        lbl_PTrns_Desc = tk.Label(infoFrame, text=" The rate of a successful transmission of infection, "
-                                                  "per contact of Infected to Susceptible.",
-                                  font=("Arial", 10), bg="#654e78")
-        lbl_IrPsu_Title = tk.Label(infoFrame, text="IR PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                   fg="white")
-        lbl_IrPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected "
-                                                  "node attacks with Random-Scanning (IR).",
-                                  font=("Arial", 10), bg="#654e78")
-        lbl_IlPsu_Title = tk.Label(infoFrame, text="IL PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                   fg="white")
-        lbl_IlPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
-                                                  "attacks with Local-Scanning (IL).",
-                                  font=("Arial", 10), bg="#654e78")
-        lbl_IpPsu_Title = tk.Label(infoFrame, text="IP PSuccess", font=("Arial", 10, "bold"), bg="#654e78",
-                                   fg="white")
-        lbl_IpPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node "
-                                                  "attacks with Peer-to-Peer (IP).",
-                                  font=("Arial", 10), bg="#654e78")
-        lbl_MSG_Title = tk.Label(infoFrame, text="Message Size", font=("Arial", 10, "bold"), bg="#654e78",
-                                 fg="white")
-        lbl_MSG_Desc = tk.Label(infoFrame, text=" The average size of a message sent between any nodes, in Bytes. "
-                                                "Changing this", font=("Arial", 10), bg="#654e78")
-        lbl_MSG_Desc2 = tk.Label(infoFrame, text=" will impact how much effort it takes a node to send each "
-                                                 "message.", font=("Arial", 10), bg="#654e78")
+        lbl_WSN_Desc = tk.Label(infoFrame, text=" The number of Wireless Sensor Networks contained within the hypothetical ", font=("Arial", 10), bg="#654e78")
+        lbl_WSN_Desc2 = tk.Label(infoFrame, text=" network. This option determines how many Local groups the N population is split into.", font=("Arial", 10), bg="#654e78")
+        lbl_DEP_Title = tk.Label(infoFrame, text="Deployment Area", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_DEP_Desc = tk.Label(infoFrame, text=" The space that the hypothetical network is deployed over, in Meters Squared", font=("Arial", 10), bg="#654e78")
+        lbl_DEP_Desc2 = tk.Label(infoFrame, text=" This variable changes how far messages must travel before reaching a node.", font=("Arial", 10), bg="#654e78")
+        lbl_TRNS_Title = tk.Label(infoFrame, text="Transmission Range", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_TRNS_Desc = tk.Label(infoFrame, text=" The range each node is able to communicate, in Meters. This variable", font=("Arial", 10), bg="#654e78")
+        lbl_TRNS_Desc2 = tk.Label(infoFrame, text=" changes how far each node can send a message and propagate a payload ...", font=("Arial", 10), bg="#654e78")
+        lbl_CNTCT_Title = tk.Label(infoFrame, text="Contact Rate", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_CNTCT_Desc = tk.Label(infoFrame, text=" The contact rate for all Susceptible nodes, the rate at which they", font=("Arial", 10), bg="#654e78")
+        lbl_CNTCT_Desc2 = tk.Label(infoFrame, text=" communicate with any other nodes, per Second.", font=("Arial", 10), bg="#654e78")
+        lbl_SCAN_Title = tk.Label(infoFrame, text="Scanning Rate", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_SCAN_Desc = tk.Label(infoFrame, text=" The rate at which any infected node will scan for other nodes, per Second", font=("Arial", 10), bg="#654e78")
+        lbl_SCAN_Desc2 = tk.Label(infoFrame, text=" This will impact how well an infected node can spread the infection.", font=("Arial", 10), bg="#654e78")
+        lbl_PTrns_Title = tk.Label(infoFrame, text="PTransmission", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_PTrns_Desc = tk.Label(infoFrame, text=" The rate of a successful transmission of infection, per contact of Infected to Susceptible.", font=("Arial", 10), bg="#654e78")
+        lbl_IrPsu_Title = tk.Label(infoFrame, text="IR PSuccess", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_IrPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node attacks with Random-Scanning (IR).", font=("Arial", 10), bg="#654e78")
+        lbl_IlPsu_Title = tk.Label(infoFrame, text="IL PSuccess", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_IlPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node attacks with Local-Scanning (IL).", font=("Arial", 10), bg="#654e78")
+        lbl_IpPsu_Title = tk.Label(infoFrame, text="IP PSuccess", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_IpPsu_Desc = tk.Label(infoFrame, text=" The rate of a successful connection when an Infected node attacks with Peer-to-Peer (IP).", font=("Arial", 10), bg="#654e78")
+        lbl_MSG_Title = tk.Label(infoFrame, text="Message Size", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_MSG_Desc = tk.Label(infoFrame, text=" The average size of a message sent between any nodes, in Bytes. Changing this", font=("Arial", 10), bg="#654e78")
+        lbl_MSG_Desc2 = tk.Label(infoFrame, text=" will impact how much effort it takes a node to send each message.", font=("Arial", 10), bg="#654e78")
         lbl_PWR_Title = tk.Label(infoFrame, text="Power", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_PWR_Desc = tk.Label(infoFrame, text=" The average amount of power it takes to send a message between "
-                                                "any nodes,", font=("Arial", 10), bg="#654e78")
-        lbl_PWR_Desc2 = tk.Label(infoFrame, text=" in Milliamps (mA). This also impact the effort (lifespan).",
-                                 font=("Arial", 10), bg="#654e78")
-        lbl_BTRY_Title = tk.Label(infoFrame, text="Battery Size", font=("Arial", 10, "bold"), bg="#654e78",
-                                  fg="white")
-        lbl_BTRY_Desc = tk.Label(infoFrame, text=" The total amount of battery life all nodes have, in Milliamps "
-                                                 "per Hour (mAh)", font=("Arial", 10), bg="#654e78")
-        lbl_BTRY_Desc2 = tk.Label(infoFrame, text=" This is how much energy a node has to work with before it "
-                                                  "dies.", font=("Arial", 10), bg="#654e78")
-        lbl_RR_Title = tk.Label(infoFrame, text="Recovery rate", font=("Arial", 10, "bold"), bg="#654e78",
-                                fg="white")
-        lbl_RR_Desc = tk.Label(infoFrame, text=" The rate that Infected nodes recover and return to being "
-                                               "Susceptible nodes,", font=("Arial", 10), bg="#654e78")
-        lbl_RR_Desc2 = tk.Label(infoFrame, text=" per Day. A general measure of human intervention to a network "
-                                                "attack.", font=("Arial", 10), bg="#654e78")
+        lbl_PWR_Desc = tk.Label(infoFrame, text=" The average amount of power it takes to send a message between any nodes,", font=("Arial", 10), bg="#654e78")
+        lbl_PWR_Desc2 = tk.Label(infoFrame, text=" in Milliamps (mA). This also impact the effort (lifespan).", font=("Arial", 10), bg="#654e78")
+        lbl_BTRY_Title = tk.Label(infoFrame, text="Battery Size", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_BTRY_Desc = tk.Label(infoFrame, text=" The total amount of battery life all nodes have, in Milliamps per Hour (mAh)", font=("Arial", 10), bg="#654e78")
+        lbl_BTRY_Desc2 = tk.Label(infoFrame, text=" This is how much energy a node has to work with before it dies.", font=("Arial", 10), bg="#654e78")
+        lbl_RR_Title = tk.Label(infoFrame, text="Recovery rate", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
+        lbl_RR_Desc = tk.Label(infoFrame, text=" The rate that Infected nodes recover and return to being Susceptible nodes,", font=("Arial", 10), bg="#654e78")
+        lbl_RR_Desc2 = tk.Label(infoFrame, text=" per Day. A general measure of human intervention to a network attack.", font=("Arial", 10), bg="#654e78")
         lbl_T_Title = tk.Label(infoFrame, text="Timesteps", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
-        lbl_T_Desc = tk.Label(infoFrame, text=" The number of days to observe the simulation.", font=("Arial", 10),
-                              bg="#654e78")
+        lbl_T_Desc = tk.Label(infoFrame, text=" The number of days to observe the simulation.", font=("Arial", 10), bg="#654e78")
 
         # Page Icon GUI
         self.virusIcon = ImageTk.PhotoImage(Image.open("assets/virus_icon.png"))

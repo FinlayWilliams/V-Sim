@@ -49,7 +49,6 @@ class SISInspectInterface(tk.Frame):
                                  relief="ridge", fg="white", bg="#6e6e6e",
                                  command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
         graphContainer = tk.Frame(graphFrame, bg="#654e78")
-
         figure = plt.figure(facecolor="#654e78")
         self.canvas = FigureCanvasTkAgg(figure, graphContainer)
         self.canvas.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
