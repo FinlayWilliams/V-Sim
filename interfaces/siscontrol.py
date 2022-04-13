@@ -16,10 +16,10 @@ class SISControlInterface(tk.Frame):
         ######################################## Instantiating ALL elements ############################################
         frameTop = tk.Frame(self, bg="#453354")
         # Button: Resets models config and refreshes graphs
-        btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
+        btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
         # Button: overwrites the current models "saving" it
-        btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
+        btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                             command=lambda: [self.updateConfiguration(1),
                                              controller.overwriteConfiguration(self.activeConfigurationIndex, self.activeConfiguration),
                                              controller.setActiveConfiguration(self.activeConfigurationIndex)])
@@ -28,7 +28,7 @@ class SISControlInterface(tk.Frame):
                                command=lambda: [self.updateConfiguration(1), controller.addConfiguration(self.activeConfiguration),
                                                 controller.setActiveConfiguration(len(controller.configurations) - 1)])
         # Button: opens the inspect models page with the currently selected models
-        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
+        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: self.checkConfigurationSaved(controller, 1))
         # Button: takes the user to the home page
         btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",

@@ -35,9 +35,9 @@ class SISCompareInterface(tk.Frame):
         ##################################### Instantiating LEFT-side elements #########################################
         self.lblLeftName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
         self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
-        btnConfigureLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+        btnConfigureLeft = tk.Button(nameFrame, wraplength=57, width=10, text="Change Configuration", font=("Arial", 7),
                                      command=lambda: controller.display("SISCompareInterface", "SISControlInterface"))
-        btnInspectLeft = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
+        btnInspectLeft = tk.Button(nameFrame, wraplength=57, width=10, text="Inspect Configuration", font=("Arial", 7),
                                    command=lambda: controller.display("SISCompareInterface", "SISInspectInterface"))
 
         leftFrame = tk.Frame(self, bg="#453354")
@@ -55,11 +55,11 @@ class SISCompareInterface(tk.Frame):
         ##################################### Instantiating RIGHT-side elements ########################################
         self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
         self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
-        btnConfigureRight = tk.Button(nameFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+        btnConfigureRight = tk.Button(nameFrame, wraplength=57, width=10, text="Change Configuration", font=("Arial", 7),
                                       command=lambda: [self.setNewActivePlusIndex(controller),
                                                        controller.display("SISCompareInterface",
                                                                           "SISControlInterface")])
-        btnInspectRight = tk.Button(nameFrame, wraplength=41, width=7, text="Inspect Model", font=("Arial", 7),
+        btnInspectRight = tk.Button(nameFrame, wraplength=57, width=10, text="Inspect Configuration", font=("Arial", 7),
                                     command=lambda: [self.setNewActivePlusIndex(controller),
                                                      controller.display("SISCompareInterface",
                                                                         "SISInspectInterface")])
