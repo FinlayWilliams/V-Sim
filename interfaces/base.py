@@ -25,12 +25,12 @@ class BaseApp(tk.Tk):
         base.pack(side="top", fill="both", expand=True)
 
         # Initialising a models list and all default models
-        self.models = []
-        self.models.append(SIS("IoT-SIS: Example A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.activeModelIndex = 0
-        self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIS("IoT-SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
+        self.configurations = []
+        self.configurations.append(SIS("IoT-SIS: Example A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.configurations.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.activeConfigurationIndex = 0
+        self.activeConfiguration = self.configurations[self.activeConfigurationIndex]
+        self.compareConfiguration = SIS("IoT-SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
 
         # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
@@ -65,9 +65,9 @@ class BaseApp(tk.Tk):
         self.interfaces[hide].pack_forget()
         if show == "HomeInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateModelList()
-            self.interfaces[show].updateCompareModelList(self)
-            print(self.activeModel)
+            self.interfaces[show].updateConfigurationList()
+            self.interfaces[show].updateCompareConfigurationList(self)
+            print(self.activeConfiguration)
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()
@@ -79,28 +79,28 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateGraphs()
         if show == "SISCompareInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].setModels(self)
+            self.interfaces[show].setConfigurations(self)
             self.interfaces[show].updateLeftGraph()
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
 
-    def setActiveModel(self, index):
-        self.activeModel = self.models[index]
+    def setActiveConfiguration(self, index):
+        self.activeConfiguration = self.configurations[index]
 
-    def setActiveModelIndex(self, index):
-        self.activeModelIndex = index
+    def setActiveConfigurationIndex(self, index):
+        self.activeConfigurationIndex = index
 
-    def addModel(self, newModel):
-        self.models.append(newModel)
+    def addConfiguration(self, newConfig):
+        self.configurations.append(newConfig)
 
-    def removeModel(self, index):
-        self.models.remove(self.models[index])
+    def removeConfiguration(self, index):
+        self.configurations.remove(self.configurations[index])
 
-    def overwriteModel(self, index, model):
-        self.models[index] = model
+    def overwriteConfiguration(self, index, model):
+        self.configurations[index] = model
 
-    def setCompareModel(self, model):
-        self.compareModel = model
+    def setCompareConfiguration(self, model):
+        self.compareConfiguration = model
 
-    def addDefaultSISModel(self):
-        self.models.append(SIS("IoT-SIS: Default Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+    def addDefaultSISConfiguration(self):
+        self.configurations.append(SIS("IoT-SIS: Default Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))

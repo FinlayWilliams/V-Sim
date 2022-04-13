@@ -11,7 +11,7 @@ class SISControlInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        self.activeModel = controller.activeModel
+        self.activeConfiguration = controller.activeConfiguration
 
         ######################################## Instantiating ALL elements ############################################
         frameTop = tk.Frame(self, bg="#453354")
@@ -20,16 +20,16 @@ class SISControlInterface(tk.Frame):
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
         # Button: overwrites the current models "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
-                             command=lambda: [self.updateModel(1),
-                                              controller.overwriteModel(self.activeModelIndex, self.activeModel),
-                                              controller.setActiveModel(self.activeModelIndex)])
+                            command=lambda: [self.updateConfiguration(1),
+                                             controller.overwriteConfiguration(self.activeConfigurationIndex, self.activeConfiguration),
+                                             controller.setActiveConfiguration(self.activeConfigurationIndex)])
         # Button: add this models configuration to the controller list
         btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e", relief="ridge", fg="white",
-                               command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
-                                                controller.setActiveModel(len(controller.models)-1)])
+                               command=lambda: [self.updateConfiguration(1), controller.addConfiguration(self.activeConfiguration),
+                                                controller.setActiveConfiguration(len(controller.configurations) - 1)])
         # Button: opens the inspect models page with the currently selected models
         btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
-                               command=lambda: self.checkModelSaved(controller, 1))
+                               command=lambda: self.checkConfigurationSaved(controller, 1))
         # Button: takes the user to the home page
         btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: controller.display("SISControlInterface", "HomeInterface"))
@@ -51,7 +51,7 @@ class SISControlInterface(tk.Frame):
         # Lower area for the controls
         frameBot = tk.Frame(self, bg="#a8a8a8")
         # All labels and widgets for inputting variables
-        lblModelName = tk.Label(frameBot, text="Configuration Name:", bg="#a8a8a8", font=("Arial", 10))
+        lblConfigurationName = tk.Label(frameBot, text="Configuration Name:", bg="#a8a8a8", font=("Arial", 10))
         self.entryName = tk.Entry(frameBot)
         lblN = tk.Label(frameBot, text="Initial Node Population Size (N):")
         NOptions = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
@@ -126,70 +126,70 @@ class SISControlInterface(tk.Frame):
         ## Frame Bottom Half
         frameBot.place(y=628, relheight=0.30, relwidth=1)
         # 1st Block
-        lblModelName.grid(row=0, column=0, padx=30, sticky="w")
+        lblConfigurationName.grid(row=0, column=0, padx=30, sticky="w")
         self.entryName.grid(row=1, column=0, padx=30, sticky="nw")
         # 2nd Block
         lblN.grid(row=0, column=1, padx=(10, 5), pady=(7, 0), sticky="e")
         self.cmbN.grid(row=0, column=2, padx=5, pady=(7, 0))
-        self.cmbN.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbN.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblS.grid(row=1, column=1, padx=(10, 5), pady=5, sticky="e")
         self.sclS.grid(row=1, column=2, padx=5, sticky="ew")
-        self.sclS.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclS.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblI.grid(row=2, column=1, padx=(10, 5), pady=5, sticky="e")
         self.lblIMatch.grid(row=2, column=2, padx=5, sticky="ew")
         # 3rd Block
         lblWSN.grid(row=0, column=3, padx=5, pady=(7, 0), sticky="e")
         self.cmbWSN.grid(row=0, column=4, padx=5, pady=(7, 0))
-        self.cmbWSN.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbWSN.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblDEP.grid(row=1, column=3, padx=5, pady=5, sticky="e")
         self.cmbDEP.grid(row=1, column=4, padx=5, pady=5)
-        self.cmbDEP.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbDEP.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblTRNS.grid(row=2, column=3, padx=5, pady=5, sticky="e")
         self.cmbTRNS.grid(row=2, column=4, padx=5, pady=5)
-        self.cmbTRNS.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbTRNS.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblCNTCT.grid(row=3, column=3, padx=5, pady=5, sticky="e")
         self.cmbCNTCT.grid(row=3, column=4, padx=5, pady=5, sticky="ew")
-        self.cmbCNTCT.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbCNTCT.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblSCAN.grid(row=4, column=3, padx=5, pady=5, sticky="e")
         self.sclSCAN.grid(row=4, column=4, padx=5, sticky="ew")
-        self.sclSCAN.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclSCAN.bind("<ButtonRelease-1>", self.updateConfiguration)
         # 4th Block
         lblPtrns.grid(row=0, column=5, padx=5, pady=(7, 0), sticky="e")
         self.sclPtrns.grid(row=0, column=6, padx=5, pady=(7, 0))
-        self.sclPtrns.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclPtrns.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblIrPsu.grid(row=1, column=5, padx=5, pady=5, sticky="e")
         self.sclIrPsu.grid(row=1, column=6, padx=5, sticky="ew")
-        self.sclIrPsu.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclIrPsu.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblIlPsu.grid(row=2, column=5, padx=5, pady=5, sticky="e")
         self.sclIlPsu.grid(row=2, column=6, padx=5, sticky="ew")
-        self.sclIlPsu.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclIlPsu.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblIpPsu.grid(row=3, column=5, padx=5, pady=5, sticky="e")
         self.sclIpPsu.grid(row=3, column=6, padx=5, sticky="ew")
-        self.sclIpPsu.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclIpPsu.bind("<ButtonRelease-1>", self.updateConfiguration)
         # 5th Block
         lblMSG.grid(row=0, column=7, padx=5, pady=(7, 0), sticky="e")
         self.cmbMSG.grid(row=0, column=8, padx=5, pady=(7, 0))
-        self.cmbMSG.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbMSG.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblPWR.grid(row=1, column=7, padx=5, pady=5, sticky="e")
         self.cmbPWR.grid(row=1, column=8, padx=5, pady=5)
-        self.cmbPWR.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbPWR.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblBTRY.grid(row=2, column=7, padx=5, pady=5, sticky="e")
         self.cmbBTRY.grid(row=2, column=8, padx=5, pady=5)
-        self.cmbBTRY.bind("<<ComboboxSelected>>", self.updateModel)
+        self.cmbBTRY.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblRR.grid(row=3, column=7, padx=5, pady=5, sticky="e")
         self.sclRR.grid(row=3, column=8, padx=5, sticky="ew")
-        self.sclRR.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclRR.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblT.grid(row=4, column=7, padx=5, pady=5, sticky="e")
         self.sclT.grid(row=4, column=8, padx=5, sticky="ew")
-        self.sclT.bind("<ButtonRelease-1>", self.updateModel)
+        self.sclT.bind("<ButtonRelease-1>", self.updateConfiguration)
         # Calling the method to align the variables and populate all fields
         self.updateVariables(controller)
 
     # Method to update the onscreen graphs to whatever the current models configuration is
     def updateGraphs(self):
-        S1, Ir1, Il1, Ip1 = self.activeModel.runSimulation()
+        S1, Ir1, Il1, Ip1 = self.activeConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.activeModel.Timesteps, 101)
+        T1 = np.linspace(0, self.activeConfiguration.Timesteps, 101)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]
@@ -213,7 +213,7 @@ class SISControlInterface(tk.Frame):
         self.canvas.draw()
 
     # Called when a value option is changed, to automatically update the active models parameters
-    def updateModel(self, Stub):
+    def updateConfiguration(self, Stub):
         if len(self.entryName.get()) == 0:
             self.controller.popup("Invalid Save", "Please enter a name for the models!")
         if len(self.entryName.get()) > 24:
@@ -263,46 +263,46 @@ class SISControlInterface(tk.Frame):
             print("S Contact Rate: {}".format(newActiveModel.contactRate))
             print("")
 
-            self.activeModel = newActiveModel
+            self.activeConfiguration = newActiveModel
             self.updateGraphs()
 
     # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct
     def updateVariables(self, controller):
-        self.activeModel = controller.activeModel
-        self.activeModelIndex = controller.activeModelIndex
+        self.activeConfiguration = controller.activeConfiguration
+        self.activeConfigurationIndex = controller.activeConfigurationIndex
 
-        self.cmbN.set(self.activeModel.N)
-        self.sclS.set(self.activeModel.percentS * 100)
-        self.lblIMatch.config(text="{:.0f}".format(self.activeModel.percentI * 100))
-        self.cmbWSN.set(self.activeModel.WSNnumber)
-        self.cmbDEP.set(self.activeModel.deploymentArea)
-        self.cmbTRNS.set(self.activeModel.transmissionRange)
-        self.cmbCNTCT.set(self.activeModel.contactRate)
-        self.sclSCAN.set(self.activeModel.botScanningRate)
-        self.sclPtrns.set(self.activeModel.botPtransmission)
-        self.sclIrPsu.set(self.activeModel.IrPsuccess)
-        self.sclIlPsu.set(self.activeModel.IlPsuccess)
-        self.sclIpPsu.set(self.activeModel.IpPsuccess)
+        self.cmbN.set(self.activeConfiguration.N)
+        self.sclS.set(self.activeConfiguration.percentS * 100)
+        self.lblIMatch.config(text="{:.0f}".format(self.activeConfiguration.percentI * 100))
+        self.cmbWSN.set(self.activeConfiguration.WSNnumber)
+        self.cmbDEP.set(self.activeConfiguration.deploymentArea)
+        self.cmbTRNS.set(self.activeConfiguration.transmissionRange)
+        self.cmbCNTCT.set(self.activeConfiguration.contactRate)
+        self.sclSCAN.set(self.activeConfiguration.botScanningRate)
+        self.sclPtrns.set(self.activeConfiguration.botPtransmission)
+        self.sclIrPsu.set(self.activeConfiguration.IrPsuccess)
+        self.sclIlPsu.set(self.activeConfiguration.IlPsuccess)
+        self.sclIpPsu.set(self.activeConfiguration.IpPsuccess)
         self.entryName.delete(0, 'end')
-        self.entryName.insert(END, self.activeModel.Name[9:])
-        self.cmbMSG.set(self.activeModel.meanMessageSize)
-        self.cmbPWR.set(self.activeModel.meanPower)
-        self.cmbBTRY.set(self.activeModel.totalBattery)
-        self.sclRR.set(self.activeModel.recoveryRate)
-        self.sclT.set(self.activeModel.Timesteps)
+        self.entryName.insert(END, self.activeConfiguration.Name[9:])
+        self.cmbMSG.set(self.activeConfiguration.meanMessageSize)
+        self.cmbPWR.set(self.activeConfiguration.meanPower)
+        self.cmbBTRY.set(self.activeConfiguration.totalBattery)
+        self.sclRR.set(self.activeConfiguration.recoveryRate)
+        self.sclT.set(self.activeConfiguration.Timesteps)
 
     # Checks whether the models is saved or not before the user proceeds to the inspect screen and looses
     # the current configuration
-    def checkModelSaved(self, controller, stub):
-        if self.activeModel != controller.activeModel:
+    def checkConfigurationSaved(self, controller, stub):
+        if self.activeConfiguration != controller.activeConfiguration:
             self.controller.popup("Warning", "Current models configuration not saved")
         else:
             controller.display("SISControlInterface", "SISInspectInterface")
 
     # Checks if the current configuration is valid by checking no population size dips below zero
-    def checkValid(self, newActiveModel):
-        S1, Ir1, Il1, Ip1 = newActiveModel.runSimulation()
+    def checkValid(self, newActiveConfig):
+        S1, Ir1, Il1, Ip1 = newActiveConfig.runSimulation()
         populations = [S1, Ir1, Il1, Ip1]
         for P in populations:
             for value in P:

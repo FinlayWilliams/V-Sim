@@ -9,14 +9,14 @@ class HomeInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        self.newCompareModelList = []
+        self.newCompareConfigurationList = []
 
         ##################################### Instantiating LEFT-side elements #########################################
         # Left side frame
         frame_left = tk.Frame(self, bg="#453354")
         column_left_border = tk.Frame(frame_left, bg="white")
         column_left_frame = tk.Frame(frame_left, bg="#654e78")
-        self.lblModelTypeTitle = tk.Label(column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"), bg="#654e78")
+        self.lblVariableTitle = tk.Label(column_left_frame, text="SIS Model Starting Condition Variables :", font=("Arial", 14, "italic"), bg="#654e78")
         infoFrame = tk.Frame(column_left_frame, bg="#654e78")
         lbl_N_Title = tk.Label(infoFrame, text="N", font=("Arial", 10, "bold"), bg="#654e78", fg="white")
         lbl_N_Desc = tk.Label(infoFrame, text=" The starting Node population count", font=("Arial", 10), bg="#654e78")
@@ -78,25 +78,25 @@ class HomeInterface(tk.Frame):
 
         # Creating the listbox where the list of all saved models will appear
         lbl_model_list = tk.Label(frame_right, text="Select an Active Configuration to Begin",bg="#a8a8a8", font=("Arial", 12))
-        self.lstModels = tk.Listbox(frame_right, height=12, width=40, bg="#654e78", fg="white", selectbackground="#453354", font=("Calibri", 15))
-        self.updateModelList()
-        self.lstModels.bind("<<ListboxSelect>>", lambda x: [self.updateActiveModel(controller, 1)])
+        self.lstConfig = tk.Listbox(frame_right, height=12, width=40, bg="#654e78", fg="white", selectbackground="#453354", font=("Calibri", 15))
+        self.updateConfigurationList()
+        self.lstConfig.bind("<<ListboxSelect>>", lambda x: [self.updateActiveConfiguration(controller, 1)])
 
         # Button: opens control page with the current active models
         btn_Configure = tk.Button(frame_right, width=17, text="Control Configuration", command=lambda: [controller.display("HomeInterface", "SISControlInterface")])
         # Button: opens inspect page with the current active models
         btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Configuration", command=lambda: [controller.display("HomeInterface", "SISInspectInterface")])
         # Button: Deletes selected models from models list
-        btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration", command=lambda: self.deleteSelectedModel(controller, 1))
+        btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration", command=lambda: self.deleteSelectedConfiguration(controller, 1))
         # Button: creates new default SIS models
-        btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model", command=lambda:[controller.addDefaultSISModel(), self.updateModelList(), self.updateCompareModelList()])
+        btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model", command=lambda:[controller.addDefaultSISConfiguration(), self.updateConfigurationList(), self.updateCompareConfigurationList()])
 
         # Creating a second listbox of all models to for comparison
         lbl_compare_model_list = tk.Label(frame_right, text="Select a Configuration to Compare Against the Active Configuration", bg="#a8a8a8", font=("Arial", 12))
-        self.lstCompareModels = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white", selectbackground="#453354", font=("Calibri", 15))
-        self.updateCompareModelList(controller)
-        self.lstCompareModels.bind("<<ListboxSelect>>", lambda x: [self.updateCompareModel(controller, 1)])
-        self.lstCompareModels.config()
+        self.lstCompareConfig = tk.Listbox(frame_right, height=10, width=40, bg="#654e78", fg="white", selectbackground="#453354", font=("Calibri", 15))
+        self.updateCompareConfigurationList(controller)
+        self.lstCompareConfig.bind("<<ListboxSelect>>", lambda x: [self.updateCompareConfiguration(controller, 1)])
+        self.lstCompareConfig.config()
 
         # Button: Deletes selected models from models list
         self.btn_Compare = tk.Button(frame_right, width=17, text="Compare Configuration", state="disabled", command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
@@ -106,7 +106,7 @@ class HomeInterface(tk.Frame):
         frame_left.place(x=0, y=0, height="864", width="718")
         column_left_border.place(relheight=0.87, relwidth=1, x=0, y=118)
         column_left_frame.place(relheight=0.86, relwidth=0.99, x=0, y=123)
-        self.lblModelTypeTitle.place(x=7, y=7)
+        self.lblVariableTitle.place(x=7, y=7)
         placeableLogo.place(x=6, y=33)
         lblTitle.place(x=5, y=3)
         lblSubTitle.place(x=5, y=56)
@@ -161,61 +161,61 @@ class HomeInterface(tk.Frame):
         frame_right.place(x=717, y=0, height="864", width="819")
         column_right_frame.place(relheight=1, relwidth=0.7, x=135)
         lbl_model_list.place(x=270, y=40)
-        self.lstModels.place(x=220, y=70)
-        self.lstModels.select_set(0)
+        self.lstConfig.place(x=220, y=70)
+        self.lstConfig.select_set(0)
         btn_Inspect.place(x=220, y=382)
         btn_Configure.place(x=358, y=382)
         btn_Delete.place(x=496, y=382)
         btn_New_SIS.place(x=358, y=416)
         lbl_compare_model_list.place(x=186, y=470)
-        self.lstCompareModels.place(x=220, y=500)
+        self.lstCompareConfig.place(x=220, y=500)
         self.btn_Compare.place(x=358, y=760)
 
     # Method: called from base whenever the frame is repacked so the list of models is always refreshed on screen
-    def updateModelList(self):
-        self.lstModels.delete(0, END)
-        for M in self.controller.models:
-            self.lstModels.insert(END, M)
+    def updateConfigurationList(self):
+        self.lstConfig.delete(0, END)
+        for C in self.controller.configurations:
+            self.lstConfig.insert(END, C)
 
     # Method: This method populates the compare box with models of the same virus models type
-    def updateCompareModelList(self, controller):
-        self.lstCompareModels.delete(0, END)
-        self.newCompareModelList = []
+    def updateCompareConfigurationList(self, controller):
+        self.lstCompareConfig.delete(0, END)
+        self.newCompareConfigurationList = []
 
-        for M in controller.models:
-            if controller.activeModel != M:
-                self.newCompareModelList.append(M)
-        for M in self.newCompareModelList:
-            self.lstCompareModels.insert(END, M)
+        for C in controller.configurations:
+            if controller.activeConfiguration != C:
+                self.newCompareConfigurationList.append(C)
+        for C in self.newCompareConfigurationList:
+            self.lstCompareConfig.insert(END, C)
 
     # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
-    def deleteSelectedModel(self, controller, stub):
-        if len(controller.models) == 1:
-            self.controller.popup("Invalid Delete", "There is Only One Model Left!")
+    def deleteSelectedConfiguration(self, controller, stub):
+        if len(controller.configurations) == 1:
+            self.controller.popup("Invalid Delete", "There is Only One Configuration Left!")
         else:
-            if self.lstModels.curselection() != ():
-                controller.setActiveModel(0)
-                controller.removeModel(int(''.join(map(str, self.lstModels.curselection()))))
-                self.updateModelList()
-                self.updateCompareModelList(controller)
-                self.controller.popup("Model Deleted", "The Active Model is now {}, (The First Entry)".format(controller.models[0].Name))
+            if self.lstConfig.curselection() != ():
+                controller.setActiveConfiguration(0)
+                controller.removeConfiguration(int(''.join(map(str, self.lstConfig.curselection()))))
+                self.updateConfigurationList()
+                self.updateCompareConfigurationList(controller)
+                self.controller.popup("Model Deleted", "The Active Configuration is now {}, (The First Entry)".format(controller.configurations[0].Name))
 
     # Called everytime listbox is updated & other GUI updates, updates a range of variables and indexes
-    def updateActiveModel(self, controller, stub):
-        if self.lstModels.curselection() != ():
+    def updateActiveConfiguration(self, controller, stub):
+        if self.lstConfig.curselection() != ():
             # Long prefixes = obtaining listbox idx and reformatting
-            oldActive = controller.activeModel
-            controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
-            controller.setActiveModelIndex(int(''.join(map(str, self.lstModels.curselection()))))
-            self.controller.setActiveModel(int(''.join(map(str, self.lstModels.curselection()))))
+            oldActive = controller.activeConfiguration
+            controller.setActiveConfiguration(int(''.join(map(str, self.lstConfig.curselection()))))
+            controller.setActiveConfigurationIndex(int(''.join(map(str, self.lstConfig.curselection()))))
+            self.controller.setActiveConfiguration(int(''.join(map(str, self.lstConfig.curselection()))))
 
-            self.updateCompareModelList(controller)
-            self.updateCompareModel(controller, 1)
+            self.updateCompareConfigurationList(controller)
+            self.updateCompareConfiguration(controller, 1)
 
-    # Called to update the compare models selection
-    def updateCompareModel(self, controller, stub):
-        if self.lstCompareModels.curselection() == ():
+    # Called to update the compare configuration selection
+    def updateCompareConfiguration(self, controller, stub):
+        if self.lstCompareConfig.curselection() == ():
             self.btn_Compare.config(state="disabled")
-        if self.lstCompareModels.curselection() != ():
+        if self.lstCompareConfig.curselection() != ():
             self.btn_Compare.config(state="active")
-            controller.setCompareModel(self.newCompareModelList[int(''.join(map(str, self.lstCompareModels.curselection())))])
+            controller.setCompareConfiguration(self.newCompareConfigurationList[int(''.join(map(str, self.lstCompareConfig.curselection())))])

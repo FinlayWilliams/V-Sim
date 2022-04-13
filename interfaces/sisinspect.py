@@ -45,7 +45,7 @@ class SISInspectInterface(tk.Frame):
         graphFrame = tk.Frame(self, bg="#453354")
         self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="Assessment Overview",
                                       font=("Arial", 14, "italic"), fg="white")
-        btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Configure Model", font=("Arial", 7),
+        btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Control Configure", font=("Arial", 7),
                                  relief="ridge", fg="white", bg="#6e6e6e",
                                  command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
         graphContainer = tk.Frame(graphFrame, bg="#654e78")
@@ -84,12 +84,12 @@ class SISInspectInterface(tk.Frame):
 
     # Updates the on-screen graphs
     def updateGraphs(self):
-        S1, Ir1, Il1, Ip1 = self.controller.activeModel.runSimulation()
+        S1, Ir1, Il1, Ip1 = self.controller.activeConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.controller.activeModel.Timesteps, 101)
+        T1 = np.linspace(0, self.controller.activeConfiguration.Timesteps, 101)
 
         # Setting the title
-        self.lblGraphTitle.config(text="{} - Virus Propagation".format(self.controller.activeModel.Name))
+        self.lblGraphTitle.config(text="{} - Virus Propagation".format(self.controller.activeConfiguration.Name))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(3)]
@@ -115,7 +115,7 @@ class SISInspectInterface(tk.Frame):
                   "Local Scanning Infected: {:.0f}".format(pop[2]), "Peer-to-Peer Infected: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.ax[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.ax[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeModel.Timesteps))
+        self.ax[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeConfiguration.Timesteps))
 
         self.canvas.draw()
 
@@ -170,7 +170,7 @@ class SISInspectInterface(tk.Frame):
                            tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
                            tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
-        model = self.controller.activeModel
+        model = self.controller.activeConfiguration
 
         ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore, ovrScore = model.calculateScores()
 

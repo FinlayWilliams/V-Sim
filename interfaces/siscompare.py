@@ -9,11 +9,11 @@ class SISCompareInterface(tk.Frame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        self.setModels(controller)
+        self.setConfigurations(controller)
 
         ###################################### Instantiating MIDDLE elements ###########################################
         titleFrame = tk.Frame(self, bg="#453354")
-        lblTitle = tk.Label(titleFrame, bg="#453354", text="SIS Virus Model Comparison", font=("Arial", 15, "italic"),
+        lblTitle = tk.Label(titleFrame, bg="#453354", text="SIS Virus Configuration Comparison", font=("Arial", 15, "italic"),
                             fg="white")
         btnReturn = tk.Button(titleFrame, wraplength=41, width=7, text="Return Home", font=("Arial", 7),
                               relief="ridge", fg="white", bg="#6e6e6e",
@@ -105,17 +105,17 @@ class SISCompareInterface(tk.Frame):
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
 
     # Called upon page opening to set the correct models
-    def setModels(self, controller):
-        self.activeModel = controller.activeModel
-        self.compareModel = controller.compareModel
+    def setConfigurations(self, controller):
+        self.activeModel = controller.activeConfiguration
+        self.compareModel = controller.compareConfiguration
 
     # Called when opting to configure the Right, CompareModel to ensure compatibility
     def setNewActivePlusIndex(self, controller):
         index = 0
-        for M in controller.models:
+        for M in controller.configurations:
             if M == self.compareModel:
-                controller.setActiveModel(index)
-                controller.setActiveModelIndex(index)
+                controller.setActiveConfiguration(index)
+                controller.setActiveConfigurationIndex(index)
             index = index + 1
 
     # Called on page opening to update the Left, ActiveModel graph information
