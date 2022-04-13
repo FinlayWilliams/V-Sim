@@ -16,44 +16,33 @@ class SISControlInterface(tk.Frame):
         ######################################## Instantiating ALL elements ############################################
         frameTop = tk.Frame(self, bg="#453354")
         # Button: Resets models config and refreshes graphs
-        btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Model", font=("Arial", 7),
-                             relief="ridge", fg="white", bg="#6e6e6e",
+        btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: [self.updateVariables(controller), self.updateGraphs()])
         # Button: overwrites the current models "saving" it
-        btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7),
-                            relief="ridge", fg="white", bg="#6e6e6e",
+        btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: [self.updateModel(1),
                                               controller.overwriteModel(self.activeModelIndex, self.activeModel),
                                               controller.setActiveModel(self.activeModelIndex)])
         # Button: add this models configuration to the controller list
-        btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e",
-                               relief="ridge", fg="white",
+        btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e", relief="ridge", fg="white",
                                command=lambda: [self.updateModel(1), controller.addModel(self.activeModel),
                                                 controller.setActiveModel(len(controller.models)-1)])
         # Button: opens the inspect models page with the currently selected models
-        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Model", font=("Arial", 7),
-                               relief="ridge", fg="white", bg="#6e6e6e",
+        btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Model", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: self.checkModelSaved(controller, 1))
         # Button: takes the user to the home page
-        btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7),
-                              relief="ridge", fg="white", bg="#6e6e6e",
+        btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: controller.display("SISControlInterface", "HomeInterface"))
 
         # This frame holds the graphs
         canvasFrame = tk.Frame(frameTop, bg="#654e78")
         # Frame for the legend to sit in + legend labels
-        lblLegendTitle = tk.Label(frameTop, bg="#453354", width=25, pady=4, text="Legend :",
-                                    font=("Calibri", 14, "bold"), fg="white")
-        lblLegend1 = tk.Label(frameTop, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible",
-                               font=("Arial", 12), fg="white")
-        lblLegend2 = tk.Label(frameTop, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning",
-                               font=("Arial", 12), fg="white")
-        lblLegend3 = tk.Label(frameTop, bg="#1f77b4", width=25, pady=4, text="(IL) Local Scanning",
-                               font=("Arial", 12), fg="white")
-        lblLegend4 = tk.Label(frameTop, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer",
-                               font=("Arial", 12), fg="white")
-        lblLegend5 = tk.Label(frameTop, bg="#d62728", width=25, pady=4,
-                               text="(I) Infection Types Grouped", font=("Arial", 12), fg="white")
+        lblLegendTitle = tk.Label(frameTop, bg="#453354", width=25, pady=4, text="Legend :", font=("Calibri", 14, "bold"), fg="white")
+        lblLegend1 = tk.Label(frameTop, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 12), fg="white")
+        lblLegend2 = tk.Label(frameTop, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning", font=("Arial", 12), fg="white")
+        lblLegend3 = tk.Label(frameTop, bg="#1f77b4", width=25, pady=4, text="(IL) Local Scanning", font=("Arial", 12), fg="white")
+        lblLegend4 = tk.Label(frameTop, bg="#17becf", width=25, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 12), fg="white")
+        lblLegend5 = tk.Label(frameTop, bg="#d62728", width=25, pady=4, text="(I) Infection Types Grouped", font=("Arial", 12), fg="white")
 
         # Separates graphs from the controls
         frameMid = tk.Frame(self, bg="#6e6e6e")
@@ -106,6 +95,15 @@ class SISControlInterface(tk.Frame):
         self.sclRR = tk.Scale(frameBot, from_=0.250, to=1, digits=3, resolution=0.250, orient="horizontal")
         lblT = tk.Label(frameBot, text="Days to Observe:")
         self.sclT = tk.Scale(frameBot, from_=1, to=365, resolution=1, orient="horizontal")
+
+        # Setting up the canvas area for the graphs in frameTop
+        figure = plt.figure(facecolor="#654e78")
+        self.canvas = FigureCanvasTkAgg(figure, canvasFrame)
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.ax = [figure.add_subplot(2, 1, x + 1, facecolor="#453354") for x in range(2)]
+        for x in range(2):
+            self.ax[x].ticklabel_format(style="plain")
+        figure.tight_layout(rect=[0.01, 0.03, 1, 0.95], h_pad=3)
 
         ########################################### Placing ALL elements ###############################################
         ## Frame Top Half
@@ -184,22 +182,12 @@ class SISControlInterface(tk.Frame):
         lblT.grid(row=4, column=7, padx=5, pady=5, sticky="e")
         self.sclT.grid(row=4, column=8, padx=5, sticky="ew")
         self.sclT.bind("<ButtonRelease-1>", self.updateModel)
-
         # Calling the method to align the variables and populate all fields
         self.updateVariables(controller)
 
-        # Setting up the canvas area for the graphs in frameTop
-        figure = plt.figure(facecolor="#654e78")
-        self.canvas = FigureCanvasTkAgg(figure, canvasFrame)
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-        self.ax = [figure.add_subplot(2, 1, x + 1, facecolor="#453354") for x in range(2)]
-        for x in range(2):
-            self.ax[x].ticklabel_format(style="plain")
-        figure.tight_layout(rect=[0.01, 0.03, 1, 0.95], h_pad=3)
-
     # Method to update the onscreen graphs to whatever the current models configuration is
     def updateGraphs(self):
-        S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
+        S1, Ir1, Il1, Ip1 = self.activeModel.runSimulation()
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
@@ -314,7 +302,7 @@ class SISControlInterface(tk.Frame):
 
     # Checks if the current configuration is valid by checking no population size dips below zero
     def checkValid(self, newActiveModel):
-        S1, Ir1, Il1, Ip1 = newActiveModel.runModel()
+        S1, Ir1, Il1, Ip1 = newActiveModel.runSimulation()
         populations = [S1, Ir1, Il1, Ip1]
         for P in populations:
             for value in P:

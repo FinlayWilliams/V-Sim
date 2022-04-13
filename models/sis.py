@@ -25,37 +25,27 @@ class SIS:
         self.recoveryRate = rcvryRate
         self.Timesteps = timesteps
 
-        self.calculateVariables()
-
-    # Method to create all remaining variables and calculate their values based off of the input values
-    def calculateVariables(self):
-        # SI Population
+        # Starting population sizes
         self.S = self.N * self.percentS
         self.Ir = (self.N * self.percentI) / 3
         self.Il = (self.N * self.percentI) / 3
         self.Ip = (self.N * self.percentI) / 3
         self.I = self.Ir + self.Il + self.Ip
 
-        # S Local Set Range
-        #self.SLoc = 1 / self.WSNnumber
-        self.SLoc = self.S * (1 / self.WSNnumber)
+        # Starting S Local Set Range
+        self.StartSLoc = self.S * (1 / self.WSNnumber)
 
-        # S Neighbour Set Range
-        #self.density = self.N / (self.deploymentArea * self.deploymentArea)
-        #self.density = self.N / self.deploymentArea
+        # Starting S Neighbour Set Range
+        # self.density = self.N / (self.deploymentArea * self.deploymentArea)
+        # self.density = self.N / self.deploymentArea
         self.density = (self.N / self.WSNnumber) / (self.deploymentArea / self.WSNnumber)
 
-        #self.SNhb = 1 / (self.density * self.transmissionRange)
-        self.SNhb = self.S * (1 / (self.density * self.transmissionRange))
+        self.StartSNhb = self.S * (1 / (self.density * self.transmissionRange))
 
         # Contact rates
         self.IrContactRate = self.botScanningRate * self.IrPsuccess
         self.IlContactRate = self.botScanningRate * self.IlPsuccess
         self.IpContactRate = self.botScanningRate * self.IpPsuccess
-
-        # self.IrContactRate = 10
-        # self.IlContactRate = 10
-        # self.IpContactRate = 10
 
         # Infection Rates
         self.bR = self.IrContactRate * self.botPtransmission
@@ -63,8 +53,8 @@ class SIS:
         self.bP = self.IpContactRate * self.botPtransmission
 
         # Death Rates
-        #self.distance = (self.deploymentArea * self.deploymentArea) / self.N
-        #self.distance = self.deploymentArea / self.N
+        # self.distance = (self.deploymentArea * self.deploymentArea) / self.N
+        # self.distance = self.deploymentArea / self.N
         self.distance = (self.deploymentArea / self.WSNnumber) / (self.N / self.WSNnumber)
 
         self.powerMessage = self.meanPower * self.meanMessageSize * self.distance
@@ -84,7 +74,7 @@ class SIS:
         self.dthL = 1 / self.localLifespan
         self.dthP = 1 / self.peerToPeerLifespan
 
-    def SISModel(self, y, t, Sloc, Snhb, bR, bL, bP, dthB, dthR, dthL, dthP, a):
+    def SISModel(self, y, t, bR, bL, bP, dthB, dthR, dthL, dthP, a):
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
 
@@ -102,19 +92,19 @@ class SIS:
 
         return dSdt, dIrdt, dIldt, dIpdt
 
-    def runModel(self):
+    def runSimulation(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
-        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 101), args=(self.SLoc, self.SNhb, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 101), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
-        self.S1, self.Ir1, self.Il1, self.Ip1 = solution.T
+        S1, Ir1, Il1, Ip1 = solution.T
 
-        return self.S1, self.Ir1, self.Il1, self.Ip1
+        return S1, Ir1, Il1, Ip1
 
     # Method to calculate the score of the models used in the inspection page
     def calculateScores(self):
         # The scores are broken down into their categories with an overall score as well as individual scores
-        S1, Ir1, Il1, Ip1 = self.runModel()
+        S1, Ir1, Il1, Ip1 = self.runSimulation()
 
         ovrSizeScore = 0
 
@@ -160,24 +150,24 @@ class SIS:
         slocNeighbourScore = 0
         snhbNeighbourScore = 0
 
-        if self.SLoc == self.S * (1 / 1):
+        if self.StartSLoc == self.S * (1 / 1):
             slocNeighbourScore = 300
-        if self.SLoc == self.S * (1 / 5):
+        if self.StartSLoc == self.S * (1 / 5):
             slocNeighbourScore = 250
-        if self.SLoc == self.S * (1 / 10):
+        if self.StartSLoc == self.S * (1 / 10):
             slocNeighbourScore = 200
-        if self.SLoc == self.S * (1 / 20):
+        if self.StartSLoc == self.S * (1 / 20):
             slocNeighbourScore = 150
-        if self.SLoc == self.S * (1 / 50):
+        if self.StartSLoc == self.S * (1 / 50):
             slocNeighbourScore = 100
 
-        if self.SNhb == self.S * (1 / 150):
+        if self.StartSNhb == self.S * (1 / 150):
             snhbNeighbourScore = 250
-        if self.SNhb == self.S * (1 / 100):
+        if self.StartSNhb == self.S * (1 / 100):
             snhbNeighbourScore = 200
-        if self.SNhb == self.S * (1 / 50):
+        if self.StartSNhb == self.S * (1 / 50):
             snhbNeighbourScore = 150
-        if self.SNhb == self.S * (1 / 25):
+        if self.StartSNhb == self.S * (1 / 25):
             snhbNeighbourScore = 100
 
         ovrNeighbourScore = slocNeighbourScore + snhbNeighbourScore
@@ -208,27 +198,6 @@ class SIS:
             rrMiscScore = 200
         if self.recoveryRate == 1:
             rrMiscScore = 100
-
-        ######## REMOVE? This method attempts to predict future S curves and state whether it was a good thing the
-        #                virus was "stopped" in x amount of days because the S would have dropped further ...
-        #                but it isnt very accurate :(
-        # tMiscScore = 0
-        # S1A = np.array(S1).reshape(-1, 1)
-        # TA = np.array(np.linspace(0, self.Timesteps, 101)).reshape(-1, 1)
-        # tFraction = int(self.Timesteps * 0.25)
-        # tFutureList = []
-        # for timestep in range(tFraction):
-        #     tFutureList.append(self.Timesteps + timestep)
-        # tFuture = np.array(tFutureList)
-        # tFuture = np.array(tFuture).reshape(-1, 1)
-        # regressor = LinearRegression()
-        # regressor.fit(TA, S1A)
-        # sPredicted = regressor.predict(tFuture)
-        # sPredicted.flatten()
-        # sPredictedList = sPredicted.tolist()
-        # if np.mean(S1[-tFraction:]) > np.mean(sPredictedList):
-        #     print("Good thing you stopped there because S was averaging {} and it would have been averaging {} at {} steps later".
-        #           format(np.mean(S1[-tFraction:]), np.mean(sPredictedList), tFraction))
 
         ovrMiscScore = rrMiscScore
 

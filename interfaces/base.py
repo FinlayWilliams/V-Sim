@@ -7,9 +7,10 @@ from models.sis import SIS
 
 
 class BaseApp(tk.Tk):
-    # Initialising base tk.Tk class and overarching container (setting default sizes, default models, all interfaces)
     def __init__(self):
         super().__init__()
+
+        # Initialising base class and overarching container (setting default sizes, default models, all interfaces)
         self.title("V-Sim")
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
@@ -25,14 +26,11 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default models
         self.models = []
-        self.models.append(SIS("IoT-SIS: Example A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
-                               0.00009, 50, 0.75, 864000, 0.75, 14))
-        self.models.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006,
-                               0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.models.append(SIS("IoT-SIS: Example A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.models.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
         self.activeModelIndex = 0
         self.activeModel = self.models[self.activeModelIndex]
-        self.compareModel = SIS("IoT-SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
-                                0.00009, 50, 0.75, 864000, 0.75, 14)
+        self.compareModel = SIS("IoT-SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
 
         # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
@@ -44,9 +42,6 @@ class BaseApp(tk.Tk):
         self.interfaces[SISControlInterface.__name__] = sisControlInterface
         sisCompareInterface = SISCompareInterface(master=base, controller=self)
         self.interfaces[SISCompareInterface.__name__] = sisCompareInterface
-
-        self.compareModel = SIS("IoT-SIS: Comparison Example", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006,
-                                0.00009, 50, 0.75, 864000, 0.75, 14)
         self.interfaces[HomeInterface.__name__].pack(side="top", fill="both", expand=True)
 
     # Callable from any interface to display a custom popup message box for any cause
@@ -89,22 +84,23 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateRightGraph()
             self.interfaces[show].updateColumnInfo()
 
-    def setActiveModel(self, index): self.activeModel = self.models[index]
+    def setActiveModel(self, index):
+        self.activeModel = self.models[index]
 
-    def setActiveModelIndex(self, index): self.activeModelIndex = index
+    def setActiveModelIndex(self, index):
+        self.activeModelIndex = index
 
-    def addModel(self, newModel): self.models.append(newModel)
+    def addModel(self, newModel):
+        self.models.append(newModel)
 
-    def removeModel(self, index): self.models.remove(self.models[index])
+    def removeModel(self, index):
+        self.models.remove(self.models[index])
 
-    def overwriteModel(self, index, model): self.models[index] = model
+    def overwriteModel(self, index, model):
+        self.models[index] = model
 
-    def setCompareModel(self, model): self.compareModel = model
+    def setCompareModel(self, model):
+        self.compareModel = model
 
     def addDefaultSISModel(self):
-        # This is the original one you were using - if you go back to it, also consider changing the Sloc and Snhb back to fractions
-        # self.models.append(SIS("SIS: Default Model",
-        #                        10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.06, 0.09, 50, 0.75, 864000, 0.75,
-        #                        10))
-        self.models.append(SIS("IoT-SIS: Default Configuration",
-                            10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.models.append(SIS("IoT-SIS: Default Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))

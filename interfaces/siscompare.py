@@ -76,7 +76,7 @@ class SISCompareInterface(tk.Frame):
         figureRight.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
         self.updateRightGraph()
 
-        ######################################### Placing MIDDLE elements ##############################################
+        ########################################### Placing ALL elements ###############################################
         titleFrame.place(relwidth=1, relheight=0.07)
         lblTitle.pack(pady=15)
         nameFrame.place(relwidth=1, relheight=0.08, y=60)
@@ -89,16 +89,14 @@ class SISCompareInterface(tk.Frame):
         lblR.grid(row=2, column=0)
         lblREx.grid(row=2, column=1)
         self.informationFrame.place(relwidth=0.334, relheight=0.93, y=130, x=511)
-
-        ####################################### Placing LEFT-side elements #############################################
+        # Left
         btnInspectLeft.pack(side="left", padx=14)
         btnConfigureLeft.pack(side="left", padx=7)
         self.lblLeftName.pack(side="left", padx=10)
         self.lblLeftScore.pack(side="left")
         leftFrame.place(relwidth=0.333, relheight=0.93, y=126, x=0)
         leftGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-
-        ####################################### Placing RIGHT-side elements ############################################
+        # Right
         btnInspectRight.pack(side="right", padx=14)
         btnConfigureRight.pack(side="right", padx=7)
         self.lblRightName.pack(side="right", padx=10)
@@ -122,7 +120,7 @@ class SISCompareInterface(tk.Frame):
 
     # Called on page opening to update the Left, ActiveModel graph information
     def updateLeftGraph(self):
-        S1, Ir1, Il1, Ip1 = self.activeModel.runModel()
+        S1, Ir1, Il1, Ip1 = self.activeModel.runSimulation()
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, self.activeModel.Timesteps, 101)
 
@@ -156,7 +154,7 @@ class SISCompareInterface(tk.Frame):
 
     # Called on page opening to update the Right, CompareModel graph information
     def updateRightGraph(self):
-        S1, Ir1, Il1, Ip1 = self.compareModel.runModel()
+        S1, Ir1, Il1, Ip1 = self.compareModel.runSimulation()
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, self.compareModel.Timesteps, 101)
 
