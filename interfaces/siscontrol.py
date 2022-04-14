@@ -57,7 +57,7 @@ class SISControlInterface(tk.Frame):
         NOptions = ["1000", "2000", "5000", "10000", "20000", "50000", "100000"]
         self.cmbN = ttk.Combobox(frameBot, values=NOptions, state="readonly")
         lblS = tk.Label(frameBot, text="Initial S Size (% of N):")
-        self.sclS = tk.Scale(frameBot, from_=0, to=100, resolution=1, orient="horizontal")
+        self.sclS = tk.Scale(frameBot, from_=0, to=100, resolution=0.1, orient="horizontal")
         lblI = tk.Label(frameBot, text="Initial I Size (% of N):")
         self.lblIMatch = tk.Label(frameBot, bg="white", bd=3)
         lblWSN = tk.Label(frameBot, text="Wireless Sensor Network Count:")
@@ -75,7 +75,7 @@ class SISControlInterface(tk.Frame):
         lblSCAN = tk.Label(frameBot, text="Botnet Scanning Rate (/sec):")
         self.sclSCAN = tk.Scale(frameBot, from_=1, to=250, resolution=1, orient="horizontal")
         lblPtrns = tk.Label(frameBot, text="PTransmission Rate:")
-        self.sclPtrns = tk.Scale(frameBot, from_=0.01, to=1, resolution=0.01, orient="horizontal")
+        self.sclPtrns = tk.Scale(frameBot, from_=0.0001, to=1, resolution=0.0001, orient="horizontal")
         lblIrPsu = tk.Label(frameBot, text="IR PSuccess Rate:")
         self.sclIrPsu = tk.Scale(frameBot, from_=0.00001, to=1, resolution=0.00001, orient="horizontal")
         lblIlPsu = tk.Label(frameBot, text="IL PSuccess Rate:")
@@ -94,7 +94,7 @@ class SISControlInterface(tk.Frame):
         lblRR = tk.Label(frameBot, text="Recovery rate:")
         self.sclRR = tk.Scale(frameBot, from_=0.250, to=1, digits=3, resolution=0.250, orient="horizontal")
         lblT = tk.Label(frameBot, text="Days to Observe:")
-        self.sclT = tk.Scale(frameBot, from_=1, to=365, resolution=1, orient="horizontal")
+        self.sclT = tk.Scale(frameBot, from_=1, to=2700, resolution=1, orient="horizontal")
 
         # Setting up the canvas area for the graphs in frameTop
         figure = plt.figure(facecolor="#654e78")
@@ -189,7 +189,7 @@ class SISControlInterface(tk.Frame):
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.activeConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.activeConfiguration.Timesteps, 101)
+        T1 = np.linspace(0, self.activeConfiguration.Timesteps, 60)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]
@@ -215,9 +215,9 @@ class SISControlInterface(tk.Frame):
     # Called when a value option is changed, to automatically update the active models parameters
     def updateConfiguration(self, Stub):
         if len(self.entryName.get()) == 0:
-            self.controller.popup("Invalid Save", "Please enter a name for the models!")
+            self.controller.popup("Invalid Save", "Please Enter a Name for the Configuration!")
         if len(self.entryName.get()) > 24:
-            self.controller.popup("Invalid Save", "Please enter a shorter name for the models!")
+            self.controller.popup("Invalid Save", "Please Enter a Shorter Name for the Configuration!")
         else:
             Name = str("IoT-SIS: " + self.entryName.get())
             N = int(self.cmbN.get())
@@ -250,17 +250,27 @@ class SISControlInterface(tk.Frame):
             #     self.updateGraphs()
 
             # delete what is below this and uncomment what is above
-            print("Ir Death Rate: {}".format(newActiveModel.dthR))
-            print("Ir Contact Rate: {}".format(newActiveModel.IrContactRate))
+            print("=======================================================")
+
+            # print("Il Death Rate: {}".format(newActiveModel.dthL))
+            # print("Il Infection Rate: {}".format(newActiveModel.bL))
+            # print("Il Contact Rate: {}".format(newActiveModel.IlContactRate))
+            # print("")
+            # print("Ip Death Rate: {}".format(newActiveModel.dthP))
+            # print("Ip Infection Rate: {}".format(newActiveModel.bP))
+            # print("Ip Contact Rate: {}".format(newActiveModel.IpContactRate))
+            print("PowerMessage: {}".format(newActiveModel.powerMessage))
             print("")
-            print("Il Death Rate: {}".format(newActiveModel.dthL))
-            print("Il Contact Rate: {}".format(newActiveModel.IlContactRate))
+            print("RandomPowerTime: {}".format(newActiveModel.randomPowerTime))
             print("")
-            print("Ip Death Rate: {}".format(newActiveModel.dthP))
-            print("Ip Contact Rate: {}".format(newActiveModel.IpContactRate))
-            print("")
-            print("S Death Rate: {}".format(newActiveModel.dthB))
             print("S Contact Rate: {}".format(newActiveModel.contactRate))
+            print("S Lifespan: {}".format(newActiveModel.regularLifespan))
+            print("S Death Rate: {}".format(newActiveModel.dthB))
+            print("")
+            print("Ir Contact Rate: {}".format(newActiveModel.IrContactRate))
+            print("Ir ILifespan: {}".format(newActiveModel.randomLifespan))
+            print("Ir Death Rate: {}".format(newActiveModel.dthR))
+            print("Ir Infection Rate: {}".format(newActiveModel.bR))
             print("")
 
             self.activeConfiguration = newActiveModel

@@ -122,7 +122,7 @@ class SISCompareInterface(tk.Frame):
     def updateLeftGraph(self):
         S1, Ir1, Il1, Ip1 = self.activeModel.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.activeModel.Timesteps, 101)
+        T1 = np.linspace(0, self.activeModel.Timesteps, 60)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.axLeft[x].clear() for x in range(3)]
@@ -156,7 +156,7 @@ class SISCompareInterface(tk.Frame):
     def updateRightGraph(self):
         S1, Ir1, Il1, Ip1 = self.compareModel.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.compareModel.Timesteps, 101)
+        T1 = np.linspace(0, self.compareModel.Timesteps, 60)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.axRight[x].clear() for x in range(3)]

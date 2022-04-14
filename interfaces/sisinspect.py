@@ -86,7 +86,7 @@ class SISInspectInterface(tk.Frame):
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.controller.activeConfiguration.Timesteps, 101)
+        T1 = np.linspace(0, self.controller.activeConfiguration.Timesteps, 60)
 
         # Setting the title
         self.lblGraphTitle.config(text="{} - Virus Propagation".format(self.controller.activeConfiguration.Name))

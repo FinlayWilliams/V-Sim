@@ -26,7 +26,7 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default models
         self.configurations = []
-        self.configurations.append(SIS("IoT-SIS: Example A", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.configurations.append(SIS("IoT-SIS: Example A", 10000, 0.999, 0.001, 10, 50, 10, 10, 27, 0.0003, 0.01, 0.05, 0.20, 50, 0.75, 864000, 0.5, 14))
         self.configurations.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
         self.activeConfigurationIndex = 0
         self.activeConfiguration = self.configurations[self.activeConfigurationIndex]

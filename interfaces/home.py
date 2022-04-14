@@ -89,7 +89,7 @@ class HomeInterface(tk.Frame):
         # Button: Deletes selected models from models list
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration", command=lambda: self.deleteSelectedConfiguration(controller, 1))
         # Button: creates new default SIS models
-        btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model", command=lambda:[controller.addDefaultSISConfiguration(), self.updateConfigurationList(), self.updateCompareConfigurationList()])
+        btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model", command=lambda:[controller.addDefaultSISConfiguration(), self.updateConfigurationList(), self.updateCompareConfigurationList(controller)])
 
         # Creating a second listbox of all models to for comparison
         lbl_compare_model_list = tk.Label(frame_right, text="Select a Configuration to Compare Against the Active Configuration", bg="#a8a8a8", font=("Arial", 12))

@@ -36,16 +36,26 @@ class SIS:
         self.StartSLoc = self.S * (1 / self.WSNnumber)
 
         # Starting S Neighbour Set Range
-        # self.density = self.N / (self.deploymentArea * self.deploymentArea)
-        # self.density = self.N / self.deploymentArea
         self.density = (self.N / self.WSNnumber) / (self.deploymentArea / self.WSNnumber)
 
         self.StartSNhb = self.S * (1 / (self.density * self.transmissionRange))
 
         # Contact rates
+        # n = self.botScanningRate
+        # fact = 1
+        # for i in range(1, n + 1):
+        #     fact = fact * i
+
+        # self.IrPsuccess = (2.71828 ** (-(self.botScanningRate * 0.2))) * (((self.botScanningRate * 0.2) ** 27) / fact)
+        # self.IlPsuccess = (2.71828 ** (-(self.botScanningRate * 0.5))) * (((self.botScanningRate * 0.5) ** 27) / fact)
+        # self.IpPsuccess = (2.71828 ** (-(self.botScanningRate * 0.8))) * (((self.botScanningRate * 0.8) ** 27) / fact)
         self.IrContactRate = self.botScanningRate * self.IrPsuccess
         self.IlContactRate = self.botScanningRate * self.IlPsuccess
         self.IpContactRate = self.botScanningRate * self.IpPsuccess
+
+        # self.IrContactRate = 1
+        # self.IlContactRate = 1
+        # self.IpContactRate = 1
 
         # Infection Rates
         self.bR = self.IrContactRate * self.botPtransmission
@@ -53,8 +63,6 @@ class SIS:
         self.bP = self.IpContactRate * self.botPtransmission
 
         # Death Rates
-        # self.distance = (self.deploymentArea * self.deploymentArea) / self.N
-        # self.distance = self.deploymentArea / self.N
         self.distance = (self.deploymentArea / self.WSNnumber) / (self.N / self.WSNnumber)
 
         self.powerMessage = self.meanPower * self.meanMessageSize * self.distance
@@ -64,10 +72,10 @@ class SIS:
         self.localPowerTime = self.powerMessage * self.IlContactRate
         self.peerToPeerPowerTime = self.powerMessage * self.IpContactRate
 
-        self.regularLifespan = self.totalBattery * self.regularPowerTime
-        self.randomLifespan = self.totalBattery * self.randomPowerTime
-        self.localLifespan = self.totalBattery * self.localPowerTime
-        self.peerToPeerLifespan = self.totalBattery * self.peerToPeerPowerTime
+        self.regularLifespan = self.totalBattery / self.regularPowerTime
+        self.randomLifespan = self.totalBattery / self.randomPowerTime
+        self.localLifespan = self.totalBattery / self.localPowerTime
+        self.peerToPeerLifespan = self.totalBattery / self.peerToPeerPowerTime
 
         self.dthB = 1 / self.regularLifespan
         self.dthR = 1 / self.randomLifespan
@@ -95,7 +103,7 @@ class SIS:
     def runSimulation(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
-        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 101), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 60), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
         S1, Ir1, Il1, Ip1 = solution.T
 
