@@ -4,18 +4,16 @@ from scipy.integrate import odeint
 
 class SIS:
     # Preliminary Constructor to Initialise Variables and Allow for easy class creation
-    def __init__(self, name, n, prcntS, prcntI, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans,
-                 irPsuc, ilPsuc, ipPsuc, meanMsgSize, meanPwr, ttlBattery, rcvryRate, timesteps):
+    def __init__(self, name, n, i, wsnNo, depArea, transRange, cntctRate, scanRate, Ptrans, irPsuc, ilPsuc, ipPsuc, meanMsgSize, meanPwr, ttlBattery, rcvryRate, timesteps, ids):
         self.Name = name
         self.N = n
-        self.percentS = prcntS
-        self.percentI = prcntI
+        self.I = i
         self.WSNnumber = wsnNo
         self.deploymentArea = depArea
         self.transmissionRange = transRange
         self.contactRate = cntctRate
         self.botScanningRate = scanRate
-        self.botPtransmission = Ptrans
+        self.Ptransmission = Ptrans
         self.IrPsuccess = irPsuc
         self.IlPsuccess = ilPsuc
         self.IpPsuccess = ipPsuc
@@ -24,13 +22,13 @@ class SIS:
         self.totalBattery = ttlBattery
         self.recoveryRate = rcvryRate
         self.Timesteps = timesteps
+        self.IDS = ids
 
         # Starting population sizes
-        self.S = self.N * self.percentS
-        self.Ir = (self.N * self.percentI) / 3
-        self.Il = (self.N * self.percentI) / 3
-        self.Ip = (self.N * self.percentI) / 3
-        self.I = self.Ir + self.Il + self.Ip
+        self.S = self.N - self.I
+        self.Ir = self.I / 3
+        self.Il = self.I / 3
+        self.Ip = self.I / 3
 
         # Starting S Local Set Range
         self.StartSLoc = self.S * (1 / self.WSNnumber)
@@ -40,27 +38,14 @@ class SIS:
 
         self.StartSNhb = self.S * (1 / (self.density * self.transmissionRange))
 
-        # Contact rates
-        # n = self.botScanningRate
-        # fact = 1
-        # for i in range(1, n + 1):
-        #     fact = fact * i
-
-        # self.IrPsuccess = (2.71828 ** (-(self.botScanningRate * 0.2))) * (((self.botScanningRate * 0.2) ** 27) / fact)
-        # self.IlPsuccess = (2.71828 ** (-(self.botScanningRate * 0.5))) * (((self.botScanningRate * 0.5) ** 27) / fact)
-        # self.IpPsuccess = (2.71828 ** (-(self.botScanningRate * 0.8))) * (((self.botScanningRate * 0.8) ** 27) / fact)
         self.IrContactRate = self.botScanningRate * self.IrPsuccess
         self.IlContactRate = self.botScanningRate * self.IlPsuccess
         self.IpContactRate = self.botScanningRate * self.IpPsuccess
 
-        # self.IrContactRate = 1
-        # self.IlContactRate = 1
-        # self.IpContactRate = 1
-
         # Infection Rates
-        self.bR = self.IrContactRate * self.botPtransmission
-        self.bL = self.IlContactRate * self.botPtransmission
-        self.bP = self.IpContactRate * self.botPtransmission
+        self.bR = self.IrContactRate * self.Ptransmission
+        self.bL = self.IlContactRate * self.Ptransmission
+        self.bP = self.IpContactRate * self.Ptransmission
 
         # Death Rates
         self.distance = (self.deploymentArea / self.WSNnumber) / (self.N / self.WSNnumber)
@@ -100,10 +85,31 @@ class SIS:
 
         return dSdt, dIrdt, dIldt, dIpdt
 
+    def SISModelIDS(self, y, t, bR, bL, bP, dthB, dthR, dthL, dthP, a, IDS):
+        S, Ir, Il, Ip = y
+        I = Ir + Il + Ip
+
+        Sloc = S * (1 / self.WSNnumber)
+
+        Snhb = S * (1 / (self.density * self.transmissionRange))
+
+        dSdt = -bR * S * I - bL * Sloc * I - bP * Snhb * I - dthB * S + a * I + IDS * I
+
+        dIrdt = bR * S * I - a * Ir - IDS * Ir - dthB * Ir - dthR * Ir
+
+        dIldt = bL * Sloc * I - a * Il - IDS * Il - dthB * Il - dthL * Il
+
+        dIpdt = bP * Snhb * I - a * Ip - IDS * Ip - dthB * Ip - dthP * Ip
+
+        return dSdt, dIrdt, dIldt, dIpdt
+
     def runSimulation(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
-        solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 60), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+        if self.IDS:
+            solution = odeint(self.SISModelIDS, y0, np.linspace(0, self.Timesteps, 500), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate, 0.25))
+        else:
+            solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 500), args=(self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
         S1, Ir1, Il1, Ip1 = solution.T
 
@@ -112,6 +118,7 @@ class SIS:
     # Method to calculate the score of the models used in the inspection page
     def calculateScores(self):
         # The scores are broken down into their categories with an overall score as well as individual scores
+
         S1, Ir1, Il1, Ip1 = self.runSimulation()
 
         ovrSizeScore = 0

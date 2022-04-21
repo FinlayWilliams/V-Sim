@@ -26,11 +26,12 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default models
         self.configurations = []
-        self.configurations.append(SIS("IoT-SIS: Example A", 10000, 0.999, 0.001, 10, 50, 10, 10, 27, 0.0003, 0.01, 0.05, 0.20, 50, 0.75, 864000, 0.5, 14))
-        self.configurations.append(SIS("IoT-SIS: Example B", 10000, 0.99, 0.01, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14))
+        self.configurations.append(SIS("IoT-SIS: Example A", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Example C", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, True))
+        self.configurations.append(SIS("IoT-SIS: Example B", 1000, 1, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14, False))
         self.activeConfigurationIndex = 0
         self.activeConfiguration = self.configurations[self.activeConfigurationIndex]
-        self.compareConfiguration = SIS("IoT-SIS: Comparison Configuration", 10000, 0.99, 0.01, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14)
+        self.compareConfiguration = SIS("IoT-SIS: Comparison Configuration", 1000, 1, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14, False)
 
         # Manually initialising all interfaces and displaying the Home interfaces
         self.interfaces = {}
@@ -67,7 +68,6 @@ class BaseApp(tk.Tk):
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateConfigurationList()
             self.interfaces[show].updateCompareConfigurationList(self)
-            print(self.activeConfiguration)
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs()

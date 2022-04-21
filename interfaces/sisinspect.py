@@ -41,7 +41,7 @@ class SISInspectInterface(tk.Frame):
         lblLegend4 = tk.Label(mainFrame, bg="#17becf", width=27, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 9), fg="white")
         lblLegend5 = tk.Label(mainFrame, bg="#d62728", width=27, pady=4, text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
 
-        # This contains all graphs
+        # This contains all graph-side widgets
         graphFrame = tk.Frame(self, bg="#453354")
         self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="Assessment Overview",
                                       font=("Arial", 14, "italic"), fg="white")
@@ -56,6 +56,8 @@ class SISInspectInterface(tk.Frame):
         for x in range(3):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
+
+        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 12))
 
         ########################################### Placing Everything ###############################################
         mainFrame.place(relheight=1, relwidth=0.6)
@@ -80,13 +82,14 @@ class SISInspectInterface(tk.Frame):
         self.lblGraphTitle.pack(ipady=21)
         btnConfigure.place(x=541, y=21)
         graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
+        self.lblFinalN.place(x=77, y=820)
         self.updateGraphs()
 
     # Updates the on-screen graphs
     def updateGraphs(self):
         S1, Ir1, Il1, Ip1 = self.controller.activeConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.controller.activeConfiguration.Timesteps, 60)
+        T1 = np.linspace(0, self.controller.activeConfiguration.Timesteps, 500)
 
         # Setting the title
         self.lblGraphTitle.config(text="{} - Virus Propagation".format(self.controller.activeConfiguration.Name))
@@ -116,6 +119,8 @@ class SISInspectInterface(tk.Frame):
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.ax[2].pie(pop, explode=explode, labels=labels, colors=colours)
         self.ax[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeConfiguration.Timesteps))
+
+        self.lblFinalN.config(text="Final N = {}, Starting N = {}".format(S1[-1] + I1[-1], self.controller.activeConfiguration.N))
 
         self.canvas.draw()
 

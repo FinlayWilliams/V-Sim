@@ -3,6 +3,7 @@ from tkinter import *
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from models import sis
 
 
 class SISCompareInterface(tk.Frame):
@@ -104,25 +105,29 @@ class SISCompareInterface(tk.Frame):
         rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1025)
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
 
-    # Called upon page opening to set the correct models
+    # Called upon page opening to set the correct models and ensure the timesteps are synchronised
     def setConfigurations(self, controller):
-        self.activeModel = controller.activeConfiguration
-        self.compareModel = controller.compareConfiguration
+        self.activeConfiguration = controller.activeConfiguration
+        self.compareConfiguration = controller.compareConfiguration
 
     # Called when opting to configure the Right, CompareModel to ensure compatibility
     def setNewActivePlusIndex(self, controller):
         index = 0
         for M in controller.configurations:
-            if M == self.compareModel:
+            if M == self.compareConfiguration:
                 controller.setActiveConfiguration(index)
                 controller.setActiveConfigurationIndex(index)
             index = index + 1
 
     # Called on page opening to update the Left, ActiveModel graph information
     def updateLeftGraph(self):
-        S1, Ir1, Il1, Ip1 = self.activeModel.runSimulation()
+        # Configuration is made local to change timesteps for this graph only
+        leftConfiguration = sis.SIS(self.activeConfiguration.Name, self.activeConfiguration.N, self.activeConfiguration.I, self.activeConfiguration.WSNnumber, self.activeConfiguration.deploymentArea, self.activeConfiguration.transmissionRange, self.activeConfiguration.contactRate, self.activeConfiguration.botScanningRate, self.activeConfiguration.Ptransmission, self.activeConfiguration.IrPsuccess, self.activeConfiguration.IlPsuccess, self.activeConfiguration.IpPsuccess,
+                                 self.activeConfiguration.meanMessageSize, self.activeConfiguration.meanPower, self.activeConfiguration.totalBattery, self.activeConfiguration.recoveryRate, 30, self.activeConfiguration.IDS)
+
+        S1, Ir1, Il1, Ip1 = leftConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.activeModel.Timesteps, 60)
+        T1 = np.linspace(0, leftConfiguration.Timesteps, 500)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.axLeft[x].clear() for x in range(3)]
@@ -148,15 +153,18 @@ class SISCompareInterface(tk.Frame):
                   "Local-Scanning: {:.0f}".format(pop[2]), "Peer-to-Peer: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.axLeft[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.axLeft[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.activeModel.Timesteps))
+        self.axLeft[2].set_title("Population Sizes on Final Recorded Day #{}".format(leftConfiguration.Timesteps))
 
         self.canvasLeft.draw()
 
     # Called on page opening to update the Right, CompareModel graph information
     def updateRightGraph(self):
-        S1, Ir1, Il1, Ip1 = self.compareModel.runSimulation()
+        # Configuration is made local to change timesteps for this graph only
+        rightConfiguration = sis.SIS(self.compareConfiguration.Name, self.compareConfiguration.N, self.compareConfiguration.I, self.compareConfiguration.WSNnumber, self.compareConfiguration.deploymentArea, self.compareConfiguration.transmissionRange, self.compareConfiguration.contactRate, self.compareConfiguration.botScanningRate, self.compareConfiguration.Ptransmission, self.compareConfiguration.IrPsuccess, self.compareConfiguration.IlPsuccess, self.compareConfiguration.IpPsuccess,
+                                 self.compareConfiguration.meanMessageSize, self.compareConfiguration.meanPower, self.compareConfiguration.totalBattery, self.compareConfiguration.recoveryRate, 30, self.compareConfiguration.IDS)
+        S1, Ir1, Il1, Ip1 = rightConfiguration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.compareModel.Timesteps, 60)
+        T1 = np.linspace(0, rightConfiguration.Timesteps, 500)
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.axRight[x].clear() for x in range(3)]
@@ -182,29 +190,29 @@ class SISCompareInterface(tk.Frame):
                   "Local-Scanning: {:.0f}".format(pop[2]), "Peer-to-Peer: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.axRight[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.axRight[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.compareModel.Timesteps))
+        self.axRight[2].set_title("Population Sizes on Final Recorded Day #{}".format(rightConfiguration.Timesteps))
 
         self.canvasRight.draw()
 
     # Called on page opening to set the correct information
     def updateColumnInfo(self):
-        activeScore = self.activeModel.calculateScores()[8]
-        actPopScore = self.activeModel.calculateScores()[0]
-        actSizeScore = self.activeModel.calculateScores()[3]
-        actNeighbourScore = self.activeModel.calculateScores()[4]
-        actInfectionScore = self.activeModel.calculateScores()[5]
-        actDeathScore = self.activeModel.calculateScores()[6]
-        actMiscScore = self.activeModel.calculateScores()[7]
-        compareScore = self.compareModel.calculateScores()[8]
-        compPopScore = self.compareModel.calculateScores()[0]
-        compSizeScore = self.compareModel.calculateScores()[3]
-        compNeighbourScore = self.compareModel.calculateScores()[4]
-        compInfectionScore = self.compareModel.calculateScores()[5]
-        compDeathScore = self.compareModel.calculateScores()[6]
-        compMiscScore = self.compareModel.calculateScores()[7]
+        activeScore = self.activeConfiguration.calculateScores()[8]
+        actPopScore = self.activeConfiguration.calculateScores()[0]
+        actSizeScore = self.activeConfiguration.calculateScores()[3]
+        actNeighbourScore = self.activeConfiguration.calculateScores()[4]
+        actInfectionScore = self.activeConfiguration.calculateScores()[5]
+        actDeathScore = self.activeConfiguration.calculateScores()[6]
+        actMiscScore = self.activeConfiguration.calculateScores()[7]
+        compareScore = self.compareConfiguration.calculateScores()[8]
+        compPopScore = self.compareConfiguration.calculateScores()[0]
+        compSizeScore = self.compareConfiguration.calculateScores()[3]
+        compNeighbourScore = self.compareConfiguration.calculateScores()[4]
+        compInfectionScore = self.compareConfiguration.calculateScores()[5]
+        compDeathScore = self.compareConfiguration.calculateScores()[6]
+        compMiscScore = self.compareConfiguration.calculateScores()[7]
 
-        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeModel.Name[5:]))
-        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareModel.Name[5:]))
+        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeConfiguration.Name[5:]))
+        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareConfiguration.Name[5:]))
 
         if activeScore < compareScore:
             self.lblLeftScore.config(text="{}".format(activeScore), fg="#2d802f")
@@ -231,11 +239,11 @@ class SISCompareInterface(tk.Frame):
         if actPopScore < compPopScore:
             lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#2d802f")
             lblPopScoreRight.config(text="{}".format(compPopScore), fg="#d12c3f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.activeModel.Name[5:]))
+            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.activeConfiguration.Name[5:]))
         if actPopScore > compPopScore:
             lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#d12c3f")
             lblPopScoreRight.config(text="{}".format(compPopScore), fg="#2d802f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.compareModel.Name[5:]))
+            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.compareConfiguration.Name[5:]))
         if actPopScore == compPopScore:
             lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#e68f39")
             lblPopScoreRight.config(text="{}".format(compPopScore), fg="#e68f39")
@@ -252,11 +260,11 @@ class SISCompareInterface(tk.Frame):
         if actSizeScore < compSizeScore:
             lblSizeScoreLeft.config(text="{}".format(actSizeScore), fg="#2d802f")
             lblSizeScoreRight.config(text="{}".format(compSizeScore), fg="#d12c3f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.activeModel.Name[5:]))
+            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.activeConfiguration.Name[5:]))
         if actSizeScore > compSizeScore:
             lblSizeScoreLeft.config(text="{}".format(actSizeScore), fg="#d12c3f")
             lblSizeScoreRight.config(text="{}".format(compSizeScore), fg="#2d802f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.compareModel.Name[5:]))
+            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.compareConfiguration.Name[5:]))
         if actSizeScore == compSizeScore:
             lblSizeScoreLeft.config(text="{}".format(actSizeScore), fg="#e68f39")
             lblSizeScoreRight.config(text="{}".format(compSizeScore), fg="#e68f39")
@@ -273,11 +281,11 @@ class SISCompareInterface(tk.Frame):
         if actNeighbourScore < compNeighbourScore:
             lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#2d802f")
             lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#d12c3f")
-            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.activeModel.Name[5:]))
+            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.activeConfiguration.Name[5:]))
         if actNeighbourScore > compNeighbourScore:
             lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#d12c3f")
             lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#2d802f")
-            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.compareModel.Name[5:]))
+            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.compareConfiguration.Name[5:]))
         if actNeighbourScore == compNeighbourScore:
             lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#e68f39")
             lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#e68f39")
@@ -295,12 +303,12 @@ class SISCompareInterface(tk.Frame):
             lblInfectionScoreLeft.config(text="{}".format(actInfectionScore), fg="#2d802f")
             lblInfectionScoreRight.config(text="{}".format(compInfectionScore), fg="#d12c3f")
             lblInfectionDesc.config(
-                text="{} has the Better Score for the Infection Rates Category".format(self.activeModel.Name[5:]))
+                text="{} has the Better Score for the Infection Rates Category".format(self.activeConfiguration.Name[5:]))
         if actInfectionScore > compInfectionScore:
             lblInfectionScoreLeft.config(text="{}".format(actInfectionScore), fg="#d12c3f")
             lblInfectionScoreRight.config(text="{}".format(compInfectionScore), fg="#2d802f")
             lblInfectionDesc.config(
-                text="{} has the Better Score for the Infection Rates Category".format(self.compareModel.Name[5:]))
+                text="{} has the Better Score for the Infection Rates Category".format(self.compareConfiguration.Name[5:]))
         if actInfectionScore == compInfectionScore:
             lblInfectionScoreLeft.config(text="{}".format(actInfectionScore), fg="#e68f39")
             lblInfectionScoreRight.config(text="{}".format(compInfectionScore), fg="#e68f39")
@@ -318,12 +326,12 @@ class SISCompareInterface(tk.Frame):
             lblDeathScoreLeft.config(text="{}".format(actDeathScore), fg="#2d802f")
             lblDeathScoreRight.config(text="{}".format(compDeathScore), fg="#d12c3f")
             lblDeathDesc.config(
-                text="{} has the Better Score for the Death Rates Category".format(self.activeModel.Name[5:]))
+                text="{} has the Better Score for the Death Rates Category".format(self.activeConfiguration.Name[5:]))
         if actDeathScore > compDeathScore:
             lblDeathScoreLeft.config(text="{}".format(actDeathScore), fg="#d12c3f")
             lblDeathScoreRight.config(text="{}".format(compDeathScore), fg="#2d802f")
             lblDeathDesc.config(
-                text="{} has the Better Score for the Death Rates Category".format(self.compareModel.Name[5:]))
+                text="{} has the Better Score for the Death Rates Category".format(self.compareConfiguration.Name[5:]))
         if actDeathScore == compDeathScore:
             lblDeathScoreLeft.config(text="{}".format(actDeathScore), fg="#e68f39")
             lblDeathScoreRight.config(text="{}".format(compDeathScore), fg="#e68f39")
@@ -339,12 +347,12 @@ class SISCompareInterface(tk.Frame):
             lblMiscScoreLeft.config(text="{}".format(actMiscScore), fg="#2d802f")
             lblMiscScoreRight.config(text="{}".format(compMiscScore), fg="#d12c3f")
             lblMiscDesc.config(
-                text="{} has the Better Score for the Miscellaneous Category".format(self.activeModel.Name[5:]))
+                text="{} has the Better Score for the Miscellaneous Category".format(self.activeConfiguration.Name[5:]))
         if actMiscScore > compMiscScore:
             lblMiscScoreLeft.config(text="{}".format(actMiscScore), fg="#d12c3f")
             lblMiscScoreRight.config(text="{}".format(compMiscScore), fg="#2d802f")
             lblMiscDesc.config(
-                text="{} has the Better Score for the Miscellaneous Category".format(self.compareModel.Name[5:]))
+                text="{} has the Better Score for the Miscellaneous Category".format(self.compareConfiguration.Name[5:]))
         if actMiscScore == compMiscScore:
             lblMiscScoreLeft.config(text="{}".format(actMiscScore), fg="#e68f39")
             lblMiscScoreRight.config(text="{}".format(compMiscScore), fg="#e68f39")
