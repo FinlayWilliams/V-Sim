@@ -211,8 +211,8 @@ class SISCompareInterface(tk.Frame):
         compDeathScore = self.compareConfiguration.calculateScores()[6]
         compMiscScore = self.compareConfiguration.calculateScores()[7]
 
-        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeConfiguration.Name[5:]))
-        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareConfiguration.Name[5:]))
+        self.lblLeftName.config(text="{}   |   Total Score :".format(self.activeConfiguration.Name[9:]))
+        self.lblRightName.config(text=": Total Score   |   {}".format(self.compareConfiguration.Name[9:]))
 
         if activeScore < compareScore:
             self.lblLeftScore.config(text="{}".format(activeScore), fg="#2d802f")
