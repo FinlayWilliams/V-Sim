@@ -29,10 +29,10 @@ class SISInspectInterface(tk.Frame):
 
         # This area will contain the assessment and a starter list is created
         self.informationFrame = tk.Frame(mainFrame, bg="#e0e0e0")
-        self.frames = [tk.Frame(self.informationFrame, bg="#a8a8a8"), tk.Frame(self.informationFrame, bg="blue"),
-                       tk.Frame(self.informationFrame, bg="green"), tk.Frame(self.informationFrame, bg="yellow"),
-                       tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
-                       tk.Frame(self.informationFrame, bg="#6e6e6e")]
+        self.frames = [tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
+                       tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
+                       tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
+                       tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
         # This is the legend footer of the page
         lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 9), fg="white")
@@ -170,9 +170,9 @@ class SISInspectInterface(tk.Frame):
             for frame in self.frames:
                 frame.destroy()
 
-            self.frames = [tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="blue"),
-                           tk.Frame(self.informationFrame, bg="green"), tk.Frame(self.informationFrame, bg="yellow"),
-                           tk.Frame(self.informationFrame, bg="#654e78"), tk.Frame(self.informationFrame, bg="#453354"),
+            self.frames = [tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
+                           tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
+                           tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0"),
                            tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
         model = self.controller.activeConfiguration

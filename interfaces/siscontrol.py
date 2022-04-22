@@ -64,16 +64,16 @@ class SISControlInterface(tk.Frame):
         self.lblSMatch = tk.Label(frameBot, bg="white")
         lblWSN = tk.Label(frameBot, text="Wireless Sensor Network Count:")
         WSNOptions = ["1", "5", "10", "20", "50"]
-        self.cmbWSN = ttk.Combobox(frameBot, values=WSNOptions, state="readonly")
+        self.cmbWSN = ttk.Combobox(frameBot, values=WSNOptions, state="readonly", width=15)
         lblDEP = tk.Label(frameBot, text="Node Deployment Area (m²)")
         DEPOptions = ["25", "50", "100", "150"]
-        self.cmbDEP = ttk.Combobox(frameBot, values=DEPOptions, state="readonly")
+        self.cmbDEP = ttk.Combobox(frameBot, values=DEPOptions, state="readonly", width=15)
         lblTRNS = tk.Label(frameBot, text="Node Transmission Range (m):")
         TRNSOptions = ["1", "5", "10", "15"]
-        self.cmbTRNS = ttk.Combobox(frameBot, values=TRNSOptions, state="readonly")
+        self.cmbTRNS = ttk.Combobox(frameBot, values=TRNSOptions, state="readonly", width=15)
         lblCNTCT = tk.Label(frameBot, text="S Node Contact Rate:")
         CNTCTOptions = ["1", "5", "10", "20", "50", "75", "100", "250"]
-        self.cmbCNTCT = ttk.Combobox(frameBot, values=CNTCTOptions, state="readonly")
+        self.cmbCNTCT = ttk.Combobox(frameBot, values=CNTCTOptions, state="readonly", width=15)
         lblSCAN = tk.Label(frameBot, text="Bot Scanning Rate (/sec):")
         self.sclSCAN = tk.Scale(frameBot, from_=1, to=250, resolution=1, orient="horizontal")
         POptions = ["0%", "Low", "Expected", "High", "100%"]
@@ -87,13 +87,13 @@ class SISControlInterface(tk.Frame):
         self.cmbPtrns = ttk.Combobox(frameBot, values=POptions, state="readonly")
         lblMSG = tk.Label(frameBot, text="Mean Message Size (Bytes):")
         MSGOptions = ["10", "20", "50", "100"]
-        self.cmbMSG = ttk.Combobox(frameBot, values=MSGOptions, state="readonly")
+        self.cmbMSG = ttk.Combobox(frameBot, values=MSGOptions, state="readonly", width=15)
         lblPWR = tk.Label(frameBot, text="Mean Power per Message (mA):")
         PWROptions = ["0.25", "0.5", "0.75", "1", "1.25"]
-        self.cmbPWR = ttk.Combobox(frameBot, values=PWROptions, state="readonly")
+        self.cmbPWR = ttk.Combobox(frameBot, values=PWROptions, state="readonly", width=15)
         lblBTRY = tk.Label(frameBot, text="Node Battery Capacity (mAs):")
         BTRYOptions = ["216000", "432000", "864000", "1728000", "3456000"]
-        self.cmbBTRY = ttk.Combobox(frameBot, values=BTRYOptions, state="readonly")
+        self.cmbBTRY = ttk.Combobox(frameBot, values=BTRYOptions, state="readonly", width=15)
         lblRR = tk.Label(frameBot, text="Security:")
         RROptions = ["Low", "Medium", "High"]
         self.cmbRR = ttk.Combobox(frameBot, values=RROptions, state="readonly")
@@ -140,12 +140,12 @@ class SISControlInterface(tk.Frame):
         ## Frame Bottom Half
         frameBot.place(y=628, relheight=0.30, relwidth=1)
         # 1st Block
-        lblN.grid(row=0, column=0, padx=(5, 5), pady=(7, 0), sticky="e")
+        lblN.grid(row=0, column=0, padx=(8, 5), pady=(7, 0), sticky="e")
         self.cmbN.grid(row=0, column=1, padx=5, pady=(7, 0))
         self.cmbN.bind("<<ComboboxSelected>>", self.updateConfiguration)
-        lblS.grid(row=1, column=0, padx=(5, 5), pady=5, sticky="e")
+        lblS.grid(row=1, column=0, padx=(8, 5), pady=5, sticky="e")
         self.lblSMatch.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
-        lblBotCount.grid(row=2, column=0, padx=(5, 5), pady=5, sticky="e")
+        lblBotCount.grid(row=2, column=0, padx=(8, 5), pady=5, sticky="e")
         self.cmbBotCount.grid(row=2, column=1, padx=5, sticky="ew")
         self.cmbBotCount.bind("<<ComboboxSelected>>", self.updateConfiguration)
         # 2nd Block
@@ -164,7 +164,7 @@ class SISControlInterface(tk.Frame):
         # 3rd Block
         lblSCAN.grid(row=0, column=4, padx=5, pady=(7, 0), sticky="e")
         self.sclSCAN.grid(row=0, column=5, padx=5, pady=(7, 0), sticky="ew")
-        self.sclSCAN.bind("<<ComboboxSelected>>", self.updateConfiguration)
+        self.sclSCAN.bind("<ButtonRelease-1>", self.updateConfiguration)
         lblIrPsu.grid(row=1, column=4, padx=5, pady=5, sticky="e")
         self.cmbIrPsu.grid(row=1, column=5, padx=5, sticky="ew")
         self.cmbIrPsu.bind("<<ComboboxSelected>>", self.updateConfiguration)
@@ -174,7 +174,7 @@ class SISControlInterface(tk.Frame):
         lblIpPsu.grid(row=3, column=4, padx=5, pady=5, sticky="e")
         self.cmbIpPsu.grid(row=3, column=5, padx=5, sticky="ew")
         self.cmbIpPsu.bind("<<ComboboxSelected>>", self.updateConfiguration)
-        lblPtrns.grid(row=4, column=4, padx=5, pady=5, sticky="e")
+        lblPtrns.grid(row=4, column=4, padx=5, pady=7, sticky="e")
         self.cmbPtrns.grid(row=4, column=5, padx=5)
         self.cmbPtrns.bind("<<ComboboxSelected>>", self.updateConfiguration)
         # 4th Block
@@ -188,8 +188,8 @@ class SISControlInterface(tk.Frame):
         self.cmbBTRY.grid(row=2, column=7, padx=5, pady=5)
         self.cmbBTRY.bind("<<ComboboxSelected>>", self.updateConfiguration)
         # 5th Block
-        lblRR.grid(row=0, column=8, padx=5, pady=5, sticky="e")
-        self.cmbRR.grid(row=0, column=9, padx=5, sticky="ew")
+        lblRR.grid(row=0, column=8, padx=5, pady=(7, 0), sticky="e")
+        self.cmbRR.grid(row=0, column=9, padx=(7, 0), sticky="ew")
         self.cmbRR.bind("<<ComboboxSelected>>", self.updateConfiguration)
         lblIDS.grid(row=1, column=8, padx=5, pady=5, sticky="e")
         self.checkIDS.grid(row=1, column=9, padx=5, pady=5, sticky="w")
@@ -292,6 +292,7 @@ class SISControlInterface(tk.Frame):
             MSG = int(self.cmbMSG.get())
             PWR = float(self.cmbPWR.get())
             BTRY = int(self.cmbBTRY.get())
+
             if self.cmbRR.get() == "Low":
                 RR = float(0.25)
             elif self.cmbRR.get() == "Medium":
@@ -302,6 +303,7 @@ class SISControlInterface(tk.Frame):
                 T = 250
             else:
                 T = int(self.sclT.get())
+
             IDS = bool(self.checkIDSBool.get())
 
             newActiveModel = sis.SIS(Name, N, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T, IDS)
@@ -381,7 +383,7 @@ class SISControlInterface(tk.Frame):
         elif self.activeConfiguration.IlPsuccess == 0.00000000001:
             self.cmbIlPsu.set("High")
         else:
-            self.cmbIlPsu.set(1)
+            self.cmbIlPsu.set("100%")
 
         if self.activeConfiguration.IpPsuccess == 0.00000000001:
             self.cmbIpPsu.set("0%")

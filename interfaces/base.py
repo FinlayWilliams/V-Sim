@@ -24,11 +24,13 @@ class BaseApp(tk.Tk):
         base = tk.Frame(self, background="#453354")
         base.pack(side="top", fill="both", expand=True)
 
-        # Initialising a models list and all default models
+        # Initialising a models list and all default configurations
         self.configurations = []
-        self.configurations.append(SIS("IoT-SIS: Example A", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: Example C", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, True))
-        self.configurations.append(SIS("IoT-SIS: Example B", 1000, 1, 10, 50, 10, 1, 15, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14, False))
+        self.configurations.append(SIS("IoT-SIS: Default",                  1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: IDS On",                   1000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, True))
+        self.configurations.append(SIS("IoT-SIS: Large Population",        10000, 1, 10, 50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Local Biased Propagation", 1000, 1, 1,  50, 10, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: P2P Biased Propagation",   1000, 1, 10, 150, 1, 10, 27, 0.01, 0.01, 0.07, 0.8, 50, 0.75, 864000, 0.5, 12, False))
         self.activeConfigurationIndex = 0
         self.activeConfiguration = self.configurations[self.activeConfigurationIndex]
         self.compareConfiguration = SIS("IoT-SIS: Comparison Configuration", 1000, 1, 10, 50, 10, 1, 27, 0.3, 0.00002, 0.00006, 0.00009, 50, 0.75, 864000, 0.75, 14, False)
