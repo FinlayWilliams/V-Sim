@@ -45,7 +45,7 @@ class SISInspectInterface(tk.Frame):
         graphFrame = tk.Frame(self, bg="#453354")
         self.lblGraphTitle = tk.Label(graphFrame, bg="#453354", text="Assessment Overview",
                                       font=("Arial", 14, "italic"), fg="white")
-        btnConfigure = tk.Button(graphFrame, wraplength=41, width=7, text="Control Configure", font=("Arial", 7),
+        btnConfigure = tk.Button(graphFrame, wraplength=60, width=10, text="Control Configuration", font=("Arial", 7),
                                  relief="ridge", fg="white", bg="#6e6e6e",
                                  command=lambda: controller.display("SISInspectInterface", "SISControlInterface"))
         graphContainer = tk.Frame(graphFrame, bg="#654e78")
@@ -57,7 +57,7 @@ class SISInspectInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
 
-        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 12))
+        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 12, "bold"))
 
         ########################################### Placing Everything ###############################################
         mainFrame.place(relheight=1, relwidth=0.6)
@@ -79,8 +79,8 @@ class SISInspectInterface(tk.Frame):
         lblLegend5.place(x=731, y=837)
         # Graphs
         graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
-        self.lblGraphTitle.pack(ipady=21)
-        btnConfigure.place(x=541, y=21)
+        self.lblGraphTitle.pack(ipady=21, padx=(0, 30))
+        btnConfigure.place(x=537, y=21)
         graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
         self.lblFinalN.place(x=77, y=820)
         self.updateGraphs()
@@ -102,15 +102,18 @@ class SISInspectInterface(tk.Frame):
         self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
         self.ax[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning Infected")
         self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
-        self.ax[0].set_xlabel("Timesteps (Days)")
+        self.ax[0].set_xlabel("Timesteps (Hours)")
         self.ax[0].set_ylabel("Node Count")
         self.ax[0].set_title("Node Population Sizes Over Time - S, IR, IL, IP")
+        self.ax[0].axvline(linewidth=0.5, color="#a8a8a8", x=self.controller.activeConfiguration.Timesteps / 2, linestyle="--")
         # Plotting the second graph
         self.ax[1].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.ax[1].plot(T1, I1, '#d62728', label="All Infected")
-        self.ax[1].set_xlabel("Timesteps (Days)")
+        self.ax[1].set_xlabel("Timesteps (Hours)")
         self.ax[1].set_ylabel("Node Count")
         self.ax[1].set_title("Node Population Sizes Over Time - S, I = (IR + IL + IP)")
+        self.ax[1].axvline(linewidth=0.5, color="#a8a8a8", x=self.controller.activeConfiguration.Timesteps / 2, linestyle="--")
+        self.ax[1].axhline(linewidth=0.5, color="#d62728", y=max(I1), linestyle="--")
         # Plotting the third graph
         pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
         explode = (0.1, 0, 0, 0)
@@ -118,7 +121,7 @@ class SISInspectInterface(tk.Frame):
                   "Local Scanning Infected: {:.0f}".format(pop[2]), "Peer-to-Peer Infected: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.ax[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.ax[2].set_title("Population Sizes on Final Recorded Day #{}".format(self.controller.activeConfiguration.Timesteps))
+        self.ax[2].set_title("Population Sizes on Final Recorded Hour #{}".format(self.controller.activeConfiguration.Timesteps))
 
         self.lblFinalN.config(text="Final N = {}, Starting N = {}".format(S1[-1] + I1[-1], self.controller.activeConfiguration.N))
 

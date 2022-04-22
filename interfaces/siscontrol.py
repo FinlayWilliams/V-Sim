@@ -33,12 +33,13 @@ class SISControlInterface(tk.Frame):
         # Button: takes the user to the home page
         btnReturn = tk.Button(frameTop, wraplength=40, width=5, text="Return Home", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                              command=lambda: self.checkConfigurationSaved(controller, 1))
-
         # This frame holds the graphs
         canvasFrame = tk.Frame(frameTop, bg="#654e78")
+
         # Configuration Name Options
         lblConfigurationName = tk.Label(frameTop, text="Configuration Name :", bg="#453354", font=("Calibri", 14), fg="white")
-        self.entryName = tk.Entry(frameTop, font=4, width=18)
+        self.entryName = tk.Entry(frameTop, font=2, width=25)
+
         # Frame for the legend to sit in + legend labels
         lblLegendTitle = tk.Label(frameTop, bg="#453354", width=25, pady=4, text="Legend :", font=("Calibri", 14, "bold"), fg="white")
         lblLegend1 = tk.Label(frameTop, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 12), fg="white")
@@ -86,13 +87,13 @@ class SISControlInterface(tk.Frame):
         lblPtrns = tk.Label(frameBot, text="PTransmission Rate:")
         self.cmbPtrns = ttk.Combobox(frameBot, values=POptions, state="readonly")
         lblMSG = tk.Label(frameBot, text="Mean Message Size (Bytes):")
-        MSGOptions = ["10", "20", "50", "100"]
+        MSGOptions = ["16", "50", "150"]
         self.cmbMSG = ttk.Combobox(frameBot, values=MSGOptions, state="readonly", width=15)
         lblPWR = tk.Label(frameBot, text="Mean Power per Message (mA):")
-        PWROptions = ["0.25", "0.5", "0.75", "1", "1.25"]
+        PWROptions = ["0.25", "0.75", "1.25"]
         self.cmbPWR = ttk.Combobox(frameBot, values=PWROptions, state="readonly", width=15)
         lblBTRY = tk.Label(frameBot, text="Node Battery Capacity (mAs):")
-        BTRYOptions = ["216000", "432000", "864000", "1728000", "3456000"]
+        BTRYOptions = ["216000", "864000", "3456000"]
         self.cmbBTRY = ttk.Combobox(frameBot, values=BTRYOptions, state="readonly", width=15)
         lblRR = tk.Label(frameBot, text="Security:")
         RROptions = ["Low", "Medium", "High"]
@@ -124,10 +125,8 @@ class SISControlInterface(tk.Frame):
         btnSave.place(x=10, y=509)
         btnSaveNew.place(x=10, y=560)
         canvasFrame.place(relheight=1, relwidth=0.73, x=58)
-
         lblConfigurationName.place(x=1265, y=130)
-        self.entryName.place(x=1243, y=160)
-
+        self.entryName.place(x=1209, y=160)
         lblLegendTitle.place(x=1229, y=274)
         lblLegend1.place(x=1243, y=307)
         lblLegend2.place(x=1243, y=340)
@@ -215,24 +214,27 @@ class SISControlInterface(tk.Frame):
         self.ax[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning Infected")
         self.ax[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning Infected")
         self.ax[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer Infected")
-        self.ax[0].set_xlabel("Timesteps (Days)")
+        self.ax[0].set_xlabel("Timesteps (Hours)")
         self.ax[0].set_ylabel("Node Count")
         self.ax[0].set_title("Node Population Sizes Over Time - Individual Infection Types - S, IR, IL, IP")
+        self.ax[0].axvline(linewidth=0.5, color="#a8a8a8", x=self.activeConfiguration.Timesteps / 2, linestyle="--")
 
-        # Plotting the third graph
+        # Plotting the second graph
         self.ax[1].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.ax[1].plot(T1, I1, '#d62728', label="All Infected")
-        self.ax[1].set_xlabel("Timesteps (Days)")
+        self.ax[1].set_xlabel("Timesteps (Hours)")
         self.ax[1].set_ylabel("Node Count")
         self.ax[1].set_title("Node Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
+        self.ax[1].axvline(linewidth=0.5, color="#a8a8a8", x=self.activeConfiguration.Timesteps / 2, linestyle="--")
+        self.ax[1].axhline(linewidth=0.5, color="#d62728", y=max(I1), linestyle="--", label="Peak I: {}".format(max(I1)))
 
         self.canvas.draw()
 
-    # Called when a value option is changed, to automatically update the active models parameters
+    # Called when a value option is changed, to automatically update the active configurations parameters to match any changes
     def updateConfiguration(self, time):
         if len(self.entryName.get()) == 0:
             self.controller.popup("Invalid Save", "Please Enter a Name for the Configuration!")
-        if len(self.entryName.get()) > 24:
+        if len(self.entryName.get()) > 30:
             self.controller.popup("Invalid Save", "Please Enter a Shorter Name for the Configuration!")
         else:
             Name = str("IoT-SIS: " + self.entryName.get())
@@ -244,55 +246,49 @@ class SISControlInterface(tk.Frame):
             TRNS = int(self.cmbTRNS.get())
             CNTCT = int(self.cmbCNTCT.get())
             SCAN = int(self.sclSCAN.get())
-
             if self.cmbIrPsu.get() == "0%":
                 IrPsu = float(0.00000000001)
             elif self.cmbIrPsu.get() == "Low":
-                IrPsu = float(0.00000000001)
+                IrPsu = float(0.005)
             elif self.cmbIrPsu.get() == "Expected":
-                IrPsu = float(0.01)
+                IrPsu = float(0.02)
             elif self.cmbIrPsu.get() == "High":
-                IrPsu = float(0.00000000001)
+                IrPsu = float(0.05)
             else:
                 IrPsu = float(1)
-
             if self.cmbIlPsu.get() == "0%":
                 IlPsu = float(0.00000000001)
             elif self.cmbIlPsu.get() == "Low":
-                IlPsu = float(0.00000000001)
+                IlPsu = float(0.05)
             elif self.cmbIlPsu.get() == "Expected":
-                IlPsu = float(0.07)
+                IlPsu = float(0.1)
             elif self.cmbIlPsu.get() == "High":
-                IlPsu = float(0.00000000001)
+                IlPsu = float(0.25)
             else:
                 IlPsu = float(1)
-
             if self.cmbIpPsu.get() == "0%":
                 IpPsu = float(0.00000000001)
             elif self.cmbIpPsu.get() == "Low":
-                IpPsu = float(0.00000000001)
+                IpPsu = float(0.45)
             elif self.cmbIpPsu.get() == "Expected":
                 IpPsu = float(0.8)
             elif self.cmbIpPsu.get() == "High":
-                IpPsu = float(0.00000000001)
+                IpPsu = float(0.95)
             else:
                 IpPsu = float(1)
-
             if self.cmbPtrns.get() == "0%":
                 PTrns = float(0.00000000001)
             elif self.cmbPtrns.get() == "Low":
-                PTrns = float(0.00000000001)
+                PTrns = float(0.001)
             elif self.cmbPtrns.get() == "Expected":
                 PTrns = float(0.01)
             elif self.cmbPtrns.get() == "High":
-                PTrns = float(0.00000000001)
+                PTrns = float(0.03)
             else:
                 PTrns = float(1)
-
             MSG = int(self.cmbMSG.get())
             PWR = float(self.cmbPWR.get())
             BTRY = int(self.cmbBTRY.get())
-
             if self.cmbRR.get() == "Low":
                 RR = float(0.25)
             elif self.cmbRR.get() == "Medium":
@@ -303,48 +299,15 @@ class SISControlInterface(tk.Frame):
                 T = 250
             else:
                 T = int(self.sclT.get())
-
             IDS = bool(self.checkIDSBool.get())
 
-            newActiveModel = sis.SIS(Name, N, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T, IDS)
+            newActiveConfiguration = sis.SIS(Name, N, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T, IDS)
 
-            # if not self.checkValid(newActiveModel):
-            #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
-            # else:
-            #     self.activeModel = newActiveModel
-            #     self.updateGraphs()
-
-            # delete what is below this and uncomment what is above
-            print("=======================================================")
-
-            # print("Il Death Rate: {}".format(newActiveModel.dthL))
-            # print("Il Infection Rate: {}".format(newActiveModel.bL))
-            # print("Il Contact Rate: {}".format(newActiveModel.IlContactRate))
-            # print("")
-            # print("Ip Death Rate: {}".format(newActiveModel.dthP))
-            # print("Ip Infection Rate: {}".format(newActiveModel.bP))
-            # print("Ip Contact Rate: {}".format(newActiveModel.IpContactRate))
-            print("PowerMessage: {}".format(newActiveModel.powerMessage))
-            print("")
-            print("RandomPowerTime: {}".format(newActiveModel.randomPowerTime))
-            print("")
-            print("S Contact Rate: {}".format(newActiveModel.contactRate))
-            print("S Lifespan: {}".format(newActiveModel.regularLifespan))
-            print("S Death Rate: {}".format(newActiveModel.dthB))
-            print("")
-            print("Ir Contact Rate: {}".format(newActiveModel.IrContactRate))
-            print("Ir ILifespan: {}".format(newActiveModel.randomLifespan))
-            print("Ir Death Rate: {}".format(newActiveModel.dthR))
-            print("Ir Infection Rate: {}".format(newActiveModel.bR))
-            print("")
-            print("Il Infection Rate: {}".format(newActiveModel.bL))
-            print("Il Contact Rate: {}".format(newActiveModel.IlContactRate))
-            print("Ip Infection Rate: {}".format(newActiveModel.bP))
-            print("Ip Contact Rate: {}".format(newActiveModel.IpContactRate))
-            print("")
-
-            self.activeConfiguration = newActiveModel
-            self.updateGraphs()
+            if not self.checkValid(newActiveConfiguration):
+                self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
+            else:
+                self.activeConfiguration = newActiveConfiguration
+                self.updateGraphs()
 
     # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct
@@ -354,7 +317,6 @@ class SISControlInterface(tk.Frame):
 
         self.entryName.delete(0, 'end')
         self.entryName.insert(END, self.activeConfiguration.Name[9:])
-
         self.cmbN.set(self.activeConfiguration.N)
         self.cmbBotCount.set(self.activeConfiguration.I)
         self.cmbWSN.set(self.activeConfiguration.WSNnumber)
@@ -362,51 +324,46 @@ class SISControlInterface(tk.Frame):
         self.cmbTRNS.set(self.activeConfiguration.transmissionRange)
         self.cmbCNTCT.set(self.activeConfiguration.contactRate)
         self.sclSCAN.set(self.activeConfiguration.botScanningRate)
-
         if self.activeConfiguration.IrPsuccess == 0.00000000001:
             self.cmbIrPsu.set("0%")
-        elif self.activeConfiguration.IrPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IrPsuccess == 0.005:
             self.cmbIrPsu.set("Low")
-        elif self.activeConfiguration.IrPsuccess == 0.01:
+        elif self.activeConfiguration.IrPsuccess == 0.02:
             self.cmbIrPsu.set("Expected")
-        elif self.activeConfiguration.IrPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IrPsuccess == 0.05:
             self.cmbIrPsu.set("High")
         else:
-            self.cmbIrPsu.set(1)
-
+            self.cmbIrPsu.set("100%")
         if self.activeConfiguration.IlPsuccess == 0.00000000001:
             self.cmbIlPsu.set("0%")
-        elif self.activeConfiguration.IlPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IlPsuccess == 0.05:
             self.cmbIlPsu.set("Low")
-        elif self.activeConfiguration.IlPsuccess == 0.07:
+        elif self.activeConfiguration.IlPsuccess == 0.1:
             self.cmbIlPsu.set("Expected")
-        elif self.activeConfiguration.IlPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IlPsuccess == 0.25:
             self.cmbIlPsu.set("High")
         else:
             self.cmbIlPsu.set("100%")
-
         if self.activeConfiguration.IpPsuccess == 0.00000000001:
             self.cmbIpPsu.set("0%")
-        elif self.activeConfiguration.IpPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IpPsuccess == 0.45:
             self.cmbIpPsu.set("Low")
         elif self.activeConfiguration.IpPsuccess == 0.8:
             self.cmbIpPsu.set("Expected")
-        elif self.activeConfiguration.IpPsuccess == 0.00000000001:
+        elif self.activeConfiguration.IpPsuccess == 0.95:
             self.cmbIpPsu.set("High")
         else:
-            self.cmbIpPsu.set(1)
-
+            self.cmbIpPsu.set("100%")
         if self.activeConfiguration.Ptransmission == 0.00000000001:
             self.cmbPtrns.set("0")
-        elif self.activeConfiguration.Ptransmission == 0.00000000001:
+        elif self.activeConfiguration.Ptransmission == 0.001:
             self.cmbPtrns.set("Low")
         elif self.activeConfiguration.Ptransmission == 0.01:
             self.cmbPtrns.set("Expected")
-        elif self.activeConfiguration.Ptransmission == 0.00000000001:
+        elif self.activeConfiguration.Ptransmission == 0.03:
             self.cmbPtrns.set("High")
         else:
-            self.cmbPtrns.set(1)
-
+            self.cmbPtrns.set("100%")
         self.cmbMSG.set(self.activeConfiguration.meanMessageSize)
         self.cmbPWR.set(self.activeConfiguration.meanPower)
         self.cmbBTRY.set(self.activeConfiguration.totalBattery)
@@ -422,7 +379,7 @@ class SISControlInterface(tk.Frame):
         else:
             self.checkTime.deselect()
 
-    # Checks whether the models is saved or not before the user proceeds to the inspect screen and looses
+    # Checks whether the configuration is saved or not before the user proceeds to another screen and looses
     # the current configuration
     def checkConfigurationSaved(self, controller, page):
         if self.activeConfiguration != controller.activeConfiguration:
@@ -433,7 +390,7 @@ class SISControlInterface(tk.Frame):
             else:
                 controller.display("SISControlInterface", "HomeInterface")
 
-    # Checks if the current configuration is valid by checking no population size dips below zero
+    # Checks if the current configuration is valid by checking no population size reaches below zero
     def checkValid(self, newActiveConfig):
         S1, Ir1, Il1, Ip1 = newActiveConfig.runSimulation()
         populations = [S1, Ir1, Il1, Ip1]

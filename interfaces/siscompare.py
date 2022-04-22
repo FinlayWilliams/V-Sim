@@ -137,15 +137,17 @@ class SISCompareInterface(tk.Frame):
         self.axLeft[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning")
         self.axLeft[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning")
         self.axLeft[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer")
-        self.axLeft[0].set_xlabel("Timesteps (Days)")
+        self.axLeft[0].set_xlabel("Timesteps (Hours)")
         self.axLeft[0].set_ylabel("Node Count")
         self.axLeft[0].set_title("Node Population Sizes Over Time - S, IR, IL, IP")
+        self.axLeft[0].axvline(linewidth=0.5, color="#a8a8a8", x=leftConfiguration.Timesteps / 2, linestyle="--")
         # Plotting the second graph
         self.axLeft[1].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.axLeft[1].plot(T1, I1, '#d62728', label="All Infected")
-        self.axLeft[1].set_xlabel("Timesteps (Days)")
+        self.axLeft[1].set_xlabel("Timesteps (Hours)")
         self.axLeft[1].set_ylabel("Node Count")
         self.axLeft[1].set_title("Node Population Sizes Over Time - S, I = (IR + IL + IP)")
+        self.axLeft[1].axvline(linewidth=0.5, color="#a8a8a8", x=leftConfiguration.Timesteps / 2, linestyle="--")
         # Plotting the third graph
         pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
         explode = (0.1, 0, 0, 0)
@@ -153,7 +155,7 @@ class SISCompareInterface(tk.Frame):
                   "Local-Scanning: {:.0f}".format(pop[2]), "Peer-to-Peer: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.axLeft[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.axLeft[2].set_title("Population Sizes on Final Recorded Day #{}".format(leftConfiguration.Timesteps))
+        self.axLeft[2].set_title("Population Sizes on Final Recorded Hour #{}".format(leftConfiguration.Timesteps))
 
         self.canvasLeft.draw()
 
@@ -174,15 +176,17 @@ class SISCompareInterface(tk.Frame):
         self.axRight[0].plot(T1, Ir1, "#9467bd", label="Random-Scanning")
         self.axRight[0].plot(T1, Il1, "#1f77b4", label="Local-Scanning")
         self.axRight[0].plot(T1, Ip1, "#17becf", label="Peer-to-Peer")
-        self.axRight[0].set_xlabel("Timesteps (Days)")
+        self.axRight[0].set_xlabel("Timesteps (Hours)")
         self.axRight[0].set_ylabel("Node Count")
         self.axRight[0].set_title("Node Population Sizes Over Time - S, IR, IL, IP")
+        self.axRight[0].axvline(linewidth=0.5, color="#a8a8a8", x=rightConfiguration.Timesteps / 2, linestyle="--")
         # Plotting the second graph
         self.axRight[1].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.axRight[1].plot(T1, I1, '#d62728', label="All Infected")
-        self.axRight[1].set_xlabel("Timesteps (Days)")
+        self.axRight[1].set_xlabel("Timesteps (Hours)")
         self.axRight[1].set_ylabel("Node Count")
         self.axRight[1].set_title("Node Population Sizes Over Time - S, I = (IR + IL + IP)")
+        self.axRight[1].axvline(linewidth=0.5, color="#a8a8a8", x=rightConfiguration.Timesteps / 2, linestyle="--")
         # Plotting the third graph
         pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
         explode = (0.1, 0, 0, 0)
@@ -190,7 +194,7 @@ class SISCompareInterface(tk.Frame):
                   "Local-Scanning: {:.0f}".format(pop[2]), "Peer-to-Peer: {:.0f}".format(pop[3])]
         colours = ["#2ca02c", "#9467bd", "#1f77b4", "#17becf"]
         self.axRight[2].pie(pop, explode=explode, labels=labels, colors=colours)
-        self.axRight[2].set_title("Population Sizes on Final Recorded Day #{}".format(rightConfiguration.Timesteps))
+        self.axRight[2].set_title("Population Sizes on Final Recorded Hour #{}".format(rightConfiguration.Timesteps))
 
         self.canvasRight.draw()
 

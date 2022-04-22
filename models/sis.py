@@ -120,105 +120,11 @@ class SIS:
         # The scores are broken down into their categories with an overall score as well as individual scores
 
         S1, Ir1, Il1, Ip1 = self.runSimulation()
+        I1 = Ir1 + Il1 + Ip1
 
-        ovrSizeScore = 0
+        ovrMiscellaneousScore, startingPopScore, rrScore, idsScore, ovrNeighbourScore, slocScore, snhbScore, ovrBotContactRateScore, ovrEffortScore, ovrPhysicalSizeScore, ovrInfectionRateScore, ovrDeathRateScoreOvr = 0
 
-        # Calculating the population scores
-        startPopScore = 0
-        endPopScore = 0
-
-        if self.percentS >= 0.9:
-            startPopScore = startPopScore + 100
-        elif 0.8 <= self.percentS < 0.9:
-            startPopScore = startPopScore + 200
-        elif 0.7 <= self.percentS < 0.8:
-            startPopScore = startPopScore + 300
-        elif self.percentS < 0.7:
-            startPopScore = startPopScore + 400
-
-        S2 = S1[len(S1) - 1]
-        Ir2 = Ir1[len(Ir1) - 1]
-        Il2 = Il1[len(Il1) - 1]
-        Ip2 = Ip1[len(Ip1) - 1]
-        I2 = Ir2 + Il2 + Ip2
-
-        if S2 <= 0.25 * I2:
-            endPopScore = 400
-        elif 0.25 * I2 <= S2 < 0.5 * I2:
-            endPopScore = 350
-        elif 0.5 * I2 <= S2 < 0.75 * I2:
-            endPopScore = 300
-        elif 0.75 * I2 <= S2 < I2:
-            endPopScore = 250
-        elif I2 <= S2 < 2 * I2:
-            endPopScore = 200
-        elif 2 * I2 <= S2 < 3 * I2:
-            endPopScore = 150
-        elif S2 >= 3 * I2:
-            endPopScore = 100
-
-        ovrPopulationScore = startPopScore + endPopScore
-
-        # Calculating the size score
-
-        # Calculating the neighbour score
-        slocNeighbourScore = 0
-        snhbNeighbourScore = 0
-
-        if self.StartSLoc == self.S * (1 / 1):
-            slocNeighbourScore = 300
-        if self.StartSLoc == self.S * (1 / 5):
-            slocNeighbourScore = 250
-        if self.StartSLoc == self.S * (1 / 10):
-            slocNeighbourScore = 200
-        if self.StartSLoc == self.S * (1 / 20):
-            slocNeighbourScore = 150
-        if self.StartSLoc == self.S * (1 / 50):
-            slocNeighbourScore = 100
-
-        if self.StartSNhb == self.S * (1 / 150):
-            snhbNeighbourScore = 250
-        if self.StartSNhb == self.S * (1 / 100):
-            snhbNeighbourScore = 200
-        if self.StartSNhb == self.S * (1 / 50):
-            snhbNeighbourScore = 150
-        if self.StartSNhb == self.S * (1 / 25):
-            snhbNeighbourScore = 100
-
-        ovrNeighbourScore = slocNeighbourScore + snhbNeighbourScore
-
-        # Calculating the infection rate score
-        brInfectionScore = 0
-        blInfectionScore = 0
-        bpInfectionScore = 0
-
-        ovrInfectionRateScore = brInfectionScore + blInfectionScore + bpInfectionScore
-
-        # Calculating the death rate score
-        dthbDeathScore = 0
-        dthrDeathScore = 0
-        dthlDeathScore = 0
-        dthpDeathScore = 0
-
-        ovrDeathRateScore = dthbDeathScore + dthrDeathScore + dthlDeathScore + dthpDeathScore
-
-        # Calculating the miscellaneous score
-        rrMiscScore = 0
-
-        if self.recoveryRate == 0.25:
-            rrMiscScore = 400
-        if self.recoveryRate == 0.5:
-            rrMiscScore = 300
-        if self.recoveryRate == 0.75:
-            rrMiscScore = 200
-        if self.recoveryRate == 1:
-            rrMiscScore = 100
-
-        ovrMiscScore = rrMiscScore
-
-        ovrScore = ovrPopulationScore + ovrSizeScore + ovrNeighbourScore + ovrInfectionRateScore + ovrDeathRateScore + ovrMiscScore
-
-        return ovrPopulationScore, startPopScore, endPopScore, ovrSizeScore, ovrNeighbourScore, ovrInfectionRateScore, ovrDeathRateScore, ovrMiscScore, ovrScore
+        return 1
 
     # Method to obtain the name from each models allowing the list to access an attribute for identification
     def __str__(self):
