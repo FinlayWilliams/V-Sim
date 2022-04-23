@@ -5,7 +5,6 @@ theApplication = BaseApp()
 theApplication.mainloop()
 
 
-
 # from models.sis import SIS
 # from matplotlib import pyplot as plt
 #

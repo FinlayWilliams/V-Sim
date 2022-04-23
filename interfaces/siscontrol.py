@@ -17,7 +17,7 @@ class SISControlInterface(tk.Frame):
         frameTop = tk.Frame(self, bg="#453354")
         # Button: Resets models config and refreshes graphs
         btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
-                              command=lambda: [self.updateVariables(controller), self.updateGraphs()])
+                              command=lambda: [self.updateVariables(controller), self.updateGraphs(self.activeConfiguration)])
         # Button: overwrites the current models "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                             command=lambda: [self.updateConfiguration(1),
@@ -126,7 +126,7 @@ class SISControlInterface(tk.Frame):
         btnSaveNew.place(x=10, y=560)
         canvasFrame.place(relheight=1, relwidth=0.73, x=58)
         lblConfigurationName.place(x=1265, y=130)
-        self.entryName.place(x=1209, y=160)
+        self.entryName.place(x=1242, y=160)
         lblLegendTitle.place(x=1229, y=274)
         lblLegend1.place(x=1243, y=307)
         lblLegend2.place(x=1243, y=340)
@@ -201,10 +201,18 @@ class SISControlInterface(tk.Frame):
         self.updateVariables(controller)
 
     # Method to update the onscreen graphs to whatever the current models configuration is
-    def updateGraphs(self):
-        S1, Ir1, Il1, Ip1 = self.activeConfiguration.runSimulation()
+    def updateGraphs(self, configuration):
+        S1, Ir1, Il1, Ip1 = configuration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
-        T1 = np.linspace(0, self.activeConfiguration.Timesteps, 500)
+        T1 = np.linspace(0, configuration.Timesteps, 500)
+
+        # finalN = S1[-1] + Ir1[-1] + Il1[-1] + Ip1[-1]
+        #
+        # print("Final N = {}".format(finalN))
+        # print("% of N missing = {}".format(1 / (configuration.N / (configuration.N - finalN))))
+        # print("")
+
+        print("Final S = {}".format(S1[-1]))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]
@@ -217,7 +225,7 @@ class SISControlInterface(tk.Frame):
         self.ax[0].set_xlabel("Timesteps (Hours)")
         self.ax[0].set_ylabel("Node Count")
         self.ax[0].set_title("Node Population Sizes Over Time - Individual Infection Types - S, IR, IL, IP")
-        self.ax[0].axvline(linewidth=0.5, color="#a8a8a8", x=self.activeConfiguration.Timesteps / 2, linestyle="--")
+        self.ax[0].axvline(linewidth=0.5, color="#a8a8a8", x=configuration.Timesteps / 2, linestyle="--")
 
         # Plotting the second graph
         self.ax[1].plot(T1, S1, '#2ca02c', label="Susceptible")
@@ -225,7 +233,7 @@ class SISControlInterface(tk.Frame):
         self.ax[1].set_xlabel("Timesteps (Hours)")
         self.ax[1].set_ylabel("Node Count")
         self.ax[1].set_title("Node Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
-        self.ax[1].axvline(linewidth=0.5, color="#a8a8a8", x=self.activeConfiguration.Timesteps / 2, linestyle="--")
+        self.ax[1].axvline(linewidth=0.5, color="#a8a8a8", x=configuration.Timesteps / 2, linestyle="--")
         self.ax[1].axhline(linewidth=0.5, color="#d62728", y=max(I1), linestyle="--", label="Peak I: {}".format(max(I1)))
 
         self.canvas.draw()
@@ -303,11 +311,17 @@ class SISControlInterface(tk.Frame):
 
             newActiveConfiguration = sis.SIS(Name, N, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T, IDS)
 
-            if not self.checkValid(newActiveConfiguration):
-                self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
-            else:
-                self.activeConfiguration = newActiveConfiguration
-                self.updateGraphs()
+
+
+            # if not self.checkValid(newActiveConfiguration):
+            #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
+            # else:
+            self.updateGraphs(newActiveConfiguration)
+            newActiveConfiguration.Timesteps = 12
+            self.activeConfiguration = newActiveConfiguration
+
+
+
 
     # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct

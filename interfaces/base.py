@@ -26,7 +26,7 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default configurations
         self.configurations = []
-        self.configurations.append(SIS("IoT-SIS: Default",                  1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Default Configuration",    1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
         self.configurations.append(SIS("IoT-SIS: IDS On",                   1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, True))
         self.configurations.append(SIS("IoT-SIS: Large Population",        10000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
         self.configurations.append(SIS("IoT-SIS: Local Biased Propagation", 1000, 1, 1,  50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
@@ -80,7 +80,7 @@ class BaseApp(tk.Tk):
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
-            self.interfaces[show].updateGraphs()
+            self.interfaces[show].updateGraphs(self.activeConfiguration)
         if show == "SISCompareInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].setConfigurations(self)
