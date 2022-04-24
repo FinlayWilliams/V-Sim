@@ -126,7 +126,7 @@ class SISControlInterface(tk.Frame):
         btnSaveNew.place(x=10, y=560)
         canvasFrame.place(relheight=1, relwidth=0.73, x=58)
         lblConfigurationName.place(x=1265, y=130)
-        self.entryName.place(x=1242, y=160)
+        self.entryName.place(x=1210, y=160)
         lblLegendTitle.place(x=1229, y=274)
         lblLegend1.place(x=1243, y=307)
         lblLegend2.place(x=1243, y=340)
@@ -212,7 +212,7 @@ class SISControlInterface(tk.Frame):
         # print("% of N missing = {}".format(1 / (configuration.N / (configuration.N - finalN))))
         # print("")
 
-        print("Final S = {}".format(S1[-1]))
+        print("Random Lifespans = {}".format(configuration.randomLifespan))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]

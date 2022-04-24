@@ -120,14 +120,8 @@ class SIS:
         # The scores are broken down into their categories with an overall score as well as individual scores
 
         S1, Ir1, Il1, Ip1 = self.runSimulation()
-        I1 = Ir1 + Il1 + Ip1
-
-        finalN = S1[-1] + Ir1[-1] + Il1[-1] + Ip1[-1]
-
-        # REMEBER HIGHER IS BETTER NOW AND DO THE BAD SCORE AT THE TOP BEST SCORE AT BOTTOM
 
         ovrSingleFactorScore = 0
-        finalNScore = 0
         startingPopScore = 0
         rrScore = 0
         idsScore = 0
@@ -157,7 +151,6 @@ class SIS:
         IpLifespanScore = 0
 
         # Make not that given enough time, all will reduce to 0 due to the nature of... death.... so this is based off of the chosen 12 hour span to observe
-        #if 1 / (self.N / (self.N - finalN)) ==
 
         if self.I == 0:
             startingPopScore = 5 # Well done no botnet!
@@ -187,13 +180,13 @@ class SIS:
         ovrSingleFactorScore = startingPopScore + rrScore + idsScore
 
         # as you make more wsn the sloc attack cap minimizes greatly, 1 single wsn allows mad spread of Il (1 is at the bottom)
-        if self.SLocFraction == 0.05:
+        if self.SLocFraction == 0.02:
             slocScore = 5
-        elif self.SLocFraction == 0.02:
+        elif self.SLocFraction == 0.05:
             slocScore = 4
-        elif self.SLocFraction == 0.2:
-            slocScore = 3
         elif self.SLocFraction == 0.1:
+            slocScore = 3
+        elif self.SLocFraction == 0.2:
             slocScore = 2
         else:
             slocScore = 1
@@ -308,53 +301,61 @@ class SIS:
 
         ovrEffortScore = tranRangeScore + msgSizeScore + msgPowerScore + bttryScore + depAreaScore
 
-        if 0 <= self.benignLifespan <= 0:
+        if 3456000.0 <= self.benignLifespan <= 13824000.0: # (lergest) you dont want a lot of deaths but typically, the longer the lifespan means less malicious activity ... and you dont really want node death and huge nalicious activity
             benignLifespanScore = 5
-        elif 0 <= self.benignLifespan <= 0:
+        elif 115200.0 <= self.benignLifespan < 3456000.0:
             benignLifespanScore = 4
-        elif 0 <= self.benignLifespan <= 0:
+        elif 1843.2 <= self.benignLifespan < 115200.0:
             benignLifespanScore = 3
-        elif 0 <= self.benignLifespan <= 0:
+        elif 184.32 <= self.benignLifespan < 1843.2:
             benignLifespanScore = 2
-        else:
+        elif 18.432 <= self.benignLifespan < 184.32:
             benignLifespanScore = 1
+        else: # 0.1024 (Shortest)
+            benignLifespanScore = 0
 
-        if 0 <= self.randomLifespan <= 0:
+        if 73728000.0 <= self.randomLifespan <= 1.3824e+18: #This means the bots literally do nothing and do not spread infection ... like they dont exist
             IrLifespanScore = 5
-        elif 0 <= self.randomLifespan <= 0:
+        elif 7372800.0 <= self.randomLifespan < 73728000.0:
             IrLifespanScore = 4
-        elif 0 <= self.randomLifespan <= 0:
+        elif 273066.6666666667 <= self.randomLifespan < 7372800.0:
             IrLifespanScore = 3
-        elif 0 <= self.randomLifespan <= 0:
+        elif 16384.0 <= self.randomLifespan < 273066.6666666667:
+            IrLifespanScore = 2
+        elif 85.33333333333333 <= self.randomLifespan < 16384.0:
             IrLifespanScore = 2
         else:
             IrLifespanScore = 1
 
-        if 0 <= self.localLifespan <= 0:
+        if 5120000000000000.0 <= self.localLifespan <= 1.3824e+18:
             IlLifespanScore = 5
-        elif 0 <= self.localLifespan <= 0:
+        elif 27306.666666666664 <= self.localLifespan < 5120000000000000.0:
             IlLifespanScore = 4
-        elif 0 <= self.localLifespan <= 0:
+        elif 3413.333333333333 <= self.localLifespan < 27306.666666666664:
             IlLifespanScore = 3
-        elif 0 <= self.localLifespan <= 0:
+        elif 170.66666666666666 <= self.localLifespan < 3413.333333333333:
             IlLifespanScore = 2
-        else:
+        elif 7.111111111111111 <= self.localLifespan < 170.66666666666666:
             IlLifespanScore = 1
-
-        if 0 <= self.peerToPeerLifespan <= 0:
-            IpLifespanScore = 5
-        elif 0 <= self.peerToPeerLifespan <= 0:
-            IpLifespanScore = 4
-        elif 0 <= self.peerToPeerLifespan <= 0:
-            IpLifespanScore = 3
-        elif 0 <= self.peerToPeerLifespan <= 0:
-            IpLifespanScore = 2
         else:
+            IlLifespanScore = 0
+
+        if 1920000.0 <= self.peerToPeerLifespan <= 1.3824e+18:
+            IpLifespanScore = 5
+        elif 10666.666666666666 <= self.peerToPeerLifespan < 1920000.0:
+            IpLifespanScore = 4
+        elif 426.66666666666663 <= self.peerToPeerLifespan < 10666.666666666666:
+            IpLifespanScore = 3
+        elif 21.333333333333332 <= self.peerToPeerLifespan < 426.66666666666663:
+            IpLifespanScore = 2
+        elif 1.3395348837209302 <= self.peerToPeerLifespan < 21.333333333333332:
             IpLifespanScore = 1
+        else:
+            IpLifespanScore = 0
 
         ovrDeathRateScore = benignLifespanScore + IrLifespanScore + IlLifespanScore + IpLifespanScore
 
-        return ovrSingleFactorScore, finalNScore, startingPopScore, rrScore, idsScore, ovrNeighbourScore, slocScore, \
+        return ovrSingleFactorScore, startingPopScore, rrScore, idsScore, ovrNeighbourScore, slocScore, \
                snhbScore, ovrInfectionScore, scanningScore, irPScore, ilPScore, ipPScore, PTrScore, ovrEffortScore, \
                tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore, ovrDeathRateScore, \
                benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore
