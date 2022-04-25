@@ -63,8 +63,8 @@ class SISInspectInterface(tk.Frame):
         btnNeighbourSet.place(x=207, y=87)
         btnInfectionRate.place(x=399, y=87)
         btnEffort.place(x=591, y=87)
-        btnDeath.place(x=975, y=87)
-        btnSingleFactors.place(x=778, y=87)
+        btnDeath.place(x=778, y=87)
+        btnSingleFactors.place(x=975, y=87)
         self.informationFrame.place(x=14, y=124, relheight=0.85, relwidth=0.97)
         lblLegend1.place(x=0, y=1021)
         lblLegend2.place(x=230, y=1021)
@@ -186,7 +186,7 @@ class SISInspectInterface(tk.Frame):
 
         ovrSingleFactorScore, startingPopScore, rrScore, idsScore, ovrNeighbourScore, slocScore, \
         snhbScore, ovrInfectionScore, scanningScore, irPScore, ilPScore, ipPScore, PTrScore, ovrEffortScore, \
-        tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore, ovrDeathRateScore, \
+        tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, distanceScore, ovrDeathRateScore, \
         benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore = config.calculateScores()
 
         # This section populates each of the frames with updated information conforming to the active models simulation
@@ -195,8 +195,8 @@ class SISInspectInterface(tk.Frame):
         self.populateOverview(config, ovrSingleFactorScore, ovrNeighbourScore, ovrInfectionScore, ovrEffortScore, ovrDeathRateScore)
         self.populateNeighbourFrame(config, ovrNeighbourScore, slocScore, snhbScore)
         self.populateInfectionFrame(config, ovrInfectionScore, scanningScore, irPScore, ilPScore, ipPScore, PTrScore)
-        self.populateEffortFrame(config, ovrEffortScore, tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore)
-        self.populateDeathFrame(config, ovrDeathRateScore, benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore)
+        self.populateEffortFrame(config, ovrEffortScore, tranRangeScore, msgSizeScore, msgPowerScore, distanceScore)
+        self.populateDeathFrame(config, ovrDeathRateScore, bttryScore, benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore)
         self.populateSingleFactorFrame(config, ovrSingleFactorScore, startingPopScore, rrScore, idsScore)
 
     # The following 8 methods are the assessment frame contents
@@ -386,17 +386,17 @@ class SISInspectInterface(tk.Frame):
             lblSLocScoreV.config(fg="#2d802f")
             lblSLocScoreDes.config(text="In this case, the SLoc fraction was {}. This is decided directly by the WSN count of {}.\n\nIn V-Sim, the maximum number "
                                         "of WSNs is 50 - the lowest is 1 - so the {} WSNs in this simulation was enough to ensure that the number of S nodes reachable by (IL) "
-                                        "infection method was limited to only {}%.".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
+                                        "infection method was limited to only {}%.\n".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
         if 1 <= Jeff < 3:
             lblSLocScoreV.config(fg="#e68f39")
             lblSLocScoreDes.config(text="In this case, the SLoc fraction was {}. This is decided directly by the WSN count of {}.\n\nIn V-Sim, the maximum number "
                                         "of WSNs is 50 - the lowest is 1 - so the {} WSNs in this simulation allowed the number of S nodes reachable by IL to be an average / expected "
-                                        "amount. The IL bots had access to {}% of the total S population at any given point.".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
+                                        "amount. The IL bots had access to {}% of the total S population at any given point.\n".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
         if Jeff >= 3:
             lblSLocScoreV.config(fg="#b81d28")
             lblSLocScoreDes.config(text="In this case, the SLoc fraction was {}. This is decided directly by the WSN count of {}.\n\nIn V-Sim, the maximum number "
                                         "of WSNs is 50 - the lowest being 1; the {} WSNs in this simulation allowed the IL infection method a much larger than expected attack window "
-                                        "and had access to {}% of the entire S population.".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
+                                        "and had access to {}% of the entire S population.\n".format(C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
 
         lblSNhbScoreV = tk.Label(self.frames[1], text="{}  ".format(snhbScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblSNhbScore = tk.Label(self.frames[1], text="> SNhb Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
@@ -497,7 +497,7 @@ class SISInspectInterface(tk.Frame):
                                        "It is noted that changing these values comes at estimates of how successful or not a connection should be; lacking real world data "
                                        "on the subject - informed guesses will decide these rates when deciding them."
                                        "\n\nIR scans the entire S population, which will result in an abundance of connection failures despite having the largest attack "
-                                       "surface by far. IL scans the local group, which will result in less but still many failed connections. IP forwards traffic to "
+                                       "surface. \nIL scans the local group, which will result in less but still many failed connections. \nIP forwards traffic to "
                                        "direct neighbours, resulting in a very high connection chance.\n")
 
         lblIrPSucScoreV = tk.Label(self.frames[2], text="{}  ".format(irPScore), font=("Arial", 12, "bold"),
@@ -620,11 +620,492 @@ class SISInspectInterface(tk.Frame):
         lblPTrDes.grid(row=17, column=2, sticky="w", padx=(7, 0))
         lblPTrScoreDes.grid(row=18, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
 
-    def populateEffortFrame(self, config, ovrEffortScore, tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore):
-        pass
+    def populateEffortFrame(self, config, ovrEffortScore, tranRangeScore, msgSizeScore, msgPowerScore, distanceScore):
+        Jeff = 0
+        C = config
+        lblEffortOvrV = tk.Label(self.frames[3], text="{}  ".format(ovrEffortScore), font=("Arial", 14, "bold"),
+                              bg="#e0e0e0")
+        lblEffortOvr = tk.Label(self.frames[3], text="> Overall Effort Score",
+                             font=("Arial", 12, "bold", "italic"),
+                             bg="#e0e0e0")
+        lblEffortOvrDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0")
+        if Jeff < 1:
+            lblEffortOvrV.config(fg="#2d802f")
+            lblEffortOvrDes.config(
+                text="The Effort required to send payloads of information across the network to other nodes is minimal, better than average.")
+        if 1 <= Jeff < 3:
+            lblEffortOvrV.config(fg="#e68f39")
+            lblEffortOvrDes.config(
+                text="The Effort required to send payloads of information across the network to other nodes is average, the expected effort.")
+        if Jeff >= 3:
+            lblEffortOvrV.config(fg="#b81d28")
+            lblEffortOvrDes.config(text="The Effort required to send payloads of information across the network to other nodes is large, making life difficult for Nodes.")
 
-    def populateDeathFrame(self, config, ovrDeathRateScore, benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore):
-        pass
+        lblExplain = tk.Label(self.frames[3],
+                              text="This sections covers the factors contributing towards Payload Effort.",
+                              font=("Arial", 10, "italic"), bg="#e0e0e0", wraplength=1050, justify="left")
+
+        lblExplain2 = tk.Label(self.frames[3],
+                              text="Each node in the network has a limited battery capacity, the propagation of payloads across the network will drain the battery over time; so the effort to send"
+                                   "a message will impact the lifespans of the nodes heavily.\n\n"
+                                   "The factors contributing to effort are:\n\n"
+                                   "Message Size, the Power Required to Send Data Across the Network, and the Distance Between Nodes\n",
+                              font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+
+        lblTransmissionScoreV = tk.Label(self.frames[3], text="{}  ".format(tranRangeScore), font=("Arial", 12, "bold"),
+                                 bg="#e0e0e0")
+        lblTransmissionScore = tk.Label(self.frames[3], text="> Transmission Range Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblTransmissionDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                              text="The Transmission Range variable is simply the distance in meters that any node is able to send a message (a payload).\n\n"
+                                   "The average and expected range is 10m, however this can theoretically be much lower or higher.")
+        lblTransmissionScoreDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblTransmissionScoreV.config(fg="#2d802f")
+            lblTransmissionScoreDes.config(
+                text="In this simulation, the Transmission Range was lower than average at {}m.\n"
+                     "This results in nodes requiring closer placement to one another in order to communicate.".format(C.transmissionRange))
+        if 1 <= Jeff < 3:
+            lblTransmissionScoreV.config(fg="#e68f39")
+            lblTransmissionScoreDes.config(
+                text="In this simulation, the Transmission Range was an expected {}m.\n"
+                     "This results in nodes delivering payloads to an expected maximum.".format(C.transmissionRange))
+        if Jeff >= 3:
+            lblTransmissionScoreV.config(fg="#b81d28")
+            lblTransmissionScoreDes.config(
+                text="In this simulation, the Transmission Range was higher than average at {}m.\n"
+                     "This allows any node to have a greatly increased chance of being able to reach another; including I nodes propagating viruses.".format(C.transmissionRange))
+
+        lblMsgSizeScoreV = tk.Label(self.frames[3], text="{}  ".format(msgSizeScore), font=("Arial", 12, "bold"),
+                                   bg="#e0e0e0")
+        lblMsgSizeScore = tk.Label(self.frames[3], text="> Mean Message Size Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+
+        lblMsgSizeDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                  text="This variable describes the mean size of a message sent across the network, from node to node - the typical message size a sensor node sends.\n\n"
+                                       "The typical size is 50 Bytes, but this will vary dependent on the type of botnet and the traffic it generates. ")
+
+        lblMsgSizeScoreDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblMsgSizeScoreV.config(fg="#2d802f")
+            lblMsgSizeScoreDes.config(
+                text="The Mean Message Size in this simulation was a lower than average {} Bytes.".format(C.meanMessageSize))
+        if 1 <= Jeff < 3:
+            lblMsgSizeScoreV.config(fg="#e68f39")
+            lblMsgSizeScoreDes.config(
+                text="The Mean Message Size in this simulation was an expected {} Bytes.".format(C.meanMessageSize))
+        if Jeff >= 3:
+            lblMsgSizeScoreV.config(fg="#b81d28")
+            lblMsgSizeScoreDes.config(
+                text="The Mean Message Size in this simulation was a higher than average {} Bytes.".format(C.meanMessageSize))
+
+        lblMsgPowerScoreV = tk.Label(self.frames[3], text="{}  ".format(msgPowerScore), font=("Arial", 12, "bold"),
+                                    bg="#e0e0e0")
+        lblMsgPowerScore = tk.Label(self.frames[3], text="> Mean Message Power Score", font=("Arial", 10, "bold"),
+                                   bg="#e0e0e0")
+
+        lblMsgPowerDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                 text="This variable is simply the mean amount of power consumed in order to send 1 Byte of data to another Node.")
+
+        lblMsgPowerScoreDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblMsgPowerScoreV.config(fg="#2d802f")
+            lblMsgPowerScoreDes.config(
+                text="The Mean Message Size in this simulation was a lower than average {} Bytes.".format(
+                    C.meanPower))
+        if 1 <= Jeff < 3:
+            lblMsgPowerScoreV.config(fg="#e68f39")
+            lblMsgPowerScoreDes.config(
+                text="The Mean Message Size in this simulation was an expected {} Bytes.".format(C.meanPower))
+        if Jeff >= 3:
+            lblMsgPowerScoreV.config(fg="#b81d28")
+            lblMsgPowerScoreDes.config(
+                text="The Mean Message Size in this simulation was a higher than average {} Bytes.".format(C.meanPower))
+
+        lblDepAreaScoreV = tk.Label(self.frames[3], text="{}  ".format(distanceScore), font=("Arial", 12, "bold"),
+                                bg="#e0e0e0")
+        lblDepAreaScore = tk.Label(self.frames[3], text="> Distance Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+
+        lblDepAreaDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                             text="The Distance variable specifies the average distance (in meters) between any two nodes in a WSN. It is a direct factor inside of"
+                                  "calculating Payload Effort.\n\n"
+                                  "It is calculated by dividing the average area inside of any WSN by the average proportion of the entire N population"
+                                  "in any given WSN; for this particular model, even node distribution and uniformity is assumed")
+
+        lblDepAreaScoreDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblDepAreaScoreV.config(fg="#2d802f")
+            lblDepAreaScoreDes.config(
+                text="The Distance in this simulation was a lower than average {}m.\n\n"
+                     "This means nodes have much less distance to spend effort on sending messages.".format(C.distance))
+        if 1 <= Jeff < 3:
+            lblDepAreaScoreV.config(fg="#e68f39")
+            lblDepAreaScoreDes.config(
+                text="The Distance in this simulation was an average {}m.\n\n"
+                     "Nodes spend the expected amount of effort when considering the distance between them.".format(C.distance))
+        if Jeff >= 3:
+            lblDepAreaScoreV.config(fg="#b81d28")
+            lblDepAreaScoreDes.config(
+                text="The Distance in this simulation was a higher than average {}m.\n\n"
+                     "This means nodes have much more distance to spend effort on sending messages.".format(C.distance))
+
+        lblEffortOvrV.grid(row=1, column=0, sticky="w", padx=(9, 0), pady=7)
+        lblEffortOvr.grid(row=1, column=2, sticky="w")
+        lblEffortOvrDes.grid(row=2, column=2, sticky="w", padx=(7, 0))
+
+        lblExplain.grid(row=3, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
+        lblExplain2.grid(row=4, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
+
+        lblTransmissionScoreV.grid(row=5, column=0, sticky="w", padx=(9, 0))
+        lblTransmissionScore.grid(row=5, column=2, sticky="w")
+        lblTransmissionDes.grid(row=6, column=2, sticky="w", padx=(7, 0))
+        lblTransmissionScoreDes.grid(row=7, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblMsgSizeScoreV.grid(row=8, column=0, sticky="w", padx=(7, 0))
+        lblMsgSizeScore.grid(row=8, column=2, sticky="w")
+        lblMsgSizeDes.grid(row=9, column=2, sticky="w", padx=(9, 0))
+        lblMsgSizeScoreDes.grid(row=10, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblMsgPowerScoreV.grid(row=11, column=0, sticky="w", padx=(7, 0))
+        lblMsgPowerScore.grid(row=11, column=2, sticky="w")
+        lblMsgPowerDes.grid(row=12, column=2, sticky="w", padx=(9, 0))
+        lblMsgPowerScoreDes.grid(row=13, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblDepAreaScoreV.grid(row=16, column=0, sticky="w", padx=(9, 0))
+        lblDepAreaScore.grid(row=16, column=2, sticky="w")
+        lblDepAreaDes.grid(row=17, column=2, sticky="w", padx=(7, 0))
+        lblDepAreaScoreDes.grid(row=18, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+    def populateDeathFrame(self, config, ovrDeathRateScore, bttryScore, benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore):
+        Jeff = 0
+        C = config
+        lblDeathOvrV = tk.Label(self.frames[4], text="{}  ".format(ovrDeathRateScore), font=("Arial", 14, "bold"),
+                                 bg="#e0e0e0")
+        lblDeathOvr = tk.Label(self.frames[4], text="> Overall Lifespan and Death Rates Score",
+                                font=("Arial", 12, "bold", "italic"),
+                                bg="#e0e0e0")
+        lblDeathOvrDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0")
+        if Jeff < 1:
+            lblDeathOvrV.config(fg="#2d802f")
+            lblDeathOvrDes.config(
+                text="This configuration results in high Lifespans and low Death Rates. Nodes live extended durations and malicious activity is minimal.")
+        if 1 <= Jeff < 3:
+            lblDeathOvrV.config(fg="#e68f39")
+            lblDeathOvrDes.config(
+                text="The node Lifespans are average, as well as the Death Rates. Nodes live the expected durations and malicious activity is present.")
+        if Jeff >= 3:
+            lblDeathOvrV.config(fg="#b81d28")
+            lblDeathOvrDes.config(
+                text="This configuration results in low Lifespans and high Death Rates. Nodes live reduced durations and malicious activity is substantial.")
+
+        lblExplain = tk.Label(self.frames[4],
+                              text="This sections covers the factors contributing towards the node Lifespans and the corresponding Death Rates.",
+                              font=("Arial", 10, "italic"), bg="#e0e0e0", wraplength=1050, justify="left")
+
+        lblExplain2 = tk.Label(self.frames[4],
+                               text="Each node has a finite battery capacity; activity sending messages and making contact to other nodes will drain the battery.\n\n"
+                                    "Measured previously were the Contact Rates (how often a node is successfully able to make contact with another node, per second)"
+                                    ", as well as the effort required to deliver a payload to another; these two factors describes the quantity of actions able to be "
+                                    "performed before the battery has depleted. Furthermore, the formula 1 / Node Lifespan provides the Death Rate, the number multiplied to each population group that die each timestep"
+                                    " and leave the simulation entirely - which forms the Final N value - the amount of nodes still surviving; this model assumes there are"
+                                    "no 'births' into the system. Given enough time, all nodes will perish - but Death Rates can be immensely high or low, allowing nodes overly extended lifespans"
+                                    " or devastatingly short ones, as well as anything in between.",
+                               font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+
+        lblbttryScoreV = tk.Label(self.frames[4], text="{}  ".format(bttryScore), font=("Arial", 12, "bold"),
+                                         bg="#e0e0e0")
+        lblbttryScore = tk.Label(self.frames[4], text="> Total Node Battery Capacity Score", font=("Arial", 10, "bold"),
+                                        bg="#e0e0e0")
+        lblbttryDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                      text="This variable is simply the Total Capacity of the Battery each node is equip with. \n\n"
+                                           "The typical battery size for nodes found in Wireless Sensor Networks is 864000 mAs, but battery size options of "
+                                           "one quater the size, as well as four times the size have been provided to show contrast and the impact of this variable.")
+        lblbttryScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050,
+                                           justify="left")
+        if Jeff < 1:
+            lblbttryScoreV.config(fg="#2d802f")
+            lblbttryScoreDes.config(
+                text="In this simulation, the Total Battery Capacity was higher than average at {} mAs.\n"
+                     "This results in nodes having much more power to spend on effort communicating, driving the Lifespans up, and the Death Rates down.".format(
+                    C.totalBattery))
+        if 1 <= Jeff < 3:
+            lblbttryScoreV.config(fg="#e68f39")
+            lblbttryScoreDes.config(
+                text="In this simulation, the Total Battery Capacity was average at {} mAs.\n"
+                     "This results in nodes having the expected amount of power to spend on effort communicating.".format(
+                    C.totalBattery))
+        if Jeff >= 3:
+            lblbttryScoreV.config(fg="#b81d28")
+            lblbttryScoreDes.config(
+                text="In this simulation, the Total Battery Capacity was lower than average at {} mAs.\n"
+                     "This results in nodes having much less power to spend on effort communicating, driving the Lifespans down, and the Death Rates up.".format(
+                    C.totalBattery))
+
+        lblBenignScoreV = tk.Label(self.frames[4], text="{}  ".format(benignLifespanScore), font=("Arial", 12, "bold"),
+                                    bg="#e0e0e0")
+        lblBenignScore = tk.Label(self.frames[4], text="> Mean Message Size Score", font=("Arial", 10, "bold"),
+                                   bg="#e0e0e0")
+
+        lblBenignDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                 text="This variable is the Benign Lifespan and Corresponding Death Rate for all nodes, both S and I.\n\n"
+                                      "While all nodes will die at this rate due to standard node activity, each infection type has an additional Death Rate of its own"
+                                      "definition. This is due to the fact that bot nodes perform additional activity - malicious activity propagating their virus payloads.\n\n"
+                                      "In this model, the Contact Rate for S Nodes only impacts the Benign Death Rate; rates between 1-15 Contacts per second are expected, but can"
+                                      "theoretically be much higher or lower.")
+
+        lblBenignScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblBenignScoreV.config(fg="#2d802f")
+            lblBenignScoreDes.config(
+                text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to standard activities result in nodes living longer and propagating less data overall.".format(C.benignLifespan, C.dthB, C.contactRate))
+        if 1 <= Jeff < 3:
+            lblBenignScoreV.config(fg="#e68f39")
+            lblBenignScoreDes.config(
+                text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to standard activities result in nodes living an average duration and propagating an expected amount of data overall.".format(C.benignLifespan, C.dthB, C.contactRate))
+        if Jeff >= 3:
+            lblBenignScoreV.config(fg="#b81d28")
+            lblBenignScoreDes.config(
+                text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to standard activities result in nodes living a shorter time and propagating more data overall.".format(C.benignLifespan, C.dthB, C.contactRate))
+
+        lblRandomScoreV = tk.Label(self.frames[4], text="{}  ".format(IrLifespanScore), font=("Arial", 12, "bold"),
+                                   bg="#e0e0e0")
+        lblRandomScore = tk.Label(self.frames[4], text="> Random Scanning Lifespan and Death Rate Score", font=("Arial", 10, "bold"),
+                                  bg="#e0e0e0")
+
+        lblRandomDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                text="This variable is the Random Scanning Lifespan and Corresponding Death Rate for nodes specifically infected through Random Scanning (IR).\n\n"
+                                     "This score, along with the following two, is calculated through how much malicious activity this infection method has performed.\n\n"
+                                     "While all nodes propagate the same average amount of data, using the same amount of power to transmit it, and over the same average distance,"
+                                     "each population group have their respective Contact Rates calculated differently - impacting the lifespans accordingly.")
+
+        lblRandomScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblRandomScoreV.config(fg="#2d802f")
+            lblRandomScoreDes.config(
+                text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Random Scanning activity results in the IR population group living longer tha expected and performing much less malicious"
+                     " activity.".format(C.randomLifespan, C.dthR, C.IrContactRate))
+        if 1 <= Jeff < 3:
+            lblRandomScoreV.config(fg="#e68f39")
+            lblRandomScoreDes.config(
+                text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Random Scanning activity results in the IR population group living an average duration and performing the "
+                     "expected amount of malicious activity.".format(C.randomLifespan, C.dthR, C.IrContactRate))
+        if Jeff >= 3:
+            lblRandomScoreV.config(fg="#b81d28")
+            lblRandomScoreDes.config(
+                text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Random Scanning activity results in the IR population group living much shorter than expected and performing much more malicious"
+                     " activity.".format(C.randomLifespan, C.dthR, C.IrContactRate))
+
+        lblLocalScoreV = tk.Label(self.frames[4], text="{}  ".format(IlLifespanScore), font=("Arial", 12, "bold"),
+                                   bg="#e0e0e0")
+        lblLocalScore = tk.Label(self.frames[4], text="> Local Scanning Lifespan and Death Rate Score", font=("Arial", 10, "bold"),
+                                  bg="#e0e0e0")
+
+        lblLocalDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                text="This variable is the Local Scanning Lifespan and Corresponding Death Rate for nodes specifically infected through Local Scanning (IL).\n\n"
+                                     "Local Scanning, on average, should have a higher Death Rate than Random Scanning. This is due to the better chances of successful connection - and therefore"
+                                     " more malicious activity.")
+
+        lblLocalScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblLocalScoreV.config(fg="#2d802f")
+            lblLocalScoreDes.config(
+                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living longer tha expected and performing much less malicious"
+                     " activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
+        if 1 <= Jeff < 3:
+            lblLocalScoreV.config(fg="#e68f39")
+            lblLocalScoreDes.config(
+                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living an average duration and performing the "
+                     "expected amount of malicious activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
+        if Jeff >= 3:
+            lblLocalScoreV.config(fg="#b81d28")
+            lblLocalScoreDes.config(
+                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living much shorter than expected and performing much more malicious"
+                     " activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
+
+        lblP2PScoreV = tk.Label(self.frames[4], text="{}  ".format(IpLifespanScore), font=("Arial", 12, "bold"),
+                                  bg="#e0e0e0")
+        lblP2PScore = tk.Label(self.frames[4], text="> Peer-to-Peer Lifespan and Death Rate Score", font=("Arial", 10, "bold"),
+                                 bg="#e0e0e0")
+
+        lblP2PDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                               text="This variable is the Local Scanning Lifespan and Corresponding Death Rate for nodes specifically infected through Peer-to-Peer forwarding (IP).\n\n"
+                                    "Peer-to-Peer, on average, should have a much higher Death Rate than both Random and Local Scanning. This is due to very high chances of successful "
+                                    "connection - and therefore more malicious activity.")
+
+        lblP2PScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff < 1:
+            lblP2PScoreV.config(fg="#2d802f")
+            lblP2PScoreDes.config(
+                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living longer tha expected and performing much less malicious"
+                     " activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
+        if 1 <= Jeff < 3:
+            lblP2PScoreV.config(fg="#e68f39")
+            lblP2PScoreDes.config(
+                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living an average duration and performing the "
+                     "expected amount of malicious activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
+        if Jeff >= 3:
+            lblP2PScoreV.config(fg="#b81d28")
+            lblP2PScoreDes.config(
+                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
+                     "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living much shorter than expected and performing much more malicious"
+                     " activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
+
+        lblDeathOvrV.grid(row=1, column=0, sticky="w", padx=(9, 0), pady=7)
+        lblDeathOvr.grid(row=1, column=2, sticky="w")
+        lblDeathOvrDes.grid(row=2, column=2, sticky="w", padx=(7, 0))
+
+        lblExplain.grid(row=3, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
+        lblExplain2.grid(row=4, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
+
+        lblbttryScoreV.grid(row=5, column=0, sticky="w", padx=(9, 0))
+        lblbttryScore.grid(row=5, column=2, sticky="w")
+        lblbttryDes.grid(row=6, column=2, sticky="w", padx=(7, 0))
+        lblbttryScoreDes.grid(row=7, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblBenignScoreV.grid(row=8, column=0, sticky="w", padx=(7, 0))
+        lblBenignScore.grid(row=8, column=2, sticky="w")
+        lblBenignDes.grid(row=9, column=2, sticky="w", padx=(9, 0))
+        lblBenignScoreDes.grid(row=10, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblRandomScoreV.grid(row=11, column=0, sticky="w", padx=(7, 0))
+        lblRandomScore.grid(row=11, column=2, sticky="w")
+        lblRandomDes.grid(row=12, column=2, sticky="w", padx=(9, 0))
+        lblRandomScoreDes.grid(row=13, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblLocalScoreV.grid(row=14, column=0, sticky="w", padx=(7, 0))
+        lblLocalScore.grid(row=14, column=2, sticky="w")
+        lblLocalDes.grid(row=15, column=2, sticky="w", padx=(9, 0))
+        lblLocalScoreDes.grid(row=16, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblP2PScoreV.grid(row=17, column=0, sticky="w", padx=(7, 0))
+        lblP2PScore.grid(row=17, column=2, sticky="w")
+        lblP2PDes.grid(row=18, column=2, sticky="w", padx=(9, 0))
+        lblP2PScoreDes.grid(row=19, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
 
     def populateSingleFactorFrame(self, config, ovrUncategorisedScore, startingPopScore, rrScore, idsScore):
-        pass
+        Jeff = 0
+        C = config
+        lblSFOvrV = tk.Label(self.frames[5], text="{}  ".format(ovrUncategorisedScore), font=("Arial", 14, "bold"),
+                                    bg="#e0e0e0")
+        lblSFOvr = tk.Label(self.frames[5], text="> Overall Single Factors Score",
+                                font=("Arial", 12, "bold", "italic"), bg="#e0e0e0")
+        lblSFOvrDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0")
+        if Jeff < 1:
+            lblSFOvrV.config(fg="#2d802f")
+            lblSFOvrDes.config(
+                text="In this simulation, these Single Factors have helped achieve a minimal virus propagation.")
+        if 1 <= Jeff < 3:
+            lblSFOvrV.config(fg="#e68f39")
+            lblSFOvrDes.config(
+                text="In this simulation, these Single Factors are at the expected thresholds and result in the expected botnet presence.")
+        if Jeff >= 3:
+            lblSFOvrV.config(fg="#b81d28")
+            lblSFOvrDes.config(
+                text="In this simulation, these Single Factors have contributed to a higher virus propagation.")
+
+        lblExplain = tk.Label(self.frames[5],
+                              text="This section looks at three particular starting conditions: Starting Population Sizes, Admin Engagement, and Intrusion Detection System"
+                                   " (IDS) usage.\n\n"
+                                   "The variables to be examined here share a common trait, each is based off of an estimated guess as to what would occur in reality if a scenario of a botnet"
+                                   " attack occurred.",
+                              font=("Arial", 10, "italic"), bg="#e0e0e0")
+
+        lblStartScoreV = tk.Label(self.frames[5], text="{}  ".format(startingPopScore), font=("Arial", 12, "bold"),
+                                 bg="#e0e0e0")
+        lblStartScore = tk.Label(self.frames[5], text="> SLoc Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblStartDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                              text="This variable decides the starting population sizes, the fraction of the total populaton N divided into either S or I nodes.\n\n"
+                                   "The reccomended value for this model is for a single node to be divided into the I group to begin the attack. In this virus model, "
+                                   "an abstraction of population spreads considering a range of different variables and rates deciding the change - a single node is enough to start a spread.\n\n"
+                                   "The reality is that a strong and maintained attack force of bots is required for any botnet to gain traction and size. Despite this, "
+                                   "a range of starting bot counts and N sizes are provided to demonstrate what different attack forces determine.\n")
+        lblStartScoreDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if Jeff == 0:
+            lblStartScoreV.config(fg="#2d802f")
+            lblStartScoreDes.config(
+                text="Well done, with a starting I = {} - it is safe to say your systems were not attacked by a botnet!".format(C.I))
+        if Jeff < 1:
+            lblStartScoreV.config(fg="#2d802f")
+            lblStartScoreDes.config(
+                text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"
+                     "A small attack force, the botnet will not peak as fast as expected.".format(C.I, C.S))
+        if 1 <= Jeff < 3:
+            lblStartScoreV.config(fg="#e68f39")
+            lblStartScoreDes.config(
+                text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"
+                     "A growing attack force, the botnet will peak in an expected amount of time.".format(C.I, C.S))
+        if Jeff >= 3:
+            lblStartScoreV.config(fg="#b81d28")
+            lblStartScoreDes.config(
+                text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"
+                     "A large starting attack force, the botnet will peak as faster than expected.".format(C.I, C.S))
+
+        lblRRScoreV = tk.Label(self.frames[5], text="{}  ".format(rrScore), font=("Arial", 12, "bold"),
+                                 bg="#e0e0e0")
+        lblRRScore = tk.Label(self.frames[5], text="> Security Level Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblRRDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                              text="This variable is part of the model called the Recovery Rate - the rate at which nodes transition from the I populous back into S.\n\n"
+                                   "The variable is based off of varying levels of Admin Engagement and Intervention during an attack - which is something only decided"
+                                   " when a botnet attack actually occurs. The values for this rate are taken, like many others, directly from the proposers of the IoT-SIS Model.")
+        lblRRScoreDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if rrScore == 3:
+            lblRRScoreV.config(fg="#2d802f")
+            lblRRScoreDes.config(text="The Recovery Rate for this simulation was {}.\n\n"
+                     "The maximum Admin Engagement has been performed and reduced the number of nodes absorbed into the botnet.".format(C.recoveryRate))
+        if rrScore == 2:
+            lblRRScoreV.config(fg="#e68f39")
+            lblRRScoreDes.config(text="The Recovery Rate for this simulation was {}.\n\n"
+                     "The medium Admin Engagement has been performed and reduced the number of nodes absorbed into the botnet, but increased engagement would result in a larger "
+                                      "S population.".format(C.recoveryRate))
+        if rrScore == 1:
+            lblRRScoreV.config(fg="#b81d28")
+            lblRRScoreDes.config(text="The Recovery Rate for this simulation was {}.\n\n"
+                     "The minimum Admin Engagement has been performed and increased the number of nodes absorbed into the botnet. There is room for much more engagement to "
+                                      "reduce the state of infection.".format(C.recoveryRate))
+
+        lblIDSScoreV = tk.Label(self.frames[5], text="{}  ".format(idsScore), font=("Arial", 12, "bold"),
+                               bg="#e0e0e0")
+        lblIDSScore = tk.Label(self.frames[5], text="> IDS Usage Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblIDSDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                            text="The final variable to be assessed is unique in multiple ways - it is the only binary choice option, but is more importantly not part of the original IoT-SIS model.\n\n"
+                                 "The inclusion of this variable is a proof of concept, adding in another parameter to increase oppertunity and realism for real word applications.\n\n"
+                                 "This variable acts the same as the Recovery Rate based off of admin engagement; the use of an Intrusion Detection System seeks to aid system admins identify"
+                                 " and neutralise malicious traffic. Thus, activating this option will also increase the number of nodes recovering back to the S populous.")
+        lblIDSScoreDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
+        if idsScore == 2:
+            lblIDSScoreV.config(fg="#2d802f")
+            lblIDSScoreDes.config(text="An IDS has been activated for this sumulation and has aided the system admins manage the botnet attack.")
+        if idsScore == 0:
+            lblIDSScoreV.config(fg="#b81d28")
+            lblIDSScoreDes.config(text="An IDS has not been activated for this simulation; the admins have had a harder task intervening in the attack and thus more nodes have been lost to the botnet.")
+
+        lblSFOvrV.grid(row=1, column=0, sticky="w", padx=(9, 0), pady=7)
+        lblSFOvr.grid(row=1, column=2, sticky="w")
+        lblSFOvrDes.grid(row=2, column=2, sticky="w", padx=(7, 0))
+
+        lblExplain.grid(row=3, column=2, sticky="w", pady=(10, 0), padx=(7, 0))
+
+        lblStartScoreV.grid(row=5, column=0, sticky="w", padx=(9, 0))
+        lblStartScore.grid(row=5, column=2, sticky="w")
+        lblStartDes.grid(row=6, column=2, sticky="w", padx=(7, 0))
+        lblStartScoreDes.grid(row=7, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblRRScoreV.grid(row=8, column=0, sticky="w", padx=(9, 0))
+        lblRRScore.grid(row=8, column=2, sticky="w")
+        lblRRDes.grid(row=9, column=2, sticky="w", padx=(7, 0))
+        lblRRScoreDes.grid(row=10, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblIDSScoreV.grid(row=11, column=0, sticky="w", padx=(9, 0))
+        lblIDSScore.grid(row=11, column=2, sticky="w")
+        lblIDSDes.grid(row=12, column=2, sticky="w", padx=(7, 0))
+        lblIDSScoreDes.grid(row=13, column=2, sticky="w", padx=(7, 0), pady=(0, 10))

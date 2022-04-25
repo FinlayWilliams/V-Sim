@@ -142,7 +142,7 @@ class SIS:
         msgSizeScore = 0
         msgPowerScore = 0
         bttryScore = 0
-        depAreaScore = 0
+        distanceScore = 0
 
         ovrDeathRateScore = 0
         benignLifespanScore = 0
@@ -266,8 +266,10 @@ class SIS:
             tranRangeScore = 3
         elif self.transmissionRange == 10:
             tranRangeScore = 2
-        else:
+        elif self.transmissionRange == 15:
             tranRangeScore = 1
+        else:
+            tranRangeScore = 0
 
         if self.meanMessageSize == 16:
             msgSizeScore = 3
@@ -283,6 +285,21 @@ class SIS:
         else:
             msgPowerScore = 1
 
+        if 0.0625 <= self.distance <= 0.3125:
+            distanceScore = 5
+        elif 0.3125 < self.distance <= 1.25:
+            distanceScore = 4
+        elif 1.25 <= self.distance <= 2.5:
+            distanceScore = 3
+        elif 2.5 <= self.distance <= 10.0:
+            distanceScore = 2
+        elif 10.0 <= self.distance <= 20.0:
+            distanceScore = 1
+        else:
+            distanceScore = 0
+
+        ovrEffortScore = tranRangeScore + msgSizeScore + msgPowerScore + distanceScore
+
         if self.totalBattery == 3456000:
             bttryScore = 3
         elif self.totalBattery == 864000:
@@ -290,18 +307,7 @@ class SIS:
         else:
             bttryScore = 1
 
-        if self.deploymentArea == 150:
-            depAreaScore = 3
-        elif self.deploymentArea == 100:
-            depAreaScore = 2
-        elif self.deploymentArea == 50:
-            depAreaScore = 2
-        else:
-            depAreaScore = 1
-
-        ovrEffortScore = tranRangeScore + msgSizeScore + msgPowerScore + bttryScore + depAreaScore
-
-        if 3456000.0 <= self.benignLifespan <= 13824000.0: # (lergest) you dont want a lot of deaths but typically, the longer the lifespan means less malicious activity ... and you dont really want node death and huge nalicious activity
+        if 3456000.0 <= self.benignLifespan <= 13824000.0: # (largest) you dont want a lot of deaths but typically, the longer the lifespan means less malicious activity ... and you dont really want node death and huge nalicious activity
             benignLifespanScore = 5
         elif 115200.0 <= self.benignLifespan < 3456000.0:
             benignLifespanScore = 4
@@ -353,11 +359,11 @@ class SIS:
         else:
             IpLifespanScore = 0
 
-        ovrDeathRateScore = benignLifespanScore + IrLifespanScore + IlLifespanScore + IpLifespanScore
+        ovrDeathRateScore = bttryScore + benignLifespanScore + IrLifespanScore + IlLifespanScore + IpLifespanScore
 
         return ovrSingleFactorScore, startingPopScore, rrScore, idsScore, ovrNeighbourScore, slocScore, \
                snhbScore, ovrInfectionScore, scanningScore, irPScore, ilPScore, ipPScore, PTrScore, ovrEffortScore, \
-               tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore, ovrDeathRateScore, \
+               tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, distanceScore, ovrDeathRateScore, \
                benignLifespanScore, IrLifespanScore, IlLifespanScore, IpLifespanScore
 
     # Method to obtain the name from each models allowing the list to access an attribute for identification

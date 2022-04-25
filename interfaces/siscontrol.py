@@ -93,7 +93,7 @@ class SISControlInterface(tk.Frame):
         DEPOptions = ["25", "50", "100", "150"]
         self.cmbDEP = ttk.Combobox(frameBot, values=DEPOptions, state="readonly")
         lblTRNS = tk.Label(frameBot, text="Node Transmission Range (m):")
-        TRNSOptions = ["1", "5", "10", "15"]
+        TRNSOptions = ["1", "5", "10", "15", "100"]
         self.cmbTRNS = ttk.Combobox(frameBot, values=TRNSOptions, state="readonly")
         lblCNTCT = tk.Label(frameBot, text="S Node Contact Rate:")
         CNTCTOptions = ["1", "5", "10", "20", "50", "75", "100", "250"]
@@ -256,7 +256,7 @@ class SISControlInterface(tk.Frame):
         # print("% of N missing = {}".format(1 / (configuration.N / (configuration.N - finalN))))
         # print("")
 
-        print("Random Lifespans = {}".format(configuration.randomLifespan))
+        print("Distance = {}".format(configuration.distance))
 
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]
