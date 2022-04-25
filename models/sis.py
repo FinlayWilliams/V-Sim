@@ -261,15 +261,15 @@ class SIS:
         ovrInfectionScore = scanningScore + irPScore + ilPScore + ipPScore + PTrScore
 
         if self.transmissionRange == 1:
-            tranRangeScore = 4
+            tranRangeScore = 5
         elif self.transmissionRange == 5:
-            tranRangeScore = 3
+            tranRangeScore = 4
         elif self.transmissionRange == 10:
-            tranRangeScore = 2
+            tranRangeScore = 3
         elif self.transmissionRange == 15:
-            tranRangeScore = 1
+            tranRangeScore = 2
         else:
-            tranRangeScore = 0
+            tranRangeScore = 1
 
         if self.meanMessageSize == 16:
             msgSizeScore = 3

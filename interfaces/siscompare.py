@@ -35,7 +35,7 @@ class SISCompareInterface(tk.Frame):
 
         ##################################### Instantiating LEFT-side elements #########################################
         self.lblLeftName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
-        self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
+        self.lblLeftScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 17, "bold"))
         btnConfigureLeft = tk.Button(nameFrame, wraplength=57, width=10, text="Control Configuration", font=("Arial", 7),
                                      command=lambda: controller.display("SISCompareInterface", "SISControlInterface"))
         btnInspectLeft = tk.Button(nameFrame, wraplength=57, width=10, text="Inspect Configuration", font=("Arial", 7),
@@ -56,7 +56,7 @@ class SISCompareInterface(tk.Frame):
 
         ##################################### Instantiating RIGHT-side elements ########################################
         self.lblRightName = tk.Label(nameFrame, bg="#574b59", font=("Arial", 14), fg="white")
-        self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 16))
+        self.lblRightScore = tk.Label(nameFrame, bg="#574b59", font=("Arial", 17, "bold"))
         btnConfigureRight = tk.Button(nameFrame, wraplength=57, width=10, text="Control Configuration", font=("Arial", 7),
                                       command=lambda: [self.setNewActivePlusIndex(controller), controller.display("SISCompareInterface","SISControlInterface")])
         btnInspectRight = tk.Button(nameFrame, wraplength=57, width=10, text="Inspect Configuration", font=("Arial", 7),
@@ -95,15 +95,15 @@ class SISCompareInterface(tk.Frame):
         self.lblLeftScore.pack(side="left")
         leftFrame.place(relwidth=0.333, relheight=0.93, y=126, x=0)
         leftGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-        self.lblFinalNLeft.place(x=105, y=710)
+        self.lblFinalNLeft.place(x=160, y=880)
         # Right
         btnInspectRight.pack(side="right", padx=14)
         btnConfigureRight.pack(side="right", padx=7)
-        self.lblRightName.pack(side="right", padx=10)
-        self.lblRightScore.pack(side="right")
+        self.lblRightScore.pack(side="right", padx=10)
+        self.lblRightName.pack(side="right")
         rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1280)
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
-        self.lblFinalNRight.place(x=105, y=710)
+        self.lblFinalNRight.place(x=160, y=880)
 
     # Called upon page opening to set the correct models and ensure the timesteps are synchronised
     def setConfigurations(self, controller):
@@ -232,23 +232,23 @@ class SISCompareInterface(tk.Frame):
 
     # Called on page opening to set the correct information
     def updateColumnInfo(self):
-        activeScore = self.activeConfiguration.calculateScores()[8]
-        actPopScore = self.activeConfiguration.calculateScores()[0]
-        actSizeScore = self.activeConfiguration.calculateScores()[3]
-        actNeighbourScore = self.activeConfiguration.calculateScores()[4]
-        actInfectionScore = self.activeConfiguration.calculateScores()[5]
-        actDeathScore = self.activeConfiguration.calculateScores()[6]
-        actMiscScore = self.activeConfiguration.calculateScores()[7]
-        compareScore = self.compareConfiguration.calculateScores()[8]
-        compPopScore = self.compareConfiguration.calculateScores()[0]
-        compSizeScore = self.compareConfiguration.calculateScores()[3]
-        compNeighbourScore = self.compareConfiguration.calculateScores()[4]
-        compInfectionScore = self.compareConfiguration.calculateScores()[5]
-        compDeathScore = self.compareConfiguration.calculateScores()[6]
-        compMiscScore = self.compareConfiguration.calculateScores()[7]
+        activeSingleFactorScore = self.activeConfiguration.calculateScores()[0]
+        activeNeighbourScore = self.activeConfiguration.calculateScores()[4]
+        activeInfectionScore = self.activeConfiguration.calculateScores()[7]
+        activeEffortScore = self.activeConfiguration.calculateScores()[13]
+        activeDeathRateScore = self.activeConfiguration.calculateScores()[19]
+        activeScore = activeSingleFactorScore + activeNeighbourScore + activeInfectionScore + activeEffortScore + activeDeathRateScore
 
-        self.lblLeftName.config(text="{} : ".format(self.activeConfiguration.Name[9:]))
-        self.lblRightName.config(text=" : {}".format(self.compareConfiguration.Name[9:]))
+        compareSingleFactorScore = self.compareConfiguration.calculateScores()[0]
+        compareNeighbourScore = self.compareConfiguration.calculateScores()[4]
+        compareInfectionScore = self.compareConfiguration.calculateScores()[7]
+        compareEffortScore = self.compareConfiguration.calculateScores()[13]
+        compareDeathRateScore = self.compareConfiguration.calculateScores()[19]
+        compareScore = compareSingleFactorScore + compareNeighbourScore + compareInfectionScore + compareEffortScore + compareDeathRateScore
+
+
+        self.lblLeftName.config(text="{} Score : ".format(self.activeConfiguration.Name[9:]))
+        self.lblRightName.config(text="{} Score : ".format(self.compareConfiguration.Name[9:]))
 
         if activeScore < compareScore:
             self.lblLeftScore.config(text="{}".format(activeScore), fg="#d12c3f")
@@ -272,18 +272,18 @@ class SISCompareInterface(tk.Frame):
         lblBufferLeft = tk.Label(leftScores, text="", bg="#e0e0e0")
         lblBufferRight = tk.Label(rightScores, text="", bg="#e0e0e0")
 
-        if actPopScore < compPopScore:
-            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#d12c3f")
-            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#2d802f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.activeConfiguration.Name[9:]))
-        if actPopScore > compPopScore:
-            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#2d802f")
-            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#d12c3f")
-            lblPopDesc.config(text="{} has the Better Score for the Population Category".format(self.compareConfiguration.Name[9:]))
-        if actPopScore == compPopScore:
-            lblPopScoreLeft.config(text="{}".format(actPopScore), fg="#e68f39")
-            lblPopScoreRight.config(text="{}".format(compPopScore), fg="#e68f39")
-            lblPopDesc.config(text="The Models have an Equal Score for the Population Category")
+        if activeNeighbourScore < compareNeighbourScore:
+            lblPopScoreLeft.config(text="{}".format(activeNeighbourScore), fg="#d12c3f")
+            lblPopScoreRight.config(text="{}".format(compareNeighbourScore), fg="#2d802f")
+            lblPopDesc.config(text="{} has the Better Score for the Neighbour Set Category".format(self.activeConfiguration.Name[9:]))
+        if activeNeighbourScore > compareNeighbourScore:
+            lblPopScoreLeft.config(text="{}".format(activeNeighbourScore), fg="#2d802f")
+            lblPopScoreRight.config(text="{}".format(compareNeighbourScore), fg="#d12c3f")
+            lblPopDesc.config(text="{} has the Better Score for the Neighbour Set Category".format(self.compareConfiguration.Name[9:]))
+        if activeNeighbourScore == compareNeighbourScore:
+            lblPopScoreLeft.config(text="{}".format(activeNeighbourScore), fg="#e68f39")
+            lblPopScoreRight.config(text="{}".format(compareNeighbourScore), fg="#e68f39")
+            lblPopDesc.config(text="The Models have an Equal Score for the Neighbour Set Category")
 
         lblSizeLeft = tk.Label(leftScores, text="Size Score :", bg="#e0e0e0")
         lblSizeScoreLeft = tk.Label(leftScores, bg="#e0e0e0")
@@ -306,26 +306,26 @@ class SISCompareInterface(tk.Frame):
             lblSizeScoreRight.config(text="{}".format(compSizeScore), fg="#e68f39")
             lblSizeDesc.config(text="The Models have an Equal Score for the Size Category")
 
-        lblNeighbourLeft = tk.Label(leftScores, text="Neighbour Set Score :", bg="#e0e0e0")
-        lblNeighbourScoreLeft = tk.Label(leftScores, bg="#e0e0e0")
+        lblNeighbourELeft = tk.Label(leftScores, text="Neighbour Set Score :", bg="#e0e0e0")
+        lblNeighbourEScoreLeft = tk.Label(leftScores, bg="#e0e0e0")
         lblNeighbourRight = tk.Label(rightScores, text="Neighbour Set Score :", bg="#e0e0e0")
         lblNeighbourScoreRight = tk.Label(rightScores, bg="#e0e0e0")
         lblNeighbourDesc = tk.Label(centreFrame, bg="#e0e0e0", wraplength=190, pady=8)
         lblBufferLeft2 = tk.Label(leftScores, text="", bg="#e0e0e0")
         lblBufferRight2 = tk.Label(rightScores, text="", bg="#e0e0e0")
 
-        if actNeighbourScore < compNeighbourScore:
-            lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#d12c3f")
-            lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#2d802f")
-            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.activeConfiguration.Name[9:]))
-        if actNeighbourScore > compNeighbourScore:
-            lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#2d802f")
-            lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#d12c3f")
-            lblNeighbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.compareConfiguration.Name[9:]))
-        if actNeighbourScore == compNeighbourScore:
-            lblNeighbourScoreLeft.config(text="{}".format(actNeighbourScore), fg="#e68f39")
-            lblNeighbourScoreRight.config(text="{}".format(compNeighbourScore), fg="#e68f39")
-            lblNeighbourDesc.config(text="The Models have an Equal Score for the Neighbour Sets Category")
+        if actNeighbouErScore < compNeighboEurScore:
+            lblNeighbEourScoreLeft.config(text="{}".format(actNeiEghbourScore), fg="#d12c3f")
+            lblNeighbEourScoreRight.config(text="{}".format(compNEeighbourScore), fg="#2d802f")
+            lblNeighbEourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.activeConfiguration.Name[9:]))
+        if actNeighboEurScore > compNeighbourScore:
+            lblNeighbEourScoreLeft.config(text="{}".format(actNeiEghbourScore), fg="#2d802f")
+            lblNeighbEourScoreRight.config(text="{}".format(compNEeighbourScore), fg="#d12c3f")
+            lblNeighEbourDesc.config(text="{} has the Better Score for the Neighbour Sets Category".format(self.compareConfiguration.Name[9:]))
+        if actNeighbEourScore == compNeighbourScore:
+            lblNeighbEourScoreLeft.config(text="{}".format(actNeiEghbourScore), fg="#e68f39")
+            lblNeighbEourScoreRight.config(text="{}".format(compNEeighbourScore), fg="#e68f39")
+            lblNeighboEurDesc.config(text="The Models have an Equal Score for the Neighbour Sets Category")
 
         lblInfectionLeft = tk.Label(leftScores, text="Infection Rates Score :", bg="#e0e0e0")
         lblInfectionScoreLeft = tk.Label(leftScores, bg="#e0e0e0")
