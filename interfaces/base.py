@@ -15,9 +15,9 @@ class BaseApp(tk.Tk):
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        center_x = int(self.screen_width / 2 - 1536 / 2)
-        center_y = int(self.screen_height / 2 - 864 / 2)
-        self.geometry(f"1536x864+{center_x}+{center_y}")
+        center_x = int(self.screen_width / 2 - 1920 / 2) #1536
+        center_y = int(self.screen_height / 2 - 1080 / 2) #864
+        self.geometry(f"1920x1080+{center_x - 6}+{center_y}")
         self.iconbitmap("assets/virus_icon.ico")
 
         # Creating a base frame interfaces for all other interfaces to use as the master class

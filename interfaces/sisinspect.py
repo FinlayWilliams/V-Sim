@@ -18,12 +18,12 @@ class SISInspectInterface(tk.Frame):
         btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: controller.display("SISInspectInterface", "HomeInterface"))
         self.lblControl = tk.Label(controlBar, bg="#453354", text="", font=("Arial", 14, "italic"), fg="white" )
-        btnOverview = tk.Button(mainFrame, text="Overview", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(0, 1))
-        btnNeighbourSet = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(1, 1))
-        btnInfectionRate = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(2, 1))
-        btnEffort = tk.Button(mainFrame, text="Payload Effort", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(3, 1))
-        btnDeath = tk.Button(mainFrame, text="Death Rates", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(4, 1))
-        btnSingleFactors = tk.Button(mainFrame, text="Single Factors", font=("Arial", 9), width=17, command=lambda : self.switchInfoFrame(5, 1))
+        btnOverview = tk.Button(mainFrame, text="Overview", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(0, 1))
+        btnNeighbourSet = tk.Button(mainFrame, text="Neighbour Sets", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(1, 1))
+        btnInfectionRate = tk.Button(mainFrame, text="Infection Rates", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(2, 1))
+        btnEffort = tk.Button(mainFrame, text="Payload Effort", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(3, 1))
+        btnDeath = tk.Button(mainFrame, text="Death Rates", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(4, 1))
+        btnSingleFactors = tk.Button(mainFrame, text="Single Factors", font=("Arial", 9), width=21, command=lambda : self.switchInfoFrame(5, 1))
 
         # This area will contain the assessment and a starter list is created
         self.informationFrame = tk.Frame(mainFrame, bg="#e0e0e0")
@@ -32,11 +32,11 @@ class SISInspectInterface(tk.Frame):
                        tk.Frame(self.informationFrame, bg="#e0e0e0"), tk.Frame(self.informationFrame, bg="#e0e0e0")]
 
         # This is the legend footer of the page
-        lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=25, pady=4, text="(S) Susceptible", font=("Arial", 9), fg="white")
-        lblLegend2 = tk.Label(mainFrame, bg="#9467bd", width=25, pady=4, text="(IR) Random-Scanning", font=("Arial", 9), fg="white")
-        lblLegend3 = tk.Label(mainFrame, bg="#1f77b4", width=27, pady=4, text="(IL) Local-Scanning", font=("Arial", 9), fg="white")
-        lblLegend4 = tk.Label(mainFrame, bg="#17becf", width=27, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 9), fg="white")
-        lblLegend5 = tk.Label(mainFrame, bg="#d62728", width=27, pady=4, text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
+        lblLegend1 = tk.Label(mainFrame, bg="#2ca02c", width=32, pady=4, text="(S) Susceptible", font=("Arial", 9), fg="white")
+        lblLegend2 = tk.Label(mainFrame, bg="#9467bd", width=32, pady=4, text="(IR) Random-Scanning", font=("Arial", 9), fg="white")
+        lblLegend3 = tk.Label(mainFrame, bg="#1f77b4", width=32, pady=4, text="(IL) Local-Scanning", font=("Arial", 9), fg="white")
+        lblLegend4 = tk.Label(mainFrame, bg="#17becf", width=32, pady=4, text="(IP) Peer-to-Peer", font=("Arial", 9), fg="white")
+        lblLegend5 = tk.Label(mainFrame, bg="#d62728", width=33, pady=4, text="(I) Infection Types Grouped", font=("Arial", 9), fg="white")
 
         # This contains all graph-side widgets
         graphFrame = tk.Frame(self, bg="#453354")
@@ -52,31 +52,31 @@ class SISInspectInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
 
-        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 12))
+        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 13))
 
         ########################################### Placing Everything ###############################################
         mainFrame.place(relheight=1, relwidth=0.6)
-        controlBar.place(relheight=0.087, relwidth=1)
+        controlBar.place(relheight=0.07, relwidth=1)
         btnReturn.place(x=21, y=21)
         self.lblControl.pack(ipady=21)
         btnOverview.place(x=15, y=87)
-        btnNeighbourSet.place(x=166, y=87)
-        btnInfectionRate.place(x=317, y=87)
-        btnEffort.place(x=469, y=87)
-        btnDeath.place(x=622, y=87)
+        btnNeighbourSet.place(x=207, y=87)
+        btnInfectionRate.place(x=399, y=87)
+        btnEffort.place(x=591, y=87)
+        btnDeath.place(x=975, y=87)
         btnSingleFactors.place(x=778, y=87)
-        self.informationFrame.place(x=14, y=124, relheight=0.83, relwidth=0.97)
-        lblLegend1.place(x=0, y=837)
-        lblLegend2.place(x=172, y=837)
-        lblLegend3.place(x=353, y=837)
-        lblLegend4.place(x=548, y=837)
-        lblLegend5.place(x=731, y=837)
+        self.informationFrame.place(x=14, y=124, relheight=0.85, relwidth=0.97)
+        lblLegend1.place(x=0, y=1021)
+        lblLegend2.place(x=230, y=1021)
+        lblLegend3.place(x=460, y=1021)
+        lblLegend4.place(x=690, y=1021)
+        lblLegend5.place(x=920, y=1021)
         # Graphs
-        graphFrame.place(x=922, y=0, relheight=1, relwidth=0.4)
+        graphFrame.place(x=1152, y=0, relheight=1, relwidth=0.4)
         self.lblGraphTitle.pack(ipady=21, padx=(0, 30))
-        btnConfigure.place(x=530, y=21)
-        graphContainer.place(x=5, y=75, relheight=0.96, relwidth=1)
-        self.lblFinalN.place(x=150, y=835)
+        btnConfigure.place(x=680, y=21)
+        graphContainer.place(x=5, y=75, relheight=0.94, relwidth=1)
+        self.lblFinalN.place(x=250, y=1000)
         self.updateGraphs()
 
     # Updates the on-screen graphs
@@ -206,84 +206,108 @@ class SISInspectInterface(tk.Frame):
         lbl1 = tk.Label(self.frames[0], text="{} - Assessment Overview and Simulation Scores".format(C.Name), font=("Arial", 12), bg="#e0e0e0")
 
         lblScoreAc = tk.Label(self.frames[0], text="{}  ".format(ovrSingleFactorScore + ovrNeighbourScore + ovrInfectionScore + ovrEffortScore + ovrDeathRateScore), font=("Arial", 14, "bold"), bg="#e0e0e0")
-        lblScore = tk.Label(self.frames[0], text="> Overall Simulation Score", font=("Arial", 12, "bold"), bg="#e0e0e0")
-        lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblScore = tk.Label(self.frames[0], text="> Overall Simulation Score", font=("Arial", 12, "bold", "italic"), bg="#e0e0e0")
+        lblScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblScoreAc.config(fg="#2d802f")
             lblScoreDes.config(text="This model has a configuration that results in a generally slower and less potent propagation.")
         if 1 <= Jeff < 3:
             lblScoreAc.config(fg="#b35827")
-            lblScoreDes.config(text="This model has a configuration that results in an average propagation of a virus.")
+            lblScoreDes.config(text="This model has a configuration that results in an expected / average propagation of a virus.")
         if Jeff >= 3:
             lblScoreAc.config(fg="#b81d28")
-            lblScoreDes.config(text="This model has a configuration that results in a fast and potent virus propagation.")
+            lblScoreDes.config(text="This configuration results in a fast and potent virus propagation.")
 
-        lblExplain = tk.Label(self.frames[0], text="The assessment is broken down into different categories and combine to produce an overall score and explanatory breakdown", font=("Arial", 10, "italic"), bg="#e0e0e0")
+        lblExplain = tk.Label(self.frames[0], text="The assessment is broken down into different categories and combine to produce an overall score and explanatory breakdown\n", font=("Arial", 10, "italic"), bg="#e0e0e0")
 
         lblNeighbourScoreV = tk.Label(self.frames[0], text="{}  ".format(ovrNeighbourScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblNeighbourScore = tk.Label(self.frames[0], text="> Neighbour Sets Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblNeighbourScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblNeighbourScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblNeighbourScoreV.config(fg="#2d802f")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make for small attack ranges. The Local Scanning and Peer-to-Peer infection methods are capped severly.")
+            lblNeighbourScoreDes.config(text="This section looks into the attack surface of Local Scanning (IL) and Peer-to-Peer (IP) infection methods as the proportion "
+                                             "of the Susceptible (S) population they can target is limited, unlike Random Scanning (IR). \n\n"
+                                             "In this simulation, the Neighbour Sets make for small attack ranges. The Local Scanning and Peer-to-Peer infection methods are capped severly.")
         if 1 <= Jeff < 3:
             lblNeighbourScoreV.config(fg="#e68f39")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make for average attack ranges. The Local Scanning and Peer-to-Peer infection have enough of an attack vector to do damage.")
+            lblNeighbourScoreDes.config(text="This section looks into the attack surface of Local Scanning (IL) and Peer-to-Peer (IP) infection methods as the proportion "
+                                             "of the Susceptible (S) population they can target is limited, unlike Random Scanning (IR). \n\n"
+                                             "In this simulation, the Neighbour Sets make for average attack ranges. The Local Scanning and Peer-to-Peer infection have enough of an attack vector to do damage.")
         if Jeff >= 3:
             lblNeighbourScoreV.config(fg="#b81d28")
-            lblNeighbourScoreDes.config(text="The Neighbour Sets make for large attack ranges. The Local Scanning and Peer-to-Peer infection methods can reach a huge amount of the population.")
+            lblNeighbourScoreDes.config(text="This section looks into the attack surface of Local Scanning (IL) and Peer-to-Peer (IP) infection methods as the proportion "
+                                             "of the Susceptible (S) population they can target is limited, unlike Random Scanning (IR). \n\n"
+                                             "In this simulation, the Neighbour Sets make for large attack ranges. The Local Scanning and Peer-to-Peer infection methods can reach a huge amount of the population.")
 
         lblInfScoreV = tk.Label(self.frames[0], text="{}  ".format(ovrInfectionScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblInfScore = tk.Label(self.frames[0], text="> Infection Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblInfScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblInfScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblInfScoreV.config(fg="#2d802f")
-            lblInfScoreDes.config(text="The Infection Rates are low, a minimal propagation of the botnet has been achieved.")
+            lblInfScoreDes.config(text="The Infection Rates section explores the calculated rates that describe how well an Infected (I) Node propagates the infection. \n\n"
+                                       "The calculated Infection Rates are low, a minimal propagation of the botnet has been achieved.")
         if 1 <= Jeff < 3:
             lblInfScoreV.config(fg="#e68f39")
-            lblInfScoreDes.config(text="The Infection Rates are average, an expected propagation of the botnet has occured.")
+            lblInfScoreDes.config(text="The Infection Rates section explores the calculated rates that describe how well an Infected (I) Node propagates the infection. \n\n"
+                                       "The calculated Infection Rates are average, an expected propagation of the botnet has occured.")
         if Jeff >= 3:
             lblInfScoreV.config(fg="#b81d28")
-            lblInfScoreDes.config(text="The Infection Rates are high, a maxiaml propagation of the botnet has occured.")
+            lblInfScoreDes.config(text="The Infection Rates section explores the calculated rates that describe how well an Infected (I) Node propagates the infection. \n\n"
+                                       "The calculated Infection Rates are high, a maxiaml propagation of the botnet has occured.")
 
         lblEffortScoreV = tk.Label(self.frames[0], text="{}  ".format(ovrEffortScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblEffortScore = tk.Label(self.frames[0], text="> Payload Effort Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblEffortScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblEffortScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblEffortScoreV.config(fg="#2d802f")
-            lblEffortScoreDes.config(text="The Effort required to send payloads of information across the network to other nodes is minimal, better than average.")
+            lblEffortScoreDes.config(text="The Payload Effort section analyses the factors contributing to the amount of 'Effort' both Susceptible (S) and Infected (I) Nodes "
+                                          "exert when sending data across the network to other Nodes. \n\n"
+                                          "Here, the Effort required to send payloads of information across the network to other nodes is minimal, better than average.")
         if 1 <= Jeff < 3:
             lblEffortScoreV.config(fg="#e68f39")
-            lblEffortScoreDes.config(text="The Effort required to send payloads of information across the network to other nodes is average, the expected effort.")
+            lblEffortScoreDes.config(text="The Payload Effort section analyses the factors contributing to the amount of 'Effort' both Susceptible (S) and Infected (I) Nodes "
+                                          "exert when sending data across the network to other Nodes. \n\n"
+                                          "Here, the Effort required to send payloads of information across the network to other nodes is average, the expected effort.")
         if Jeff >= 3:
             lblEffortScoreV.config(fg="#b81d28")
-            lblEffortScoreDes.config(text="The Effort required to send payloads of information across the network to other nodes is large, making life difficult.")
+            lblEffortScoreDes.config(text="The Payload Effort section analyses the factors contributing to the amount of 'Effort' both Susceptible (S) and Infected (I) Nodes "
+                                          "exert when sending data across the network to other Nodes. \n\n"
+                                          "Here, the Effort required to send payloads of information across the network to other nodes is large, making life difficult for Nodes.")
 
         lblDthScoreV = tk.Label(self.frames[0], text="{}  ".format(ovrDeathRateScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblDthScore = tk.Label(self.frames[0], text="> Lifespan and Death Rates Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblDthScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblDthScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblDthScoreV.config(fg="#2d802f")
-            lblDthScoreDes.config(text="The node Lifespans are high and Death Rates low. Nodes live extended durations and malicious activity is minimal.")
+            lblDthScoreDes.config(text="This section examines the factors contributing to both Susceptible (S) and Infected (I) Nodes' Lifespans, and the corresponding Death Rates. \n\n"
+                                       "This configuration results in high Lifespans and low Death Rates. Nodes live extended durations and malicious activity is minimal.")
         if 1 <= Jeff < 3:
             lblDthScoreV.config(fg="#e68f39")
-            lblDthScoreDes.config(text="The node Lifespans are average, as well as the Death Rates. Nodes live the expected durations and malicious activity is present.")
+            lblDthScoreDes.config(text="This section examines the factors contributing to both Susceptible (S) and Infected (I) Nodes' Lifespans, and the corresponding Death Rates. \n\n"
+                                       "The node Lifespans are average, as well as the Death Rates. Nodes live the expected durations and malicious activity is present.")
         if Jeff >= 3:
             lblDthScoreV.config(fg="#b81d28")
-            lblDthScoreDes.config(text="The node Lifespans are low and Death Rates high. Nodes live shorter durations and malicious activity is substantial.")
+            lblDthScoreDes.config(text="This section examines the factors contributing to both Susceptible (S) and Infected (I) Nodes' Lifespans, and the corresponding Death Rates. \n\n"
+                                       "This configuration results in low Lifespans and high Death Rates. Nodes live reduced durations and malicious activity is substantial.")
 
         lblSFScoreV = tk.Label(self.frames[0], text="{}  ".format(ovrSingleFactorScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblSFScore = tk.Label(self.frames[0], text="> Single Factor Scores", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblSFScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0")
+        lblSFScoreDes = tk.Label(self.frames[0], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblSFScoreV.config(fg="#2d802f")
-            lblSFScoreDes.config(text="Certain Single Factors have helped achieve a minimal virus propagation.")
+            lblSFScoreDes.config(text="This section looks at three particular starting conditions: Starting Population Sizes, Admin Engagement, and Intrusion Detection System"
+                                      " (IDS) usage. \n\n"
+                                      "In this simulation, these Single Factors have helped achieve a minimal virus propagation.")
         if 1 <= Jeff < 3:
             lblSFScoreV.config(fg="#e68f39")
-            lblSFScoreDes.config(text="Certain Single Factors are at the expected thresholds and result in the expected botnet presence.")
+            lblSFScoreDes.config(text="This section looks at three particular starting conditions: Starting Population Sizes, Admin Engagement, and Intrusion Detection System"
+                                      " (IDS) usage. \n\n"
+                                      "In this simulation, these Single Factors are at the expected thresholds and result in the expected botnet presence.")
         if Jeff >= 3:
             lblSFScoreV.config(fg="#b81d28")
-            lblSFScoreDes.config(text="Certain Single Factors have contributed to a higher virus propagation.")
+            lblSFScoreDes.config(text="This section looks at three particular starting conditions: Starting Population Sizes, Admin Engagement, and Intrusion Detection System"
+                                      " (IDS) usage. \n\n"
+                                      "In this simulation, these Single Factors have contributed to a higher virus propagation.")
 
 
         lblExplain3 = tk.Label(self.frames[0], text="The overall score ranges from a minimum of ___ to ___ and to a maximum of ___", font=("Arial", 10, "italic"), bg="#e0e0e0")
@@ -330,8 +354,8 @@ class SISInspectInterface(tk.Frame):
     def populateNeighbourFrame(self, config, ovrNeighbourScore, slocScore, snhbScore):
         Jeff = 0
         C = config
-        lblNeighbourOvrV = tk.Label(self.frames[1], text="{}  ".format(ovrNeighbourScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
-        lblNeighbour = tk.Label(self.frames[1], text="> Overall Neighbour Sets Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
+        lblNeighbourOvrV = tk.Label(self.frames[1], text="{}  ".format(ovrNeighbourScore), font=("Arial", 14, "bold"), bg="#e0e0e0")
+        lblNeighbour = tk.Label(self.frames[1], text="> Overall Neighbour Sets Score", font=("Arial", 12, "bold", "italic"), bg="#e0e0e0")
         lblNeighbourDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0")
         if Jeff < 1:
             lblNeighbourOvrV.config(fg="#2d802f")
@@ -346,18 +370,18 @@ class SISInspectInterface(tk.Frame):
             lblNeighbourDes.config(
                 text="The Neighbour Sets make for large attack ranges. The Local Scanning and Peer-to-Peer infection methods can reach a huge amount of the population.")
 
-        lblExplain = tk.Label(self.frames[1], text="This sections covers the two neighbour sets, the attack ranges for the Local Scanning and Peer-to-Peer infection methods.",
+        lblExplain = tk.Label(self.frames[1], text="This sections covers the two neighbour sets, the attack ranges for the Local Scanning and Peer-to-Peer infection methods.\n",
                               font=("Arial", 10, "italic"), bg="#e0e0e0")
 
         lblSLocScoreV = tk.Label(self.frames[1], text="{}  ".format(slocScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblSLocScore = tk.Label(self.frames[1], text="> SLoc Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblSLocDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left",
+        lblSLocDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
                 text="SLoc is the variable that describes the quantity of locally available nodes in the network, for any Susceptible (S) node.\n\nIn the model, "
                      "this is represented as a fraction of the S population. The fraction of the S population does not change as the simulation progresses but the"
                      " S value does, meaning in the simulation the actual value of SLoc also does.\n\nSLoc is calculated by dividing the entire population (N) across the"
                      "number of Wireless Sensor Networks (WSN), and taking that fraction of N in each WSN from the S population.\n\nThe Local Scanning (IL) infection"
                      "method can only target nodes within the SLoc subset; decided by the infection method only scanning for a nodes' local neighbours.")
-        lblSLocScoreDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblSLocScoreDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblSLocScoreV.config(fg="#2d802f")
             lblSLocScoreDes.config(text="In this case, the SLoc fraction was {}. This is decided directly by the WSN count of {}.\n\nIn V-Sim, the maximum number "
@@ -376,7 +400,7 @@ class SISInspectInterface(tk.Frame):
 
         lblSNhbScoreV = tk.Label(self.frames[1], text="{}  ".format(snhbScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
         lblSNhbScore = tk.Label(self.frames[1], text="> SNhb Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblSNhbDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left",
+        lblSNhbDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
             text="SNhb is the variable that describes the directly available neighbours, for any Susceptible (S) node - all nodes reachable within the transmission distance;"
                  " also describing the Peer-to-Peer (IP) attack surface as the infection method only propagating payloads through directly connected neighbour."
                  "\n\nSimilarly to SLoc, SNhb is represented as a fraction of the S population, and the actual value changes along with S.\n\nSNhb is calculated by "
@@ -384,7 +408,7 @@ class SISInspectInterface(tk.Frame):
                  " the density by the transmission range to find out how many nodes can be discovered. Finally, this number becomes the fraction of nodes available to reach in each WSN; "
                  "this value is then taken from the S population.\n\nIP has the most limited attack surface, high density and long transmission ranges will increase "
                  "the SNhb attack surface greatly.")
-        lblSNhbScoreDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblSNhbScoreDes = tk.Label(self.frames[1], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblSNhbScoreV.config(fg="#2d802f")
             lblSNhbScoreDes.config(text="The SNhhb fraction was {}. A smaller than average fraction of S available to IP. This number relies heavily on Density and "
@@ -423,8 +447,8 @@ class SISInspectInterface(tk.Frame):
     def populateInfectionFrame(self, config, ovrInfectionScore, scanningScore, irPScore, ilPScore, ipPScore, PTrScore):
         Jeff = 0
         C = config
-        lblinfOvrV = tk.Label(self.frames[2], text="{}  ".format(ovrInfectionScore), font=("Arial", 12, "bold"), bg="#e0e0e0")
-        lblinfOvr = tk.Label(self.frames[2], text="> Overall Neighbour Sets Score", font=("Arial", 10, "bold"),
+        lblinfOvrV = tk.Label(self.frames[2], text="{}  ".format(ovrInfectionScore), font=("Arial", 14, "bold"), bg="#e0e0e0")
+        lblinfOvr = tk.Label(self.frames[2], text="> Overall Infection Rates Score", font=("Arial", 12, "bold", "italic"),
                                 bg="#e0e0e0")
         lblinfOvrDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0")
         if Jeff < 1:
@@ -440,16 +464,16 @@ class SISInspectInterface(tk.Frame):
             lblinfOvrDes.config(text="The Infection Rates are high, a maxiaml propagation of the botnet has occured.")
 
         lblExplain = tk.Label(self.frames[2],
-                              text="This sections covers the Infection Rates, and how they have been achieved.",
+                              text="This sections covers the Infection Rates, and how they have been achieved.\n",
                               font=("Arial", 10, "italic"), bg="#e0e0e0")
 
         lblScanScoreV = tk.Label(self.frames[2], text="{}  ".format(scanningScore), font=("Arial", 12, "bold"),bg="#e0e0e0")
         lblScanScore = tk.Label(self.frames[2], text="> Scanning Rate Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
-        lblScanDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left",
+        lblScanDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
                               text="The Scanning Rate variable is simple the rate at which Infected (I) Nodes scan to make contact with S nodes. The default and reccomended value "
                                    "for this is 27 scans per second. This figure is based off of other IoT-based botnets such as the Mirai botnet, but can theoretically reach lower or"
                                    "much higher values.")
-        lblScanScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblScanScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblScanScoreV.config(fg="#2d802f")
             lblScanScoreDes.config(
@@ -463,8 +487,10 @@ class SISInspectInterface(tk.Frame):
             lblScanScoreDes.config(
                 text="In this simulation, the Scanning Rate was higher than average at {} scans per second.".format(C.botScanningRate))
 
-        lblPSuccessDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left",
-                                  text="\nThe next three scores are for the PSuccess values for all infection types - IR, IL, and IP.\n\nThe PSuccess value "
+        lblPSuccess = tk.Label(self.frames[2], font=("Arial", 10, "bold"), bg="#e0e0e0", wraplength=1050, justify="left", text="PSuccess")
+
+        lblPSuccessDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
+                                  text="The next three scores are for the PSuccess values for all infection types - IR, IL, and IP.\n\nThe PSuccess value "
                                        "describes the rate of a successful rate of connection, per scan, per second (the Scanning Rate). Multiplying PSuccess by the "
                                        "Scanning Rate forms the Contact Rate for each infection method.\n\nThese values "
                                        "are theoretical, estimated based off of how successful a connection should be; this is reflected in the definitions of the rates. "
@@ -472,13 +498,13 @@ class SISInspectInterface(tk.Frame):
                                        "on the subject - informed guesses will decide these rates when deciding them."
                                        "\n\nIR scans the entire S population, which will result in an abundance of connection failures despite having the largest attack "
                                        "surface by far. IL scans the local group, which will result in less but still many failed connections. IP forwards traffic to "
-                                       "direct neighbours, resulting in a very high connection chance.")
+                                       "direct neighbours, resulting in a very high connection chance.\n")
 
         lblIrPSucScoreV = tk.Label(self.frames[2], text="{}  ".format(irPScore), font=("Arial", 12, "bold"),
                                  bg="#e0e0e0")
         lblIrPSucScore = tk.Label(self.frames[2], text="> IR PSuccess Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
 
-        lblIrPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblIrPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblIrPSucScoreV.config(fg="#2d802f")
             lblIrPSucScoreDes.config(
@@ -496,7 +522,7 @@ class SISInspectInterface(tk.Frame):
                                    bg="#e0e0e0")
         lblIlPSucScore = tk.Label(self.frames[2], text="> IL PSuccess Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
 
-        lblIlPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblIlPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblIlPSucScoreV.config(fg="#2d802f")
             lblIlPSucScoreDes.config(
@@ -514,35 +540,35 @@ class SISInspectInterface(tk.Frame):
                                    bg="#e0e0e0")
         lblIpPSucScore = tk.Label(self.frames[2], text="> IP PSuccess Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
 
-        lblIpPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblIpPSucScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblIpPSucScoreV.config(fg="#2d802f")
             lblIpPSucScoreDes.config(
-                text="The PSuccess value for this simulation was {}, a lower than expected value - minimising chances of successful connections for IP.".format(
+                text="The PSuccess value for this simulation was {}, a lower than expected value - minimising chances of successful connections for IP.\n".format(
                     C.IpPsuccess))
         if 1 <= Jeff < 3:
             lblIpPSucScoreV.config(fg="#e68f39")
             lblIpPSucScoreDes.config(
-                text="The PSuccess value for this simulation was {}, ensuring the expected chance of successful connections for IP.".format(
+                text="The PSuccess value for this simulation was {}, ensuring the expected chance of successful connections for IP.\n".format(
                     C.IpPsuccess))
         if Jeff >= 3:
             lblIpPSucScoreV.config(fg="#b81d28")
             lblIpPSucScoreDes.config(
-                text="The PSuccess value for this simulation was {}, a higher than expected value - maximising chances of successful connections for IP.".format(
+                text="The PSuccess value for this simulation was {}, a higher than expected value - maximising chances of successful connections for IP.\n".format(
                     C.IpPsuccess))
 
         lblPTrScoreV = tk.Label(self.frames[2], text="{}  ".format(ipPScore), font=("Arial", 12, "bold"),
                                    bg="#e0e0e0")
         lblPTrScore = tk.Label(self.frames[2], text="> PTransmission Score", font=("Arial", 10, "bold"), bg="#e0e0e0")
 
-        lblPTrDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left",
+        lblPTrDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
                                   text="PTransmission is a variable that describes the rate of a successful transmission of a virus payload from any I node to an S node, "
                                        "per successful contact, per second; The Contact Rate multiplied by the PTransmission value equals the infection rate."
                                        "\n\nSimilar to PSuccess, this value is estimated based off of how expected a successful transmission should be; this figure"
                                        "greatly impacts the propagation. The default and reccomended figure is defined based off of other viruses, and should be"
                                        "a realtively small number when factoring in the chances of a successful connection, and other factors such as security.")
 
-        lblPTrScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=850, justify="left")
+        lblPTrScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if Jeff < 1:
             lblPTrScoreV.config(fg="#2d802f")
             lblPTrScoreDes.config(
@@ -573,24 +599,26 @@ class SISInspectInterface(tk.Frame):
         lblScanDes.grid(row=6, column=2, sticky="w", padx=(7, 0))
         lblScanScoreDes.grid(row=7, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
 
-        lblPSuccessDes.grid(row=8, column=2, sticky="w", padx=(9, 0))
+        lblPSuccess.grid(row=8, column=2, sticky="w", padx=(9, 0))
 
-        lblIrPSucScoreV.grid(row=9, column=0, sticky="w", padx=(7, 0))
-        lblIrPSucScore.grid(row=9, column=2, sticky="w")
-        lblIrPSucScoreDes.grid(row=10, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+        lblPSuccessDes.grid(row=9, column=2, sticky="w", padx=(9, 0))
 
-        lblIlPSucScoreV.grid(row=11, column=0, sticky="w", padx=(9, 0))
-        lblIlPSucScore.grid(row=11, column=2, sticky="w")
-        lblIlPSucScoreDes.grid(row=12, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+        lblIrPSucScoreV.grid(row=10, column=0, sticky="w", padx=(7, 0))
+        lblIrPSucScore.grid(row=10, column=2, sticky="w")
+        lblIrPSucScoreDes.grid(row=11, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
 
-        lblIpPSucScoreV.grid(row=11, column=0, sticky="w", padx=(9, 0))
-        lblIpPSucScore.grid(row=11, column=2, sticky="w")
-        lblIpPSucScoreDes.grid(row=12, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+        lblIlPSucScoreV.grid(row=12, column=0, sticky="w", padx=(9, 0))
+        lblIlPSucScore.grid(row=12, column=2, sticky="w")
+        lblIlPSucScoreDes.grid(row=13, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
 
-        lblPTrScoreV.grid(row=13, column=0, sticky="w", padx=(9, 0))
-        lblPTrScore.grid(row=13, column=2, sticky="w")
-        lblPTrDes.grid(row=14, column=2, sticky="w", padx=(7, 0))
-        lblPTrScoreDes.grid(row=15, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+        lblIpPSucScoreV.grid(row=14, column=0, sticky="w", padx=(9, 0))
+        lblIpPSucScore.grid(row=14, column=2, sticky="w")
+        lblIpPSucScoreDes.grid(row=15, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
+
+        lblPTrScoreV.grid(row=16, column=0, sticky="w", padx=(9, 0))
+        lblPTrScore.grid(row=16, column=2, sticky="w")
+        lblPTrDes.grid(row=17, column=2, sticky="w", padx=(7, 0))
+        lblPTrScoreDes.grid(row=18, column=2, sticky="w", padx=(7, 0), pady=(0, 10))
 
     def populateEffortFrame(self, config, ovrEffortScore, tranRangeScore, msgSizeScore, msgPowerScore, bttryScore, depAreaScore):
         pass

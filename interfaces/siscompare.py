@@ -78,16 +78,16 @@ class SISCompareInterface(tk.Frame):
         ########################################### Placing ALL elements ###############################################
         titleFrame.place(relwidth=1, relheight=0.07)
         lblTitle.pack(pady=15)
-        nameFrame.place(relwidth=1, relheight=0.08, y=60)
+        nameFrame.place(relwidth=1, relheight=0.065, y=60)
         btnReturn.place(x=14, y=14)
-        legendFrame.place(x=657, y=3)
+        legendFrame.place(x=846, y=3)
         lblG.grid(row=0, column=0)
         lblGEx.grid(row=0, column=1)
         lblO.grid(row=1, column=0)
         lblOEx.grid(row=1, column=1)
         lblR.grid(row=2, column=0)
         lblREx.grid(row=2, column=1)
-        self.informationFrame.place(relwidth=0.334, relheight=0.93, y=130, x=511)
+        self.informationFrame.place(relwidth=0.334, relheight=0.93, y=130, x=639)
         # Left
         btnInspectLeft.pack(side="left", padx=14)
         btnConfigureLeft.pack(side="left", padx=7)
@@ -101,7 +101,7 @@ class SISCompareInterface(tk.Frame):
         btnConfigureRight.pack(side="right", padx=7)
         self.lblRightName.pack(side="right", padx=10)
         self.lblRightScore.pack(side="right")
-        rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1025)
+        rightFrame.place(relwidth=0.333, relheight=0.93, y=126, x=1280)
         rightGraphFrame.place(relwidth=0.98, relheight=0.95, x=5, y=5)
         self.lblFinalNRight.place(x=105, y=710)
 
