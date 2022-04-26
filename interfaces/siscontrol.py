@@ -62,7 +62,7 @@ class SISControlInterface(tk.Frame):
         self.currentBl = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12, "bold"), fg="white")
         lblCurrentBp = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12), text="IP Infection Rate : ")
         self.currentBp = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12, "bold"), fg="white")
-        lblCurrentDthB = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12), text="Node Death Rate : ")
+        lblCurrentDthB = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12), text="Benign Death Rate : ")
         self.currentDthB = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12, "bold"), fg="white")
         lblCurrentDthR = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12), text="IR Node Death Rate : ")
         self.currentDthR = tk.Label(frameConfigurationStats, bg="#654e78", font=("Calibri", 12, "bold"), fg="white")
@@ -360,19 +360,24 @@ class SISControlInterface(tk.Frame):
             # else:
             self.updateGraphs(newActiveConfiguration)
             newActiveConfiguration.Timesteps = 12
+            self.updateStatistics(newActiveConfiguration)
             self.activeConfiguration = newActiveConfiguration
 
-            self.currentSLoc.config(text="{:.0f} / {:.0f}".format(self.activeConfiguration.SLocFraction * self.activeConfiguration.S,
-                                                    self.activeConfiguration.S))
-            self.currentSNhb.config(text="{:.0f} / {:.0f}".format(self.activeConfiguration.SNhbFraction * self.activeConfiguration.S,
-                                                    self.activeConfiguration.S))
-            self.currentBr.config(text="{:.6f}".format(self.activeConfiguration.bR))
-            self.currentBl.config(text="{:.6f}".format(self.activeConfiguration.bL))
-            self.currentBp.config(text="{:.6f}".format(self.activeConfiguration.bP))
-            self.currentDthB.config(text="{:.6f}".format(self.activeConfiguration.dthB))
-            self.currentDthR.config(text="{:.6f}".format(self.activeConfiguration.dthR))
-            self.currentDthL.config(text="{:.6f}".format(self.activeConfiguration.dthL))
-            self.currentDthP.config(text="{:.6f}".format(self.activeConfiguration.dthP))
+
+    def updateStatistics(self, activeConfiguration):
+        self.currentSLoc.config(
+            text="{:.0f} / {:.0f}".format(activeConfiguration.SLocFraction * activeConfiguration.S,
+                                          activeConfiguration.S))
+        self.currentSNhb.config(
+            text="{:.0f} / {:.0f}".format(activeConfiguration.SNhbFraction * activeConfiguration.S,
+                                          activeConfiguration.S))
+        self.currentBr.config(text="{:.8f}".format(activeConfiguration.bR))
+        self.currentBl.config(text="{:.8f}".format(activeConfiguration.bL))
+        self.currentBp.config(text="{:.8f}".format(activeConfiguration.bP))
+        self.currentDthB.config(text="{:.8f}".format(activeConfiguration.dthB))
+        self.currentDthR.config(text="{:.8f}".format(activeConfiguration.dthR))
+        self.currentDthL.config(text="{:.8f}".format(activeConfiguration.dthL))
+        self.currentDthP.config(text="{:.8f}".format(activeConfiguration.dthP))
 
     # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
     # are updated and correct
@@ -397,8 +402,9 @@ class SISControlInterface(tk.Frame):
             self.cmbIrPsu.set("Expected")
         elif self.activeConfiguration.IrPsuccess == 0.05:
             self.cmbIrPsu.set("High")
-        else:
+        elif self.activeConfiguration.IrPsuccess == 1:
             self.cmbIrPsu.set("100%")
+
         if self.activeConfiguration.IlPsuccess == 0.00000000001:
             self.cmbIlPsu.set("0%")
         elif self.activeConfiguration.IlPsuccess == 0.05:
@@ -407,8 +413,9 @@ class SISControlInterface(tk.Frame):
             self.cmbIlPsu.set("Expected")
         elif self.activeConfiguration.IlPsuccess == 0.25:
             self.cmbIlPsu.set("High")
-        else:
+        elif self.activeConfiguration.IlPsuccess == 1:
             self.cmbIlPsu.set("100%")
+
         if self.activeConfiguration.IpPsuccess == 0.00000000001:
             self.cmbIpPsu.set("0%")
         elif self.activeConfiguration.IpPsuccess == 0.45:
@@ -417,8 +424,9 @@ class SISControlInterface(tk.Frame):
             self.cmbIpPsu.set("Expected")
         elif self.activeConfiguration.IpPsuccess == 0.95:
             self.cmbIpPsu.set("High")
-        else:
+        elif self.activeConfiguration.IpPsuccess == 1:
             self.cmbIpPsu.set("100%")
+
         if self.activeConfiguration.Ptransmission == 0.00000000001:
             self.cmbPtrns.set("0")
         elif self.activeConfiguration.Ptransmission == 0.001:
@@ -427,8 +435,9 @@ class SISControlInterface(tk.Frame):
             self.cmbPtrns.set("Expected")
         elif self.activeConfiguration.Ptransmission == 0.03:
             self.cmbPtrns.set("High")
-        else:
+        elif self.activeConfiguration.Ptransmission == 1:
             self.cmbPtrns.set("100%")
+
         self.cmbMSG.set(self.activeConfiguration.meanMessageSize)
         self.cmbPWR.set(self.activeConfiguration.meanPower)
         self.cmbBTRY.set(self.activeConfiguration.totalBattery)

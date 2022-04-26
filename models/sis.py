@@ -166,11 +166,11 @@ class SIS:
             startingPopScore = 0
 
         if self.recoveryRate == 0.25:
-            rrScore = 1
+            rrScore = 0
         elif self.recoveryRate == 0.5:
-            rrScore = 2
+            rrScore = 1
         else:
-            rrScore = 3
+            rrScore = 2
 
         if self.IDS == False:
             idsScore = 0
@@ -181,109 +181,109 @@ class SIS:
 
         # as you make more wsn the sloc attack cap minimizes greatly, 1 single wsn allows mad spread of Il (1 is at the bottom)
         if self.SLocFraction == 0.02:
-            slocScore = 5
-        elif self.SLocFraction == 0.05:
             slocScore = 4
-        elif self.SLocFraction == 0.1:
+        elif self.SLocFraction == 0.05:
             slocScore = 3
-        elif self.SLocFraction == 0.2:
+        elif self.SLocFraction == 0.1:
             slocScore = 2
-        else:
+        elif self.SLocFraction == 0.2:
             slocScore = 1
+        else:
+            slocScore = 0
 
         # LARGE deployment and TINY transmission range means the SMALLEST snhb size which neutralises Ip (good), tiny deployment and huge trans range allows mad spread of Ip (bad)
         if self.SNhbFraction == 0.000044444444444444447:
-            snhbScore = 4
-        elif 0.000044444444444444448 <= self.SNhbFraction <= 0.0005:
             snhbScore = 3
-        elif 0.0005 <= self.SNhbFraction <= 0.004:
+        elif 0.000044444444444444448 <= self.SNhbFraction <= 0.0005:
             snhbScore = 2
-        else: # (0.024)
+        elif 0.0005 <= self.SNhbFraction <= 0.004:
             snhbScore = 1
+        else: # (0.024)
+            snhbScore = 0
 
         ovrNeighbourScore = slocScore + snhbScore
 
         if 1 <= self.botScanningRate >= 10:
-            scanningScore = 5
-        elif 11 <= self.botScanningRate >= 21:
             scanningScore = 4
-        elif 21 <= self.botScanningRate >= 40:
+        elif 11 <= self.botScanningRate >= 21:
             scanningScore = 3
-        elif 41 <= self.botScanningRate >= 100:
+        elif 21 <= self.botScanningRate >= 40:
             scanningScore = 2
-        else: # (100-250)
+        elif 41 <= self.botScanningRate >= 100:
             scanningScore = 1
+        else: # (100-250)
+            scanningScore = 0
 
         if self.IrPsuccess == 0.00000000001:
-            irPScore = 5
-        elif self.IrPsuccess == 0.005:
             irPScore = 4
-        elif self.IrPsuccess == 0.02:
+        elif self.IrPsuccess == 0.005:
             irPScore = 3
-        elif self.IrPsuccess == 0.05:
+        elif self.IrPsuccess == 0.02:
             irPScore = 2
-        else:
+        elif self.IrPsuccess == 0.05:
             irPScore = 1
+        else:
+            irPScore = 0
 
         if self.IlPsuccess == 0.00000000001:
-            ilPScore = 5
-        elif self.IlPsuccess == 0.05:
             ilPScore = 4
-        elif self.IlPsuccess == 0.1:
+        elif self.IlPsuccess == 0.05:
             ilPScore = 3
-        elif self.IlPsuccess == 0.25:
+        elif self.IlPsuccess == 0.1:
             ilPScore = 2
-        else:
+        elif self.IlPsuccess == 0.25:
             ilPScore = 1
+        else:
+            ilPScore = 0
 
         if self.IpPsuccess == 0.00000000001:
-            ipPScore = 5
-        elif self.IpPsuccess == 0.45:
             ipPScore = 4
-        elif self.IpPsuccess == 0.8:
+        elif self.IpPsuccess == 0.45:
             ipPScore = 3
-        elif self.IpPsuccess == 0.95:
+        elif self.IpPsuccess == 0.8:
             ipPScore = 2
-        else:
+        elif self.IpPsuccess == 0.95:
             ipPScore = 1
+        else:
+            ipPScore = 0
 
         if self.Ptransmission == 0.00000000001:
-            PTrScore = 5
-        elif self.Ptransmission == 0.001:
             PTrScore = 4
-        elif self.Ptransmission == 0.01:
+        elif self.Ptransmission == 0.001:
             PTrScore = 3
-        elif self.Ptransmission == 0.03:
+        elif self.Ptransmission == 0.01:
             PTrScore = 2
-        else:
+        elif self.Ptransmission == 0.03:
             PTrScore = 1
+        else:
+            PTrScore = 0
 
         ovrInfectionScore = scanningScore + irPScore + ilPScore + ipPScore + PTrScore
 
         if self.transmissionRange == 1:
-            tranRangeScore = 5
-        elif self.transmissionRange == 5:
             tranRangeScore = 4
-        elif self.transmissionRange == 10:
+        elif self.transmissionRange == 5:
             tranRangeScore = 3
-        elif self.transmissionRange == 15:
+        elif self.transmissionRange == 10:
             tranRangeScore = 2
-        else:
+        elif self.transmissionRange == 15:
             tranRangeScore = 1
+        else:
+            tranRangeScore = 0
 
         if self.meanMessageSize == 16:
-            msgSizeScore = 3
-        elif self.meanMessageSize == 50:
             msgSizeScore = 2
-        else:
+        elif self.meanMessageSize == 50:
             msgSizeScore = 1
+        else:
+            msgSizeScore = 0
 
         if self.meanPower == 0.25:
-            msgPowerScore = 3
-        elif self.meanPower == 0.75:
             msgPowerScore = 2
-        else:
+        elif self.meanPower == 0.75:
             msgPowerScore = 1
+        else:
+            msgPowerScore = 0
 
         if 0.0625 <= self.distance <= 0.3125:
             distanceScore = 5
@@ -301,11 +301,11 @@ class SIS:
         ovrEffortScore = tranRangeScore + msgSizeScore + msgPowerScore + distanceScore
 
         if self.totalBattery == 3456000:
-            bttryScore = 3
-        elif self.totalBattery == 864000:
             bttryScore = 2
-        else:
+        elif self.totalBattery == 864000:
             bttryScore = 1
+        else:
+            bttryScore = 0
 
         if 3456000.0 <= self.benignLifespan <= 13824000.0: # (largest) you dont want a lot of deaths but typically, the longer the lifespan means less malicious activity ... and you dont really want node death and huge nalicious activity
             benignLifespanScore = 5

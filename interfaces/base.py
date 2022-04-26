@@ -28,11 +28,11 @@ class BaseApp(tk.Tk):
         self.configurations = []
         self.configurations.append(SIS("IoT-SIS: Default Configuration",    1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
         self.configurations.append(SIS("IoT-SIS: IDS On",                   1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, True))
-        self.configurations.append(SIS("IoT-SIS: Large Population",        10000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: Local Biased Propagation", 1000, 1, 1,  50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: P2P Biased Propagation",   1000, 1, 10, 25, 15, 10, 27, 0.01, 0.02, 0.1, 0.95, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: High Node Death Rate",     1000, 1, 50, 150, 1, 250, 27, 0.01, 0.02, 0.1, 0.8, 150, 1.25, 216000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: High Infected Node Death Rate", 1000, 1, 50, 150, 1, 10, 250, 0.01, 0.005, 0.05, 0.45, 150, 1.25, 216000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Large Population",               10000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Local Biased Propagation",        1000, 1, 1,  50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: P2P Biased Propagation",          1000, 1, 10, 25, 15, 10, 27, 0.01, 0.02, 0.1, 0.95, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: High Benign Death Rate",              1000, 1, 50, 150, 1, 250, 27, 0.01, 0.02, 0.1, 0.8, 150, 1.25, 216000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: High Infected Node Death Rates", 1000, 1, 50, 150, 1, 10, 250, 0.01, 1, 1, 1, 150, 1.25, 216000, 0.5, 12, False))
         self.activeConfigurationIndex = 0
         self.activeConfiguration = self.configurations[self.activeConfigurationIndex]
         self.compareConfiguration = SIS("IoT-SIS: Comparison Configuration", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False)
@@ -74,13 +74,14 @@ class BaseApp(tk.Tk):
             self.interfaces[show].updateCompareConfigurationList(self)
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
-            self.interfaces[show].updateGraphs()
-            self.interfaces[show].populateFrames()
+            self.interfaces[show].updateGraphs(self.activeConfiguration)
+            self.interfaces[show].populateFrames(self.activeConfiguration)
             self.interfaces[show].switchInfoFrame(0, 1)
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateVariables(self)
             self.interfaces[show].updateGraphs(self.activeConfiguration)
+            self.interfaces[show].updateStatistics(self.activeConfiguration)
         if show == "SISCompareInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].setConfigurations(self)
