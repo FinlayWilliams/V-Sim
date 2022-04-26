@@ -462,7 +462,7 @@ class SISInspectInterface(tk.Frame):
                      "of WSNs is 50 - the lowest is 1 - so the {} WSNs in this simulation allowed the number of S nodes reachable by IL to be an average / expected "
                      "amount. The IL bots had access to {}% of the total S population at any given point.\n".format(
                     C.SLocFraction, C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
-        if 1 <= slocScore <= 2:
+        if slocScore <= 2:
             lblSLocScoreV.config(fg="#b81d28")
             lblSLocScoreDes.config(
                 text="In this case, the SLoc fraction was {}. This is decided directly by the WSN count of {}.\n\nIn V-Sim, the maximum number "
@@ -490,7 +490,7 @@ class SISInspectInterface(tk.Frame):
                      "infection method was limited to only {}% of the entire population. The nodes in this deployment were spaced out enough that Peer-to-Peer bots"
                      "could not propagate effectively.".format(C.SLocFraction, C.density, C.transmissionRange,
                                                                C.WSNnumber, C.WSNnumber, C.SLocFraction * 100))
-        if 2 <= snhbScore == 3:
+        if 2 <= snhbScore <= 3:
             lblSNhbScoreV.config(fg="#e68f39")
             lblSNhbScoreDes.config(
                 text="The SNhhb fraction was {}. An average fraction of S available to IP. This number relies heavily on Density and "
@@ -499,7 +499,7 @@ class SISInspectInterface(tk.Frame):
                                                                                          C.transmissionRange,
                                                                                          C.WSNnumber, C.WSNnumber,
                                                                                          C.SLocFraction * 100))
-        if snhbScore == 1:
+        if snhbScore <= 1:
             lblSNhbScoreV.config(fg="#b81d28")
             lblSNhbScoreDes.config(
                 text="The SNhhb fraction was {}. A large fraction of S available to IP. This number relies heavily on Density and "
@@ -559,15 +559,20 @@ class SISInspectInterface(tk.Frame):
         lblScanScoreDes = tk.Label(self.frames[2], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
         if 4 <= scanningScore <= 5:
             lblScanScoreV.config(fg="#2d802f")
-            lblScanScoreDes.config(
-                text="In this simulation, the Scanning Rate was below average at {} scans per second.".format(
-                    C.botScanningRate))
-        if scanningScore == 3:
+            if C.botScanningRate == 27:
+                lblScanScoreDes.config(
+                    text="In this simulation, the Scanning Rate was the expected {} scans per second.".format(
+                        C.botScanningRate))
+            else:
+                lblScanScoreDes.config(
+                    text="In this simulation, the Scanning Rate was below average at {} scans per second.".format(
+                        C.botScanningRate))
+        if 2 <= scanningScore <= 3:
             lblScanScoreV.config(fg="#e68f39")
             lblScanScoreDes.config(
                 text="In this simulation, the Scanning Rate was an average {} scans per second.".format(
                     C.botScanningRate))
-        if 1 <= scanningScore <= 2:
+        if scanningScore <= 1:
             lblScanScoreV.config(fg="#b81d28")
             lblScanScoreDes.config(
                 text="In this simulation, the Scanning Rate was higher than average at {} scans per second.".format(
@@ -602,7 +607,7 @@ class SISInspectInterface(tk.Frame):
             lblIrPSucScoreDes.config(
                 text="The PSuccess value for this simulation was {}, ensuring the expected chance of successful connections for IR.".format(
                     C.IrPsuccess))
-        if 1 <= irPScore <= 2:
+        if irPScore <= 2:
             lblIrPSucScoreV.config(fg="#b81d28")
             lblIrPSucScoreDes.config(
                 text="The PSuccess value for this simulation was {}, a higher than expected value - maximising chances of successful connections for IR.".format(
@@ -644,7 +649,7 @@ class SISInspectInterface(tk.Frame):
             lblIpPSucScoreDes.config(
                 text="The PSuccess value for this simulation was {}, ensuring the expected chance of successful connections for IP.\n".format(
                     C.IpPsuccess))
-        if 1 <= ipPScore <= 2:
+        if ipPScore <= 2:
             lblIpPSucScoreV.config(fg="#b81d28")
             lblIpPSucScoreDes.config(
                 text="The PSuccess value for this simulation was {}, a higher than expected value - maximising chances of successful connections for IP.\n".format(
@@ -674,7 +679,7 @@ class SISInspectInterface(tk.Frame):
                 text="The PTransmission value for this simulation was {}, a lower than expected value - minimising chances of successful payload deliverance for I nodes."
                      "\nInfection Rate for IR: {}. Infection Rate for IL: {}. Infection Rate for IP: {}.".format(
                     C.Ptransmission, C.bR, C.bL, C.bP))
-        if 1 <= PTrScore <= 2:
+        if PTrScore <= 2:
             lblPTrScoreV.config(fg="#b81d28")
             lblPTrScoreDes.config(
                 text="The PTransmission value for this simulation was {}, a lower than expected value - minimising chances of successful payload deliverance for I nodes."
@@ -766,7 +771,7 @@ class SISInspectInterface(tk.Frame):
             lblTransmissionScoreDes.config(
                 text="In this simulation, the Transmission Range was an expected {}m.\n"
                      "This results in nodes delivering payloads to an expected maximum.".format(C.transmissionRange))
-        if 1 <= tranRangeScore <= 2:
+        if tranRangeScore <= 2:
             lblTransmissionScoreV.config(fg="#b81d28")
             lblTransmissionScoreDes.config(
                 text="In this simulation, the Transmission Range was higher than average at {}m.\n"
@@ -834,18 +839,18 @@ class SISInspectInterface(tk.Frame):
 
         lblDistanceScoreDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050,
                                        justify="left")
-        if Jeff < 1:
+        if 4 <= distanceScore <= 5:
             lblDistanceScoreV.config(fg="#2d802f")
             lblDistanceScoreDes.config(
                 text="The Distance in this simulation was a lower than average {}m.\n\n"
                      "This means nodes have much less distance to spend effort on sending messages.".format(C.distance))
-        if 1 <= Jeff < 3:
+        if 2 <= distanceScore <= 3:
             lblDistanceScoreV.config(fg="#e68f39")
             lblDistanceScoreDes.config(
                 text="The Distance in this simulation was an average {}m.\n\n"
                      "Nodes spend the expected amount of effort when considering the distance between them.".format(
                     C.distance))
-        if Jeff >= 3:
+        if distanceScore <= 1:
             lblDistanceScoreV.config(fg="#b81d28")
             lblDistanceScoreDes.config(
                 text="The Distance in this simulation was a higher than average {}m.\n\n"
@@ -952,19 +957,19 @@ class SISInspectInterface(tk.Frame):
                                      "theoretically be much higher or lower.")
 
         lblBenignScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
-        if Jeff < 1:
+        if 4 == benignLifespanScore <= 5:
             lblBenignScoreV.config(fg="#2d802f")
             lblBenignScoreDes.config(
                 text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
                      "The Lifespan and Death Rate due to standard activities result in nodes living longer and propagating less data overall.".format(
                     C.benignLifespan, C.dthB, C.contactRate))
-        if 1 <= Jeff < 3:
+        if 2 == benignLifespanScore <= 3:
             lblBenignScoreV.config(fg="#e68f39")
             lblBenignScoreDes.config(
                 text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
                      "The Lifespan and Death Rate due to standard activities result in nodes living an average duration and propagating an expected amount of data overall.".format(
                     C.benignLifespan, C.dthB, C.contactRate))
-        if Jeff >= 3:
+        if 0 == benignLifespanScore <= 1:
             lblBenignScoreV.config(fg="#b81d28")
             lblBenignScoreDes.config(
                 text="The Benign Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
@@ -984,19 +989,19 @@ class SISInspectInterface(tk.Frame):
                                      "each population group have their respective Contact Rates calculated differently - impacting the lifespans accordingly.")
 
         lblRandomScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
-        if Jeff < 1:
+        if 4 == IrLifespanScore <= 5:
             lblRandomScoreV.config(fg="#2d802f")
             lblRandomScoreDes.config(
                 text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Random Scanning activity results in the IR population group living longer tha expected and performing much less malicious"
                      " activity.".format(C.randomLifespan, C.dthR, C.IrContactRate))
-        if 1 <= Jeff < 3:
+        if 2 == IrLifespanScore <= 3:
             lblRandomScoreV.config(fg="#e68f39")
             lblRandomScoreDes.config(
                 text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Random Scanning activity results in the IR population group living an average duration and performing the "
                      "expected amount of malicious activity.".format(C.randomLifespan, C.dthR, C.IrContactRate))
-        if Jeff >= 3:
+        if 0 == IrLifespanScore <= 1:
             lblRandomScoreV.config(fg="#b81d28")
             lblRandomScoreDes.config(
                 text="The Random Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IR was {}.\n\n"
@@ -1015,19 +1020,19 @@ class SISInspectInterface(tk.Frame):
                                     " more malicious activity.")
 
         lblLocalScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
-        if Jeff < 1:
+        if 4 == IlLifespanScore <= 5:
             lblLocalScoreV.config(fg="#2d802f")
             lblLocalScoreDes.config(
                 text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living longer tha expected and performing much less malicious"
                      " activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
-        if 1 <= Jeff < 3:
+        if 2 == IlLifespanScore <= 3:
             lblLocalScoreV.config(fg="#e68f39")
             lblLocalScoreDes.config(
                 text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living an average duration and performing the "
                      "expected amount of malicious activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
-        if Jeff >= 3:
+        if 0 == IlLifespanScore <= 1:
             lblLocalScoreV.config(fg="#b81d28")
             lblLocalScoreDes.config(
                 text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
@@ -1046,19 +1051,19 @@ class SISInspectInterface(tk.Frame):
                                   "connection - and therefore more malicious activity.")
 
         lblP2PScoreDes = tk.Label(self.frames[4], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
-        if Jeff < 1:
+        if 4 == IpLifespanScore <= 5:
             lblP2PScoreV.config(fg="#2d802f")
             lblP2PScoreDes.config(
                 text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living longer tha expected and performing much less malicious"
                      " activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
-        if 1 <= Jeff < 3:
+        if 2 == IpLifespanScore <= 3:
             lblP2PScoreV.config(fg="#e68f39")
             lblP2PScoreDes.config(
                 text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living an average duration and performing the "
                      "expected amount of malicious activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
-        if Jeff >= 3:
+        if 0 == IpLifespanScore <= 1:
             lblP2PScoreV.config(fg="#b81d28")
             lblP2PScoreDes.config(
                 text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {}. Additionally, the Contact Rate for IL was {}.\n\n"
@@ -1135,22 +1140,22 @@ class SISInspectInterface(tk.Frame):
                                     "The reality is that a strong and maintained attack force of bots is required for any botnet to gain traction and size. Despite this, "
                                     "a range of starting bot counts and N sizes are provided to demonstrate what different attack forces determine.\n")
         lblStartScoreDes = tk.Label(self.frames[5], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left")
-        if Jeff == 0:
+        if Jeff == 5:
             lblStartScoreV.config(fg="#2d802f")
             lblStartScoreDes.config(
                 text="Well done, with a starting I = {} - it is safe to say your systems were not attacked by a botnet!".format(
                     C.I))
-        if Jeff < 1:
+        if startingPopScore == 4:
             lblStartScoreV.config(fg="#2d802f")
             lblStartScoreDes.config(
                 text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"
                      "A small attack force, the botnet will not peak as fast as expected.".format(C.I, C.S))
-        if 1 <= Jeff < 3:
+        if 2 == startingPopScore <= 3:
             lblStartScoreV.config(fg="#e68f39")
             lblStartScoreDes.config(
                 text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"
                      "A growing attack force, the botnet will peak in an expected amount of time.".format(C.I, C.S))
-        if Jeff >= 3:
+        if 0 == startingPopScore <= 1:
             lblStartScoreV.config(fg="#b81d28")
             lblStartScoreDes.config(
                 text="Here the starting bot count was I = {}, pitched against S = {}.\n\n"

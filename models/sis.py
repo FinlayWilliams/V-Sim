@@ -329,9 +329,9 @@ class SIS:
         elif 16384.0 <= self.randomLifespan < 273066.6666666667:
             IrLifespanScore = 2
         elif 85.33333333333333 <= self.randomLifespan < 16384.0:
-            IrLifespanScore = 2
-        else:
             IrLifespanScore = 1
+        else:
+            IrLifespanScore = 0
 
         if 5120000000000000.0 <= self.localLifespan <= 1.3824e+18:
             IlLifespanScore = 5
