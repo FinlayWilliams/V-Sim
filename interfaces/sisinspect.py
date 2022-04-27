@@ -11,7 +11,7 @@ class SISInspectInterface(tk.Frame):
         self.index = 0
 
         #################################### Instantiating Information Frame ########################################
-        # These are the basic controls of this page alling the user to navigate
+        # These are the basic controls of this page allowing the user to navigate the different sections
         mainFrame = tk.Frame(self, bg="#574b59")
         controlBar = tk.Frame(mainFrame, bg="#453354")
         btnReturn = tk.Button(controlBar, wraplength=41, width=7, text="Return Home", font=("Arial", 7), relief="ridge",
@@ -196,7 +196,7 @@ class SISInspectInterface(tk.Frame):
             self.lblControl.config(text="Single Factors")
 
     # Populates all of the information frames, ready to be deployed, the bulk of content on this page
-    def populateFrames(self, config):
+    def populateFrames(self):
         # This loop ensures the frames are destroyed and reconstructed with correct information when the frame is opened
         if self.frames:
             for frame in self.frames:
@@ -226,7 +226,9 @@ class SISInspectInterface(tk.Frame):
                                 IlLifespanScore, IpLifespanScore)
         self.populateSingleFactorFrame(config, ovrSingleFactorScore, startingPopScore, rrScore, idsScore)
 
-    # The following 8 methods are the assessment frame contents
+    # The following 8 methods are the assessment frame contents and contains the bulk of all page elements
+    # It populates the first frame containing the overview section, and then calls all methods to populate the remaining five sections
+    # Each method contains a range of if statements that decide page elements to display based on the scores corresponding to that section
     def populateOverview(self, C, ovrSingleFactorScore, ovrNeighbourScore, ovrInfectionScore, ovrEffortScore,
                          ovrDeathRateScore):
         lbl1 = tk.Label(self.frames[0], text="{} - Assessment Overview and Simulation Scores".format(C.Name),

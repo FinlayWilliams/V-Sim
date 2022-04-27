@@ -75,7 +75,7 @@ class BaseApp(tk.Tk):
         if show == "SISInspectInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
             self.interfaces[show].updateGraphs(self.activeConfiguration)
-            self.interfaces[show].populateFrames(self.activeConfiguration)
+            self.interfaces[show].populateFrames()
             self.interfaces[show].switchInfoFrame(0, 1)
         if show == "SISControlInterface":
             self.interfaces[show].pack(side="top", fill="both", expand=True)
@@ -101,11 +101,11 @@ class BaseApp(tk.Tk):
     def removeConfiguration(self, index):
         self.configurations.remove(self.configurations[index])
 
-    def overwriteConfiguration(self, index, model):
-        self.configurations[index] = model
+    def overwriteConfiguration(self, index, configuration):
+        self.configurations[index] = configuration
 
-    def setCompareConfiguration(self, model):
-        self.compareConfiguration = model
+    def setCompareConfiguration(self, configuration):
+        self.compareConfiguration = configuration
 
     def addDefaultSISConfiguration(self):
         self.configurations.append(SIS("IoT-SIS: Default Configuration", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))

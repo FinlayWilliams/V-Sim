@@ -67,6 +67,7 @@ class SIS:
         self.dthL = 1 / self.localLifespan
         self.dthP = 1 / self.peerToPeerLifespan
 
+    # The default IoT-SIS Model in Code
     def SISModel(self, y, t, SlocFr, SNhbFr, bR, bL, bP, dthB, dthR, dthL, dthP, a):
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
@@ -85,6 +86,7 @@ class SIS:
 
         return dSdt, dIrdt, dIldt, dIpdt
 
+    # The modified IoT-SIS Model containing an IDS option in Code
     def SISModelIDS(self, y, t, SlocFr, SNhbFr, bR, bL, bP, dthB, dthR, dthL, dthP, a, IDS):
         S, Ir, Il, Ip = y
         I = Ir + Il + Ip
@@ -103,6 +105,7 @@ class SIS:
 
         return dSdt, dIrdt, dIldt, dIpdt
 
+    # The method called to run the simulation with the current model configuration, also factoring in whether an IDS should be used
     def runSimulation(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
@@ -115,42 +118,34 @@ class SIS:
 
         return S1, Ir1, Il1, Ip1
 
-    # Method to calculate the score of the models used in the inspection page
+    # Method to calculate the score of the models used in the inspection and comparison pages
     def calculateScores(self):
         # The scores are broken down into their categories with an overall score as well as individual scores
-
-        S1, Ir1, Il1, Ip1 = self.runSimulation()
 
         ovrSingleFactorScore = 0
         startingPopScore = 0
         rrScore = 0
         idsScore = 0
-
         ovrNeighbourScore = 0
         slocScore = 0
         snhbScore = 0
-
         ovrInfectionScore = 0
         scanningScore = 0
         irPScore = 0
         ilPScore = 0
         ipPScore = 0
         PTrScore = 0
-
         ovrEffortScore = 0
         tranRangeScore = 0
         msgSizeScore = 0
         msgPowerScore = 0
         bttryScore = 0
         distanceScore = 0
-
         ovrDeathRateScore = 0
         benignLifespanScore = 0
         IrLifespanScore = 0
         IlLifespanScore = 0
         IpLifespanScore = 0
-
-        # Make not that given enough time, all will reduce to 0 due to the nature of... death.... so this is based off of the chosen 12 hour span to observe
 
         if self.I == 0:
             startingPopScore = 5 # Well done no botnet!
@@ -179,7 +174,6 @@ class SIS:
 
         ovrSingleFactorScore = startingPopScore + rrScore + idsScore
 
-        # as you make more wsn the sloc attack cap minimizes greatly, 1 single wsn allows mad spread of Il (1 is at the bottom)
         if self.SLocFraction == 0.02:
             slocScore = 4
         elif self.SLocFraction == 0.05:
@@ -191,7 +185,6 @@ class SIS:
         else:
             slocScore = 0
 
-        # LARGE deployment and TINY transmission range means the SMALLEST snhb size which neutralises Ip (good), tiny deployment and huge trans range allows mad spread of Ip (bad)
         if self.SNhbFraction == 0.000044444444444444447:
             snhbScore = 3
         elif 0.000044444444444444448 <= self.SNhbFraction <= 0.0005:
@@ -307,7 +300,7 @@ class SIS:
         else:
             bttryScore = 0
 
-        if 3456000.0 <= self.benignLifespan <= 13824000.0: # (largest) you dont want a lot of deaths but typically, the longer the lifespan means less malicious activity ... and you dont really want node death and huge nalicious activity
+        if 3456000.0 <= self.benignLifespan <= 13824000.0:
             benignLifespanScore = 5
         elif 115200.0 <= self.benignLifespan < 3456000.0:
             benignLifespanScore = 4
@@ -320,7 +313,7 @@ class SIS:
         else: # 0.1024 (Shortest)
             benignLifespanScore = 0
 
-        if 73728000.0 <= self.randomLifespan <= 1.3824e+18: #This means the bots literally do nothing and do not spread infection ... like they dont exist
+        if 73728000.0 <= self.randomLifespan <= 1.3824e+18:
             IrLifespanScore = 5
         elif 7372800.0 <= self.randomLifespan < 73728000.0:
             IrLifespanScore = 4
