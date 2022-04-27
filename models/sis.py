@@ -106,13 +106,18 @@ class SIS:
         return dSdt, dIrdt, dIldt, dIpdt
 
     # The method called to run the simulation with the current model configuration, also factoring in whether an IDS should be used
+
     def runSimulation(self):
         y0 = self.S, self.Ir, self.Il, self.Ip
 
         if self.IDS:
-            solution = odeint(self.SISModelIDS, y0, np.linspace(0, self.Timesteps, 500), args=(self.SLocFraction, self.SNhbFraction, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate, 0.25))
+            solution = odeint(self.SISModelIDS, y0, np.linspace(0, self.Timesteps, 500),
+                              args=(self.SLocFraction, self.SNhbFraction, self.bR, self.bL, self.bP, self.dthB,
+                                    self.dthR, self.dthL, self.dthP, self.recoveryRate, 0.25))
         else:
-            solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 500), args=(self.SLocFraction, self.SNhbFraction, self.bR, self.bL, self.bP, self.dthB, self.dthR, self.dthL, self.dthP, self.recoveryRate))
+            solution = odeint(self.SISModel, y0, np.linspace(0, self.Timesteps, 500),
+                              args=(self.SLocFraction, self.SNhbFraction, self.bR, self.bL, self.bP, self.dthB,
+                                    self.dthR, self.dthL, self.dthP, self.recoveryRate))
 
         S1, Ir1, Il1, Ip1 = solution.T
 

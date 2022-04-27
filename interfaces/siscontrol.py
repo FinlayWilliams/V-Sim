@@ -250,8 +250,6 @@ class SISControlInterface(tk.Frame):
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, configuration.Timesteps, 500)
 
-        print("Distance = {}".format(configuration.distance))
-
         # Wiping all four axes of the figure (clearing all graphs)
         [self.ax[x].clear() for x in range(2)]
 
