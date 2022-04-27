@@ -37,3 +37,9 @@ Finally, the configuration comparison screen allows the user to select two diffe
 
 
 ### Legal, Ethical, Social, Professional Notice
+
+This application provides the oppertunity to understand a complex issue within computing, and supplies knowledge on how to reduce the damage cause by botnets and virus propagation inside networks of IoT devices. 
+
+The aim is to build an understanding on the topic; due to the nature of compartmental modelling, the results are an abstraction of real world events and are not 100% accurate. 
+
+Furthermore, the results obtained should not be used directly in practise when developing applications or utilising tools defending real work networks.
