@@ -12,7 +12,7 @@ class HomeInterface(tk.Frame):
         self.newCompareConfigurationList = []
 
         ##################################### Instantiating LEFT-side elements #########################################
-        # Left side frame
+        # The following labels are displayed on the home page, brief instructions and explanations for all starting condition variables
         frame_left = tk.Frame(self, bg="#453354")
         column_left_border = tk.Frame(frame_left, bg="white")
         column_left_frame = tk.Frame(frame_left, bg="#654e78")
@@ -72,23 +72,23 @@ class HomeInterface(tk.Frame):
         self.updateConfigurationList()
         self.lstConfig.bind("<<ListboxSelect>>", lambda x: [self.updateActiveConfiguration(controller, 1)])
 
-        # Button: opens control page with the current active models
+        # Button: opens control page with the current active configuration
         btn_Configure = tk.Button(frame_right, width=17, text="Control Configuration", command=lambda: [controller.display("HomeInterface", "SISControlInterface")])
-        # Button: opens inspect page with the current active models
+        # Button: opens inspect page with the current active configuration
         btn_Inspect = tk.Button(frame_right, width=17, text="Inspect Configuration", command=lambda: [controller.display("HomeInterface", "SISInspectInterface")])
-        # Button: Deletes selected models from models list
+        # Button: Deletes selected configuration from configuration list
         btn_Delete = tk.Button(frame_right, width=17, text="Delete Configuration", command=lambda: self.deleteSelectedConfiguration(controller, 1))
-        # Button: creates new default SIS models
+        # Button: creates new default SIS configurations
         btn_New_SIS = tk.Button(frame_right, width=17, text="Default SIS Model", command=lambda:[controller.addDefaultSISConfiguration(), self.updateConfigurationList(), self.updateCompareConfigurationList(controller)])
 
-        # Creating a second listbox of all models to for comparison
+        # Creating a second listbox of all configuration to for comparison
         lbl_compare_model_list = tk.Label(frame_right, text="Select Another Configuration to Use in Comparison", bg="#a8a8a8", font=("Arial", 12))
         self.lstCompareConfig = tk.Listbox(frame_right, height=13, width=44, bg="#654e78", fg="white", selectbackground="#453354", font=("Calibri", 17))
         self.updateCompareConfigurationList(controller)
         self.lstCompareConfig.bind("<<ListboxSelect>>", lambda x: [self.updateCompareConfiguration(controller, 1)])
         self.lstCompareConfig.config()
 
-        # Button: Deletes selected configuration from configuration list
+        # Button: Opens the comparison page with the active configuration and the secondary comparison configuration
         self.btn_Compare = tk.Button(frame_right, width=18, text="Compare Configuration", state="disabled", command=lambda: [controller.display("HomeInterface", "SISCompareInterface")])
 
         ########################################## Placing All elements ###############################################
@@ -151,13 +151,13 @@ class HomeInterface(tk.Frame):
         self.lstCompareConfig.place(x=205, y=560)
         self.btn_Compare.place(x=205, y=945)
 
-    # Method: called from base whenever the frame is repacked so the list of models is always refreshed on screen
+    # Method: called from base whenever the frame is repacked so the list of configuration is always refreshed on screen
     def updateConfigurationList(self):
         self.lstConfig.delete(0, END)
         for C in self.controller.configurations:
             self.lstConfig.insert(END, C)
 
-    # Method: This method populates the compare box with models of the same virus models type
+    # Method: This method populates the compare box with all configurations par the selected one
     def updateCompareConfigurationList(self, controller):
         self.lstCompareConfig.delete(0, END)
         self.newCompareConfigurationList = []
@@ -168,7 +168,7 @@ class HomeInterface(tk.Frame):
         for C in self.newCompareConfigurationList:
             self.lstCompareConfig.insert(END, C)
 
-    # Method: Deletes the currently selected models from the controllers list, replaces the active models with another
+    # Method: Deletes the currently selected configuration from the controllers list, replaces the active configuration with another
     def deleteSelectedConfiguration(self, controller, stub):
         if len(controller.configurations) == 1:
             self.controller.popup("Invalid Delete", "There is Only One Configuration Left!")

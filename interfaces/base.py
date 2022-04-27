@@ -15,8 +15,8 @@ class BaseApp(tk.Tk):
         self.resizable(0, 0)
         self.screen_width = self.winfo_screenwidth()
         self.screen_height = self.winfo_screenheight()
-        center_x = int(self.screen_width / 2 - 1920 / 2) #1536
-        center_y = int(self.screen_height / 2 - 1080 / 2) #864
+        center_x = int(self.screen_width / 2 - 1920 / 2)
+        center_y = int(self.screen_height / 2 - 1080 / 2)
         self.geometry(f"1920x1080+{center_x - 7}+{center_y}")
         self.iconbitmap("assets/virus_icon.ico")
 
@@ -26,12 +26,12 @@ class BaseApp(tk.Tk):
 
         # Initialising a models list and all default configurations
         self.configurations = []
-        self.configurations.append(SIS("IoT-SIS: Default Configuration",    1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: IDS On",                   1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, True))
-        self.configurations.append(SIS("IoT-SIS: Large Population",               10000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: Local Biased Propagation",        1000, 1, 1,  50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: P2P Biased Propagation",          1000, 1, 10, 25, 15, 10, 27, 0.01, 0.02, 0.1, 0.95, 50, 0.75, 864000, 0.5, 12, False))
-        self.configurations.append(SIS("IoT-SIS: High Benign Death Rate",              1000, 1, 50, 150, 1, 250, 27, 0.01, 0.02, 0.1, 0.8, 150, 1.25, 216000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Default Configuration", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: IDS On", 1000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, True))
+        self.configurations.append(SIS("IoT-SIS: Large Population", 10000, 1, 10, 50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: Local Biased Propagation", 1000, 1, 1,  50, 10, 10, 27, 0.01, 0.02, 0.1, 0.8, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: P2P Biased Propagation", 1000, 1, 10, 25, 15, 10, 27, 0.01, 0.02, 0.1, 0.95, 50, 0.75, 864000, 0.5, 12, False))
+        self.configurations.append(SIS("IoT-SIS: High Benign Death Rate", 1000, 1, 50, 150, 1, 250, 27, 0.01, 0.02, 0.1, 0.8, 150, 1.25, 216000, 0.5, 12, False))
         self.configurations.append(SIS("IoT-SIS: High Infected Node Death Rates", 1000, 1, 50, 150, 1, 10, 250, 0.01, 1, 1, 1, 150, 1.25, 216000, 0.5, 12, False))
         self.activeConfigurationIndex = 0
         self.activeConfiguration = self.configurations[self.activeConfigurationIndex]
@@ -65,7 +65,7 @@ class BaseApp(tk.Tk):
         popup.iconbitmap("assets/virus_icon.ico")
         popup.mainloop()
 
-    # Callable from any interface to switch to another, also calls other methods to set up the page
+    # Callable from any interface to switch from one to another, also calls other methods to set up the page contents
     def display(self, hide, show):
         self.interfaces[hide].pack_forget()
         if show == "HomeInterface":

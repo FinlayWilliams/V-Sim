@@ -15,19 +15,19 @@ class SISControlInterface(tk.Frame):
 
         ######################################## Instantiating ALL elements ############################################
         frameTop = tk.Frame(self, bg="#453354")
-        # Button: Resets models config and refreshes graphs
+        # Button: Resets configuration to the last saved state and refreshes graphs
         btnReset = tk.Button(frameTop, wraplength=40, width=5, text="Reset Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                               command=lambda: [self.updateVariables(controller), self.updateGraphs(self.activeConfiguration)])
-        # Button: overwrites the current models "saving" it
+        # Button: overwrites the current configuration "saving" it
         btnSave = tk.Button(frameTop, wraplength=40, width=5, text="Save Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                             command=lambda: [self.updateConfiguration(1),
                                              controller.overwriteConfiguration(self.activeConfigurationIndex, self.activeConfiguration),
                                              controller.setActiveConfiguration(self.activeConfigurationIndex)])
-        # Button: add this models configuration to the controller list
+        # Button: add this configuration to the controller list as a new save
         btnSaveNew = tk.Button(frameTop, wraplength=40, width=5, text="Save New", font=("Arial", 7), bg="#6e6e6e", relief="ridge", fg="white",
                                command=lambda: [self.updateConfiguration(1), controller.addConfiguration(self.activeConfiguration),
                                                 controller.setActiveConfiguration(len(controller.configurations) - 1)])
-        # Button: opens the inspect models page with the currently selected models
+        # Button: opens the inspect page with the currently selected configuration
         btnInspect = tk.Button(frameTop, wraplength=40, width=5, text="Inspect Config", font=("Arial", 7), relief="ridge", fg="white", bg="#6e6e6e",
                                command=lambda: self.checkConfigurationSaved(controller, 0))
         # Button: takes the user to the home page
@@ -244,17 +244,11 @@ class SISControlInterface(tk.Frame):
         self.updateVariables(controller)
         self.updateConfiguration(False)
 
-    # Method to update the onscreen graphs to whatever the current models configuration is
+    # Method to update the onscreen graphs to the current configurations variables
     def updateGraphs(self, configuration):
         S1, Ir1, Il1, Ip1 = configuration.runSimulation()
         I1 = Ir1 + Il1 + Ip1
         T1 = np.linspace(0, configuration.Timesteps, 500)
-
-        # finalN = S1[-1] + Ir1[-1] + Il1[-1] + Ip1[-1]
-        #
-        # print("Final N = {}".format(finalN))
-        # print("% of N missing = {}".format(1 / (configuration.N / (configuration.N - finalN))))
-        # print("")
 
         print("Distance = {}".format(configuration.distance))
 
@@ -270,7 +264,6 @@ class SISControlInterface(tk.Frame):
         self.ax[0].set_ylabel("Node Count")
         self.ax[0].set_title("Node Population Sizes Over Time - Individual Infection Types - S, IR, IL, IP")
         self.ax[0].axvline(linewidth=0.5, color="#a8a8a8", x=configuration.Timesteps / 2, linestyle="--")
-
         # Plotting the second graph
         self.ax[1].plot(T1, S1, '#2ca02c', label="Susceptible")
         self.ax[1].plot(T1, I1, '#d62728', label="All Infected")
@@ -279,7 +272,6 @@ class SISControlInterface(tk.Frame):
         self.ax[1].set_title("Node Population Sizes Over Time - Grouped Infection Types - S, I = (IR + IL + IP)")
         self.ax[1].axvline(linewidth=0.5, color="#a8a8a8", x=configuration.Timesteps / 2, linestyle="--")
         self.ax[1].axhline(linewidth=0.5, color="#d62728", y=max(I1), linestyle="--", label="Peak I: {}".format(max(I1)))
-
         self.canvas.draw()
 
     # Called when a value option is changed, to automatically update the active configurations parameters to match any changes
@@ -354,16 +346,12 @@ class SISControlInterface(tk.Frame):
             IDS = bool(self.checkIDSBool.get())
 
             newActiveConfiguration = sis.SIS(Name, N, I, WSN, DEP, TRNS, CNTCT, SCAN, PTrns, IrPsu, IlPsu, IpPsu, MSG, PWR, BTRY, RR, T, IDS)
-
-            # if not self.checkValid(newActiveConfiguration):
-            #     self.controller.popup("Invalid Model Configuration", "Population Sizes will reach negative values!")
-            # else:
             self.updateGraphs(newActiveConfiguration)
             newActiveConfiguration.Timesteps = 12
             self.updateStatistics(newActiveConfiguration)
             self.activeConfiguration = newActiveConfiguration
 
-
+    # Called to update the configuration statistics displayed on the left of the page
     def updateStatistics(self, activeConfiguration):
         self.currentSLoc.config(
             text="{:.0f} / {:.0f}".format(activeConfiguration.SLocFraction * activeConfiguration.S,
@@ -379,8 +367,8 @@ class SISControlInterface(tk.Frame):
         self.currentDthL.config(text="{:.8f}".format(activeConfiguration.dthL))
         self.currentDthP.config(text="{:.8f}".format(activeConfiguration.dthP))
 
-    # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variables
-    # are updated and correct
+    # Called once when this interfaces is created + everytime this interfaces is opened to ensure all variable
+    # control widgets are updated and correct
     def updateVariables(self, controller):
         self.activeConfiguration = controller.activeConfiguration
         self.activeConfigurationIndex = controller.activeConfigurationIndex
@@ -404,7 +392,6 @@ class SISControlInterface(tk.Frame):
             self.cmbIrPsu.set("High")
         elif self.activeConfiguration.IrPsuccess == 1:
             self.cmbIrPsu.set("100%")
-
         if self.activeConfiguration.IlPsuccess == 0.00000000001:
             self.cmbIlPsu.set("0%")
         elif self.activeConfiguration.IlPsuccess == 0.05:
@@ -415,7 +402,6 @@ class SISControlInterface(tk.Frame):
             self.cmbIlPsu.set("High")
         elif self.activeConfiguration.IlPsuccess == 1:
             self.cmbIlPsu.set("100%")
-
         if self.activeConfiguration.IpPsuccess == 0.00000000001:
             self.cmbIpPsu.set("0%")
         elif self.activeConfiguration.IpPsuccess == 0.45:
@@ -426,7 +412,6 @@ class SISControlInterface(tk.Frame):
             self.cmbIpPsu.set("High")
         elif self.activeConfiguration.IpPsuccess == 1:
             self.cmbIpPsu.set("100%")
-
         if self.activeConfiguration.Ptransmission == 0.00000000001:
             self.cmbPtrns.set("0")
         elif self.activeConfiguration.Ptransmission == 0.001:
@@ -437,7 +422,6 @@ class SISControlInterface(tk.Frame):
             self.cmbPtrns.set("High")
         elif self.activeConfiguration.Ptransmission == 1:
             self.cmbPtrns.set("100%")
-
         self.cmbMSG.set(self.activeConfiguration.meanMessageSize)
         self.cmbPWR.set(self.activeConfiguration.meanPower)
         self.cmbBTRY.set(self.activeConfiguration.totalBattery)

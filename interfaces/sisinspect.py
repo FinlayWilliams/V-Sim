@@ -65,7 +65,7 @@ class SISInspectInterface(tk.Frame):
             self.ax[x].ticklabel_format(style="plain")
         figure.tight_layout(rect=[0.1, 0.03, 0.95, 0.95], h_pad=2)
 
-        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 13))
+        self.lblFinalN = tk.Label(graphFrame, bg="#654e78", fg="black", font=("Arial", 13), justify="right")
 
         ########################################### Placing Everything ###############################################
         mainFrame.place(relheight=1, relwidth=0.6)
@@ -89,7 +89,7 @@ class SISInspectInterface(tk.Frame):
         self.lblGraphTitle.pack(ipady=21, padx=(0, 30))
         btnConfigure.place(x=680, y=21)
         graphContainer.place(x=5, y=75, relheight=0.94, relwidth=1)
-        self.lblFinalN.place(x=250, y=1000)
+        self.lblFinalN.place(x=280, y=990)
         self.updateGraphs(controller.activeConfiguration)
 
     # Updates the on-screen graphs
@@ -125,12 +125,11 @@ class SISInspectInterface(tk.Frame):
         self.ax[1].axhline(linewidth=0.5, color="#d62728", y=max(I1), linestyle="--")
         # Plotting the third graph
         pop = [S1[len(S1) - 1], Ir1[len(Ir1) - 1], Il1[len(Il1) - 1], Ip1[len(Ip1) - 1]]
-
+        # Following code deals with any negative values to ensure the pie charts do not throw up errors
         idx = 0
         for x in range(len(pop)):
             if pop[x] <= 0.999999999999999999999:
                 idx = idx + 1
-
         if idx == len(pop):
             pop = [1]
             label = ["100% of Nodes are Dead"]
@@ -158,7 +157,7 @@ class SISInspectInterface(tk.Frame):
             self.ax[2].set_title(
                 "Population Sizes on Final Recorded Hour ({})".format(config.Timesteps))
 
-        self.lblFinalN.config(text="Population Sizes Totalled (Final N Value): {:.0f}".format(S1[-1] + I1[-1],config.N))
+        self.lblFinalN.config(text="Starting N Value: {:.0f}\nPopulation Sizes Totalled (Final N Value): {:.0f}".format(config.N, S1[-1] + I1[-1]))
 
         self.canvas.draw()
 
@@ -369,19 +368,19 @@ class SISInspectInterface(tk.Frame):
                      "In this simulation, these Single Factors have contributed to a higher virus propagation.\n\n\n")
 
         lblExplain3 = tk.Label(self.frames[0],
-                               text="The overall score ranges from a minimum of 0 and to a maximum of 66",
+                               text="The overall score ranges from a minimum of 0 and to a maximum of 66    ",
                                font=("Arial", 11, "italic"), bg="#e0e0e0", justify="center")
         lblExplain4 = tk.Label(self.frames[0],
-                               text="44 and above is a High Score - Indicating Conditions Favourable for Less Node Infection and Death",
+                               text="44 and above is a High Score - Indicating Conditions Favourable for Less Node Infection and Death   ",
                                font=("Arial", 11, "italic"), bg="#e0e0e0", fg="#2d802f", justify="center")
         lblExplain5 = tk.Label(self.frames[0],
-                               text="Between 22 and 44 is Medium Score - A Secore Indicating Average Conditions for the Expected Node Infection and Death Rates",
+                               text="Between 22 and 44 is Medium Score - A Secore Indicating Average Conditions for the Expected Node Infection and Death Rates    ",
                                font=("Arial", 11, "italic"), bg="#e0e0e0", fg="#e68f39", justify="center")
         lblExplain6 = tk.Label(self.frames[0],
-                               text="22 and below is Low Score - a Score Indicating More Optimal Conditions for Virus Propagation and Node Death\n",
+                               text="22 and below is Low Score - a Score Indicating More Optimal Conditions for Virus Propagation and Node Death    \n",
                                font=("Arial", 11, "italic"), bg="#e0e0e0", fg="#b81d28", justify="center")
         lblExplain7 = tk.Label(self.frames[0],
-                               text="Press the Labelled Buttons Above to Inspect the Correspoinding Categories' Score Breakdown.",
+                               text="Press the Labelled Buttons Above to Inspect the Correspoinding Categories' Score Breakdown    ",
                                font=("Arial", 11, "italic"), bg="#e0e0e0", justify="center")
 
         lbl1.grid(row=0, column=2, sticky="w", pady=(7, 15), padx=(7, 0))
@@ -1018,19 +1017,19 @@ class SISInspectInterface(tk.Frame):
         if 4 <= IlLifespanScore <= 5:
             lblLocalScoreV.config(fg="#2d802f")
             lblLocalScoreDes.config(
-                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
+                text="The Local Scanning Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living longer tha expected and performing much less malicious"
                      " activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
         if 2 <= IlLifespanScore <= 3:
             lblLocalScoreV.config(fg="#e68f39")
             lblLocalScoreDes.config(
-                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
+                text="The Local Scanning Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living an average duration and performing the "
                      "expected amount of malicious activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
         if 0 <= IlLifespanScore <= 1:
             lblLocalScoreV.config(fg="#b81d28")
             lblLocalScoreDes.config(
-                text="The Local Scanning Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
+                text="The Local Scanning Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IL was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Local Scanning activity results in the IL population group living much shorter than expected and performing much more malicious"
                      " activity.".format(C.localLifespan, C.dthL, C.IlContactRate))
 
@@ -1049,19 +1048,19 @@ class SISInspectInterface(tk.Frame):
         if 4 <= IpLifespanScore <= 5:
             lblP2PScoreV.config(fg="#2d802f")
             lblP2PScoreDes.config(
-                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
+                text="The Peer-to-Peer Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Peer-to-Peer propagation results in the IP population group living longer tha expected and performing much less malicious"
                      " activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
         if 2 <= IpLifespanScore <= 3:
             lblP2PScoreV.config(fg="#e68f39")
             lblP2PScoreDes.config(
-                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
+                text="The Peer-to-Peer Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Peer-to-Peer propagation results in the IP population group living an average duration and performing the "
                      "expected amount of malicious activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
         if 0 <= IpLifespanScore <= 1:
             lblP2PScoreV.config(fg="#b81d28")
             lblP2PScoreDes.config(
-                text="The Peer-to-Peer Lifespan was {}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
+                text="The Peer-to-Peer Lifespan was {:.8f}, and the corresponding Death Rate was {:.8f}. Additionally, the Contact Rate for IP was {}.\n\n"
                      "The Lifespan and Death Rate due to malicious Peer-to-Peer propagation results in the IP population group living much shorter than expected and performing much more malicious"
                      " activity.".format(C.peerToPeerLifespan, C.dthP, C.IpContactRate))
 
