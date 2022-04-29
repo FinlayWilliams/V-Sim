@@ -13,12 +13,14 @@ The goal is to provide users with an in-depth understanding of not only how thes
 
 The application comes with a set of configurations displaying a range of different scenarios - but allows the user to create an many configurations as they desire - alterable in anyway, providing commentary and feedback on the resulting virus spread.
 
+To run the application, either clone the repository into a IDE, or download V-Sim.zip from <a id="raw-url" href="https://github.com/FinlayWilliams/IoT_SIS_Sim/releases/download/exe/V-Sim.zip">HERE</a> (or check the <a id="raw-url" href="https://github.com/FinlayWilliams/IoT_SIS_Sim/releases">Releases Section</a> of this repository and find V-Sim.exe), extract the contents anywhere, and then navigate to (and run) main.exe.
+
 ### Application Interfaces:
 
 ## Home Screen:
 ![alt text](https://i.gyazo.com/7e4f2f6954523219aaf98c7fa2b9ec3b.png "Application Home Screen")
 
-This is the home screen, the interface reach when launching the application. From here, all saved IoT-SIS Model configurations can be accessed, as well as all of the features of the application.
+This is the home screen, the interface reached when launching the application. From here, all saved IoT-SIS Model configurations can be accessed, as well as all of the features of the application.
 
 ## Configuration Inspect Screen:
 ![alt text](https://i.gyazo.com/eabae6418496adb92b8d9e98297d35de.png "Application Configuration Inspect Screen")
