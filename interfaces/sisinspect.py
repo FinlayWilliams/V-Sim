@@ -820,16 +820,16 @@ class SISInspectInterface(tk.Frame):
         if msgPowerScore == 2:
             lblMsgPowerScoreV.config(fg="#2d802f")
             lblMsgPowerScoreDes.config(
-                text="The Mean Message Size in this simulation was a lower than average {} Bytes.".format(
+                text="The Mean Message Power in this simulation was a lower than average {} mA.".format(
                     C.meanPower))
         if msgPowerScore == 1:
             lblMsgPowerScoreV.config(fg="#e68f39")
             lblMsgPowerScoreDes.config(
-                text="The Mean Message Size in this simulation was an expected {} Bytes.".format(C.meanPower))
+                text="The Mean Message Power in this simulation was an expected {} mA.".format(C.meanPower))
         if msgPowerScore == 0:
             lblMsgPowerScoreV.config(fg="#b81d28")
             lblMsgPowerScoreDes.config(
-                text="The Mean Message Size in this simulation was a higher than average {} Bytes.".format(C.meanPower))
+                text="The Mean Message Power in this simulation was a higher than average {} mA.".format(C.meanPower))
 
         lblDistanceScoreV = tk.Label(self.frames[3], text="{}  ".format(distanceScore), font=("Arial", 13, "bold"),
                                      bg="#e0e0e0")
