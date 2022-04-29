@@ -20,7 +20,7 @@ To run the application, either clone the repository into a IDE, or download V-Si
 ## Home Screen:
 ![alt text](https://i.gyazo.com/7e4f2f6954523219aaf98c7fa2b9ec3b.png "Application Home Screen")
 
-This is the home screen, the interface reach when launching the application. From here, all saved IoT-SIS Model configurations can be accessed, as well as all of the features of the application.
+This is the home screen, the interface reached when launching the application. From here, all saved IoT-SIS Model configurations can be accessed, as well as all of the features of the application.
 
 ## Configuration Inspect Screen:
 ![alt text](https://i.gyazo.com/eabae6418496adb92b8d9e98297d35de.png "Application Configuration Inspect Screen")
