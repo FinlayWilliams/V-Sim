@@ -836,7 +836,7 @@ class SISInspectInterface(tk.Frame):
         lblDistanceScore = tk.Label(self.frames[3], text="> Distance Score ( /5)", font=("Arial", 10, "bold"), bg="#e0e0e0")
 
         lblDistanceDes = tk.Label(self.frames[3], font=("Arial", 10), bg="#e0e0e0", wraplength=1050, justify="left",
-                                  text="The Distance variable specifies the average distance (in meters) between any two nodes in a WSN. It is a direct factor inside of"
+                                  text="The Distance variable specifies the average distance (meters) between any two nodes in a WSN. It is a direct factor inside of"
                                        "calculating Payload Effort.\n\n"
                                        "It is calculated by dividing the average area inside of any WSN by the average proportion of the entire N population"
                                        "in any given WSN; for this particular model, even node distribution and uniformity is assumed")
