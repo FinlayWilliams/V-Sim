@@ -15,6 +15,8 @@ The application comes with a set of configurations displaying a range of differe
 
 To run the application, either clone the repository into a IDE, or download V-Sim.zip from <a id="raw-url" href="https://github.com/FinlayWilliams/V-Sim/releases/download/FinalRelease/V-Sim.zip">HERE</a> (or check the <a id="raw-url" href="https://github.com/FinlayWilliams/IoT_SIS_Sim/releases">Releases Section</a> of this repository and find V-Sim.zip), extract the contents anywhere, and then navigate to (and run) main.exe.
 
+The free online tool <a id ="raw-url" href="https://pypi.org/project/auto-py-to-exe/">auto-py-to-exe</a> was used to quickly convert the project files into a runnable application. 
+
 ### Application Interfaces:
 
 #### Home Screen:
