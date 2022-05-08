@@ -3,6 +3,8 @@
 
 *COMP3000 Final Year Project*
 
+*Project Supervisor: Hafizul Asad*
+
 ### About the Application
 
 V-Sim is a tool that simulates the IoT-SIS Virus Model proposed in *Modelling the Spread of Botnet Malware in IoT-Based Wireless Sensor Networks* by Dilara Acarali, Muttukrishnan Rajarajan, Nikos Komninos, and B. B. Zarpelão.
