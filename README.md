@@ -15,7 +15,7 @@ The goal is to provide users with an in-depth understanding of not only how thes
 
 The application comes with a set of configurations displaying a range of different scenarios - but allows the user to create an many configurations as they desire - alterable in anyway, providing commentary and feedback on the resulting virus spread.
 
-To run the application, either clone the repository into a IDE, or download V-Sim.zip from <a id="raw-url" href="https://github.com/FinlayWilliams/V-Sim/releases/download/FinalRelease/V-Sim.zip">HERE</a> (or check the <a id="raw-url" href="https://github.com/FinlayWilliams/IoT_SIS_Sim/releases">Releases Section</a> of this repository and find V-Sim.zip), extract the contents anywhere, and then navigate to (and run) main.exe.
+To run the application, either clone the repository into a Python IDE and create a new virtual environment to run the code, or download V-Sim.zip from <a id="raw-url" href="https://github.com/FinlayWilliams/V-Sim/releases/download/FinalRelease/V-Sim.zip">HERE</a> (or check the <a id="raw-url" href="https://github.com/FinlayWilliams/IoT_SIS_Sim/releases">Releases Section</a> of this repository and find V-Sim.zip), extract the contents anywhere, and then navigate to (and run) main.exe.
 
 The free online tool <a id ="raw-url" href="https://pypi.org/project/auto-py-to-exe/">auto-py-to-exe</a> was used to quickly convert the project files into a runnable application. 
 
